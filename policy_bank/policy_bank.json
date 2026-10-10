@@ -1,0 +1,5800 @@
+[
+ {
+  "id": "P-001",
+  "statement": "Obtain landlord approval before the provider-selection stage and before instructing a contractor to attend.",
+  "trigger": "New maintenance request on a landlord-owned property.",
+  "action": "Request landlord approval (email or call); keep the case at the approval step until the system logs approval, then proceed to provider selection.",
+  "actor": "agency, landlord",
+  "category": "approval-authority",
+  "confidence": "HIGH",
+  "flag": "CONFLICT",
+  "evidence": [
+   {
+    "case": "001",
+    "event": 3,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "001",
+    "event": 34,
+    "quote": "Landlord approval confirmed",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "002",
+    "event": 2,
+    "quote": "Landlord approval confirmed. Proceed to provider selection.",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 2,
+    "quote": "Landlord approval confirmed",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "006",
+    "event": 16,
+    "quote": "confirmed approval for the below quotation",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 2,
+    "quote": "Landlord approval confirmed",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 38,
+    "quote": "Please go ahead with Eliza",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "011",
+    "event": 3,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "014",
+    "event": 3,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "015",
+    "event": 3,
+    "quote": "Please confirm if you would like us to instruct a contractor to attend",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "013",
+    "event": 2,
+    "quote": "I will proceed and send an appliance engineer",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "012",
+    "event": 8,
+    "quote": "LL already agreed for GS to go out",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "role": "context",
+    "verified": true
+   },
+   {
+    "case": "017",
+    "event": 2,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "018",
+    "event": 3,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "019",
+    "event": 2,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "016",
+    "event": 10,
+    "quote": "Landlord approval confirmed. Proceed to provider selection.",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "021",
+    "event": 2,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "025",
+    "event": 9,
+    "quote": "Landlord approval confirmed. Proceed to provider selection.",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "022",
+    "event": 3,
+    "quote": "Maintenance provider assigned",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "026",
+    "event": 4,
+    "quote": "can i send out Keystone Compliance",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "028",
+    "event": 2,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "030",
+    "event": 4,
+    "quote": "I have raised a job for Riverside Works to sort.",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "029",
+    "event": 4,
+    "quote": "will be attending your property",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "031",
+    "event": 3,
+    "quote": "Landlord approval confirmed. Proceed to provider selection.",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "032",
+    "event": 2,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "033",
+    "event": 3,
+    "quote": "advise if you wish for me to instruct a contractor to attend",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "034",
+    "event": 2,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "035",
+    "event": 3,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "038",
+    "event": 3,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "040",
+    "event": 3,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "039",
+    "event": 9,
+    "quote": "asked Ava Fletcher to get in touch",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "041",
+    "event": 3,
+    "quote": "Can you please advise if you are happy for us to arrange this",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "042",
+    "event": 3,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "044",
+    "event": 12,
+    "quote": "Please go ahead",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "045",
+    "event": 2,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "043",
+    "event": 8,
+    "quote": "Maintenance provider assigned",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 2,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "048",
+    "event": 2,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "050",
+    "event": 3,
+    "quote": "Please complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "049",
+    "event": 3,
+    "quote": "complete landlord approval step first",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "Case 003 and 005 show no visible landlord-approval event before provider assignment (003 ev002 provider assigned directly). Not treated as conflict because absence is not contradiction; see gaps. In 004 ev002 approval precedes the quote, so it is approval-in-principle of the job, not of the quote. [B2] Approval appears to be two-stage: job/provider-selection approval (system status), then quote approval. In 006/007/008 a provider was assigned to quote before the landlord saw the quote, so P-001 covers instructing works, not obtaining a quote. 007 ev002 shows approval with no landlord message visible. Cases 009 and 010 are tenant-only tasks with no landlord approval step (distinguishing condition, not used to resolve). [B3] 013: landlord was told, not asked, for an appliance repair (no quote step). 012: a note records a prior landlord agreement, so no new request was made. [B5] 022: provider assigned and sent to attend with no landlord contact anywhere in the case (a routine lock fault). Landlord approval was asked first in 021, 023, 024, 025. [B6] Tell-and-proceed (landlord informed or never contacted) now appears in 013, 022, 029, 030 against ask-first in 15+ cases. All four are routine, low-cost, no-quote-expected faults, but nothing states that as the rule. [B7] 034: approval logged with no landlord correspondence visible (offline or unlogged). [B8] 039: provider assigned about three days after the landlord hold with no landlord reply recorded (offline approval or tell-and-proceed). [B9] 043: provider assigned after about five days of landlord silence, before the landlord's later yes (a human acted).",
+  "first_batch": 1,
+  "decision": "Default: ask the landlord and wait, unless the case already records their agreement. A defensible alternative for routine no-quote faults is to tell the landlord and proceed (013, 022, 029, 030), but we do not adopt it without evidence of a limit."
+ },
+ {
+  "id": "P-002",
+  "statement": "Send the contractor's quote to the landlord and obtain explicit approval before telling the contractor to proceed.",
+  "trigger": "Contractor quote or estimate received.",
+  "action": "Email landlord with quote attached, ask whether to proceed, hold as Waiting for Landlord, then instruct contractor only after the go-ahead.",
+  "actor": "agency, landlord, contractor",
+  "category": "approval-authority",
+  "confidence": "HIGH",
+  "flag": "CONFLICT",
+  "evidence": [
+   {
+    "case": "002",
+    "event": 17,
+    "quote": "advise if you approve for me to raise an order for these works",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 12,
+    "quote": "Pls go ahead.",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "005",
+    "event": 16,
+    "quote": "Yes please go ahead.",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "001",
+    "event": 22,
+    "quote": "agrees to proceed with the garden maintenance works",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "003",
+    "event": 9,
+    "quote": "Please proceed",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1,
+    "role": "contradicts"
+   },
+   {
+    "case": "003",
+    "event": 10,
+    "quote": "Estimate approved",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1,
+    "role": "contradicts"
+   },
+   {
+    "case": "006",
+    "event": 15,
+    "quote": "Pls go ahead",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 9,
+    "quote": "Please let me know if he may proceed",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 11,
+    "quote": "Pls go ahead",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 36,
+    "quote": "Please let me know how you wish to proceed",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "011",
+    "event": 20,
+    "quote": "Are you happy to go ahead with this?",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "011",
+    "event": 22,
+    "quote": "Please go ahead",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "013",
+    "event": 28,
+    "quote": "I will pass the invoice of",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "022",
+    "event": 16,
+    "quote": "he will drop new key off and send invoice",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "032",
+    "event": 18,
+    "quote": "Please let me know if they can proceed",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "033",
+    "event": 20,
+    "quote": "advise if you approve for me to raise an order",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 16,
+    "quote": "Are you happy to go ahead?",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 20,
+    "quote": "Yes, go ahead please.",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "050",
+    "event": 21,
+    "quote": "Yes please proceed",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "Cases 002, 004, 005, 001 route the quote to the landlord first. Case 003 (ev009-010): agency approved the estimate and told contractor to proceed with no landlord approval visible; the invoice only went to the landlord afterwards (ev020). Possibly a value-based threshold or a pre-agreed arrangement, but no threshold is stated anywhere. Not resolved. [B2] Batch 2 adds 3 more cases following the landlord-first pattern (7 supporting cases vs the single case 003 exception). Conflict kept open. [B3] 013: no quote step at all; the invoice was passed to the landlord to come out of the rent. [B5] 021, 022, 023, 024 had no quote step: the contractor attended and fixed on site, with a quote only 'if the job requires quotation' (see P-058).",
+  "first_batch": 1,
+  "decision": "Landlord approval to attend covers diagnosis and a minor on-site fix. Any quote or extra cost goes to the landlord for approval before the contractor proceeds. Case 003 is treated as an outlier."
+ },
+ {
+  "id": "P-003",
+  "statement": "Tell contractors they must not proceed with works until the agency has approved the quote.",
+  "trigger": "Contractor asked to quote.",
+  "action": "State in the quote request that works only proceed after agency approval.",
+  "actor": "agency, contractor",
+  "category": "approval-authority",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "002",
+    "event": 8,
+    "quote": "you should only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "006",
+    "event": 5,
+    "quote": "you should only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "011",
+    "event": 13,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "012",
+    "event": 15,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "015",
+    "event": 10,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "016",
+    "event": 14,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "018",
+    "event": 8,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "021",
+    "event": 12,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "024",
+    "event": 13,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "026",
+    "event": 14,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "031",
+    "event": 6,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "032",
+    "event": 11,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "033",
+    "event": 11,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "034",
+    "event": 7,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "036",
+    "event": 11,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "042",
+    "event": 13,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "044",
+    "event": 15,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 12,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "048",
+    "event": 11,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "047",
+    "event": 18,
+    "quote": "only proceed after receiving our approval",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "[B2] Not present in 007 or 008 contractor requests.",
+  "first_batch": 1,
+  "confidence_history": [
+   "LOW->MEDIUM in batch 2",
+   "MEDIUM->HIGH in batch 3"
+  ]
+ },
+ {
+  "id": "P-004",
+  "statement": "Put the case on hold with a reason naming who the agency is waiting on, plus a comment, after each outbound request.",
+  "trigger": "Agency has sent a request to landlord, provider or tenant and the next step depends on the reply.",
+  "action": "Log a Hold with reason (Waiting for Landlord / Waiting for Provider / Other) and a short comment.",
+  "actor": "agency",
+  "category": "process-timing",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "001",
+    "event": 8,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "002",
+    "event": 18,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "003",
+    "event": 5,
+    "quote": "Waiting for Provider",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 7,
+    "quote": "Waiting for Provider",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "006",
+    "event": 9,
+    "quote": "Hold for quote",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 6,
+    "quote": "Waiting for Provider",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 10,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 35,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "009",
+    "event": 2,
+    "quote": "WAITING FOR TENANT",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "010",
+    "event": 7,
+    "quote": "await T reply",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "011",
+    "event": 17,
+    "quote": "Waiting for Provider",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "014",
+    "event": 7,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "016",
+    "event": 7,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "019",
+    "event": 30,
+    "quote": "Waiting for Tenant",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "024",
+    "event": 4,
+    "quote": "Awaiting TT response",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "024",
+    "event": 9,
+    "quote": "Awaiting landlord response",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "025",
+    "event": 4,
+    "quote": "Held awaiting response from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "026",
+    "event": 7,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "027",
+    "event": 3,
+    "quote": "Has the tenant responded?",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "028",
+    "event": 5,
+    "quote": "Held awaiting response from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "030",
+    "event": 23,
+    "quote": "Waiting for Tenant",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "031",
+    "event": 18,
+    "quote": "Waiting for Provider",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "032",
+    "event": 4,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "033",
+    "event": 21,
+    "quote": "Held awaiting response from the landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "035",
+    "event": 7,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "036",
+    "event": 4,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "037",
+    "event": 5,
+    "quote": "LL to approve contractor",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "039",
+    "event": 8,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "042",
+    "event": 6,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "043",
+    "event": 7,
+    "quote": "Waiting for landlord response",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "044",
+    "event": 10,
+    "quote": "waiting to hear from LL",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "045",
+    "event": 4,
+    "quote": "Waiting for Tenant",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 5,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "048",
+    "event": 4,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "050",
+    "event": 7,
+    "quote": "Waiting for Landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "049",
+    "event": 10,
+    "quote": "Waiting for Tenant",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "Reason switches to Waiting for Provider once the landlord has approved (001 ev024 to ev028). Several holds in 005 have no text (comment unavailable). [B2] Reason set also includes Tenant; many holds are free text without a structured reason (006, 008, 010). [B4] 017, 018 and 020 show no hold or reason after outbound emails (may not be exported). [B5] 022 and 023 show holds only late in the case. [B9] 041: a hold named the contractor when the request had gone to the landlord, so hold reasons are not always accurate; name the right party.",
+  "first_batch": 1
+ },
+ {
+  "id": "P-005",
+  "statement": "When a provider replies, a human checks whether a response is needed; if not, return the request to auto mode.",
+  "trigger": "Inbound provider email on an open request.",
+  "action": "System prompts staff; staff either respond or return the request to auto mode.",
+  "actor": "system, agency",
+  "category": "process-timing",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "002",
+    "event": 15,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "003",
+    "event": 6,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 8,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "006",
+    "event": 11,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 7,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 8,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "011",
+    "event": 16,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "012",
+    "event": 10,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "014",
+    "event": 8,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "015",
+    "event": 6,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "016",
+    "event": 8,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "018",
+    "event": 14,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "019",
+    "event": 24,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "020",
+    "event": 5,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "021",
+    "event": 14,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "022",
+    "event": 17,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "023",
+    "event": 13,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "024",
+    "event": 5,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "025",
+    "event": 41,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "028",
+    "event": 6,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "030",
+    "event": 9,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "032",
+    "event": 23,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "033",
+    "event": 7,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "035",
+    "event": 8,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "036",
+    "event": 5,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "037",
+    "event": 6,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "039",
+    "event": 5,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "041",
+    "event": 13,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "042",
+    "event": 7,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "043",
+    "event": 12,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "044",
+    "event": 11,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "045",
+    "event": 5,
+    "quote": "Please check if we need to provide a response",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 6,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "048",
+    "event": 5,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "050",
+    "event": 8,
+    "quote": "return this request to auto mode",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 1
+ },
+ {
+  "id": "P-006",
+  "statement": "Wait for a landlord or tenant response before provider selection; if none arrives after 3 days, the system flags the case for manual review.",
+  "trigger": "Landlord/tenant response outstanding before provider selection.",
+  "action": "System raises a 3-day wait notice, then a manual-review notice.",
+  "actor": "system, agency",
+  "category": "escalation-trigger",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "001",
+    "event": 5,
+    "quote": "before provider selection",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "001",
+    "event": 19,
+    "quote": "No landlord/tenant response after 3 days",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "011",
+    "event": 6,
+    "quote": "No landlord/tenant response after 3 days",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "016",
+    "event": 5,
+    "quote": "No landlord/tenant response after 3 days",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "017",
+    "event": 5,
+    "quote": "Waiting for landlord/tenant response before provider selection (3 days)",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "019",
+    "event": 6,
+    "quote": "No landlord/tenant response after 3 days",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "021",
+    "event": 4,
+    "quote": "Waiting for landlord/tenant response before provider selection (3 days)",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "038",
+    "event": 7,
+    "quote": "Waiting for landlord/tenant response before provider selection (3 days)",
+    "evidence_type": "EXPLICIT",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "040",
+    "event": 6,
+    "quote": "Waiting for landlord/tenant response before provider selection (3 days)",
+    "evidence_type": "EXPLICIT",
+    "batch": 8,
+    "verified": true
+   }
+  ],
+  "notes": "Single case. The 3 days is stated in a system notice but in 001 the case sat in a chase loop for weeks afterwards (ev009-020). [B2] 008: roughly 20 days of landlord chasing (ev020-038) with no visible 3-day manual-review flag, which is in tension with this rule; the flag may apply only before provider selection (008 had a provider assigned). Not resolved. [B3] In 011 the landlord replied after the flag and a provider was only assigned after approval (consistent with 001). [B4] In 016 and 019 staff re-sent the request and kept chasing after the flag; in 019 the landlord stayed silent for a long period and nothing was done without approval. [B5] 021 and 023: the landlord replied well inside the 3 days, so no flag was needed. [B6] 030: approval was logged seconds after an informational email with no wait.",
+  "first_batch": 1,
+  "confidence_history": [
+   "LOW->MEDIUM in batch 3",
+   "MEDIUM->HIGH in batch 4"
+  ]
+ },
+ {
+  "id": "P-007",
+  "statement": "A request on a property with no tenant is auto-paused by the system and must be reviewed and progressed manually.",
+  "trigger": "Property status is NOT TENANTED (e.g. checkout cleans on vacated flats).",
+  "action": "Agency staff review the pause and continue by hand (they went on to contact the contractor).",
+  "actor": "system, agency",
+  "category": "escalation-trigger",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "004",
+    "event": 4,
+    "quote": "NOT TENANTED",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "005",
+    "event": 2,
+    "quote": "NOT TENANTED",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "005",
+    "event": 2,
+    "quote": "Please solve this manually",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "007",
+    "event": 15,
+    "quote": "NOT TENANTED",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 12,
+    "quote": "NOT TENANTED",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   }
+  ],
+  "notes": "How the pause is formally cleared is not shown in either case. [B2] In 007 and 008 work continued after the pause with no unpause event logged. Case 006 (tenant vacating) shows no pause.",
+  "first_batch": 1,
+  "confidence_history": [
+   "MEDIUM->HIGH in batch 2"
+  ]
+ },
+ {
+  "id": "P-008",
+  "statement": "Send an SMS prompt to check email alongside every email to a contractor.",
+  "trigger": "Any outbound contractor email.",
+  "action": "Send SMS saying to check email and not to reply, then the email carrying job details.",
+  "actor": "agency",
+  "category": "communication",
+  "confidence": "HIGH",
+  "flag": "CONFLICT",
+  "evidence": [
+   {
+    "case": "003",
+    "event": 3,
+    "quote": "Please check your email",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 5,
+    "quote": "Please do not reply.",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 15,
+    "quote": "Please do not reply.",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "007",
+    "event": 4,
+    "quote": "Please check your email",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 4,
+    "quote": "Please check your email",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "013",
+    "event": 13,
+    "quote": "Please check your email",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "023",
+    "event": 11,
+    "quote": "Please check your email",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "029",
+    "event": 6,
+    "quote": "Please check your email",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "036",
+    "event": 10,
+    "quote": "Please check your email",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   }
+  ],
+  "notes": "In 004 the SMS/email pairing recurs at 005/006, 015/016, 022/023, 025/026, 028/029, 033/034. [B2] SMS appears with contractor emails only, never landlord emails (007, 008). Case 006 shows no SMS (may not be logged). [B3] 012 and 015 show no logged SMS to the contractor (may not be logged). [B4] 016 shows no SMS alongside the contractor email (ev014). [B5] Not universal: 022, 024 and 025 show no logged SMS with contractor emails or used phone calls. [B6] 026, 028 and 030 show no logged SMS to the contractor. [B7] No logged SMS with contractor emails in 022, 024-026 and 030-034 (SMS only to tenants), so this is common practice but not universal.",
+  "first_batch": 1,
+  "confidence_history": [
+   "MEDIUM->HIGH in batch 2"
+  ],
+  "decision": "Send the SMS prompt with contractor emails anyway; it is cheap and harmless, and the logs may simply omit it."
+ },
+ {
+  "id": "P-009",
+  "statement": "Give the contractor the checkout inspection report to scope a checkout clean or clearance quote.",
+  "trigger": "Checkout cleaning or clearance quote requested.",
+  "action": "Attach the checkout report to the quote request (or send it when the contractor asks).",
+  "actor": "agency",
+  "category": "communication",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "003",
+    "event": 4,
+    "quote": "Attachment: attachment-54-document",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 6,
+    "quote": "as per the checkout report",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "005",
+    "event": 7,
+    "quote": "please see attached the check out report",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "007",
+    "event": 9,
+    "quote": "check out report",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 3,
+    "quote": "attachment-01-check-out-inspection-report.pdf",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   }
+  ],
+  "notes": "[B2] Extends beyond cleaning: used for repair/refurb quotes (007, 008).",
+  "first_batch": 1
+ },
+ {
+  "id": "P-010",
+  "statement": "Close a request through a fixed sequence: move to Result, mark completed, run final checks, then close.",
+  "trigger": "Provider reports the work complete.",
+  "action": "Move to Result, mark completed, do final checks, system closes with 'All checks have been completed'.",
+  "actor": "agency, system",
+  "category": "closure-checklist",
+  "confidence": "HIGH",
+  "flag": "CONFLICT",
+  "evidence": [
+   {
+    "case": "002",
+    "event": 36,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "002",
+    "event": 40,
+    "quote": "All checks have been completed",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "003",
+    "event": 19,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "003",
+    "event": 22,
+    "quote": "All checks have been completed",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 39,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 42,
+    "quote": "All checks have been completed",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "005",
+    "event": 22,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "005",
+    "event": 37,
+    "quote": "All checks have been completed",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "006",
+    "event": 22,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "006",
+    "event": 27,
+    "quote": "All checks have been completed",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 34,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 37,
+    "quote": "All checks have been completed",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 43,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 48,
+    "quote": "All checks have been completed",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "009",
+    "event": 23,
+    "quote": "complete done",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "010",
+    "event": 14,
+    "quote": "done complete",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "011",
+    "event": 27,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "012",
+    "event": 26,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "013",
+    "event": 30,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "015",
+    "event": 18,
+    "quote": "completed by supervisor",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "019",
+    "event": 39,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "022",
+    "event": 15,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "023",
+    "event": 22,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "024",
+    "event": 19,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "029",
+    "event": 17,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "033",
+    "event": 39,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "034",
+    "event": 13,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "043",
+    "event": 20,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "044",
+    "event": 22,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 46,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "048",
+    "event": 30,
+    "quote": "final checks",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "The checklist items themselves are never listed. Seen items: photos/documents (P-013), keys returned (P-017), landlord confirmation (P-011). [B2] Tenant-only/admin tasks (009, 010) close with a single 'complete' update and no Result stage or final-checks event. Distinguishing condition: not a maintenance job with a contractor. Flagged, not resolved. See P-041. [B3] 015 closed by a supervisor with one update and no Result/final-checks events. [B7] 032 closed 'by supervisor' with no Result/final-checks events (like 015).",
+  "first_batch": 1,
+  "decision": "Maintenance with a contractor: full sequence (Result, completed, final checks, close). Tenant-evidence/admin tasks and no-works cases: one 'complete' update (P-041). A supervisor can also close manually (P-023). Decide by job type."
+ },
+ {
+  "id": "P-011",
+  "statement": "On completion, log 'Need confirmation from landlord'; if the agency received an invoice, forward it to the landlord for payment.",
+  "trigger": "Contractor confirms work done and invoice issued.",
+  "action": "Email landlord with invoice attached; log the confirmation note; then proceed to close.",
+  "actor": "agency, landlord",
+  "category": "financial",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "003",
+    "event": 20,
+    "quote": "Please see invoice from",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "003",
+    "event": 21,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 37,
+    "quote": "please find the invoice",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 41,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "005",
+    "event": 34,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "002",
+    "event": 39,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "006",
+    "event": 24,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 33,
+    "quote": "Please see attached the invoice for payment",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 36,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 45,
+    "quote": "Please pass this for payment",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 47,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "019",
+    "event": 43,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "021",
+    "event": 26,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "022",
+    "event": 22,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "023",
+    "event": 24,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "024",
+    "event": 21,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "026",
+    "event": 35,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "029",
+    "event": 19,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "031",
+    "event": 26,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "033",
+    "event": 41,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "034",
+    "event": 15,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "039",
+    "event": 27,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "043",
+    "event": 22,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "044",
+    "event": 24,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 49,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "048",
+    "event": 33,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "050",
+    "event": 42,
+    "quote": "Need confirmation from landlord",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "[B2] In 006 the agency did not forward an invoice because the contractor invoices the landlord directly (see P-033), yet still logged 'Need confirmation from landlord'. [B4] 018: landlord was told the job was invoiced off the rent, with no invoice forward and no confirmation note. [B5] The 'Need confirmation from landlord' note is logged at closure even when the agency holds no invoice (021-024), so it is a closure step, not tied to an invoice forward. [B9] 042, 044: an invoice was received but only the cost (042) or nothing (044) was passed to the landlord.",
+  "first_batch": 1
+ },
+ {
+  "id": "P-012",
+  "statement": "Closure does not wait for the landlord's confirmation or payment to arrive.",
+  "trigger": "Invoice forwarded to landlord and checklist note logged.",
+  "action": "Close the case once checks are complete even though no landlord reply is on record.",
+  "actor": "agency",
+  "category": "closure-checklist",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "003",
+    "event": 22,
+    "quote": "All checks have been completed",
+    "evidence_type": "INFERRED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "003",
+    "event": 23,
+    "quote": "Paid",
+    "evidence_type": "INFERRED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 42,
+    "quote": "All checks have been completed",
+    "evidence_type": "INFERRED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "002",
+    "event": 40,
+    "quote": "All checks have been completed",
+    "evidence_type": "INFERRED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "006",
+    "event": 27,
+    "quote": "All checks have been completed",
+    "evidence_type": "INFERRED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 37,
+    "quote": "All checks have been completed",
+    "evidence_type": "INFERRED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 48,
+    "quote": "All checks have been completed",
+    "evidence_type": "INFERRED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 49,
+    "quote": "Ok to pay.",
+    "evidence_type": "INFERRED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "010",
+    "event": 14,
+    "quote": "done complete",
+    "evidence_type": "INFERRED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "010",
+    "event": 15,
+    "quote": "15th September",
+    "evidence_type": "INFERRED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "013",
+    "event": 34,
+    "quote": "All checks have been completed",
+    "evidence_type": "INFERRED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "019",
+    "event": 44,
+    "quote": "All checks have been completed",
+    "evidence_type": "INFERRED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "022",
+    "event": 23,
+    "quote": "All checks have been completed",
+    "evidence_type": "INFERRED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "031",
+    "event": 27,
+    "quote": "the request is now closed",
+    "evidence_type": "INFERRED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "034",
+    "event": 16,
+    "quote": "the request is now closed",
+    "evidence_type": "INFERRED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "039",
+    "event": 28,
+    "quote": "the request is now closed",
+    "evidence_type": "INFERRED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "044",
+    "event": 27,
+    "quote": "the request is now closed",
+    "evidence_type": "INFERRED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 52,
+    "quote": "the request is now closed",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "048",
+    "event": 36,
+    "quote": "the request is now closed",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "050",
+    "event": 43,
+    "quote": "the request is now closed",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "INFERRED from event order only. Landlord 'Paid' (003 ev023) arrives after closure; no landlord reply between 004 ev041 and ev042. [B2] In 008 and 010 the landlord's reply arrived after the case closed. [B7] 034: landlord 'Paid today' arrived after closure. [B10] 048, 050: closed with no landlord reply to the final-confirmation prompt.",
+  "first_batch": 1,
+  "confidence_history": [
+   "MEDIUM->HIGH in batch 2"
+  ]
+ },
+ {
+  "id": "P-013",
+  "statement": "Expect before-and-after photos and documents at completion; if not supplied, record a skip reason and still close.",
+  "trigger": "Completion checklist reached.",
+  "action": "Request photos with the invoice; otherwise log 'Skipped uploading one or more documents' with a reason.",
+  "actor": "agency, contractor",
+  "category": "closure-checklist",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "002",
+    "event": 24,
+    "quote": "before and after",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "002",
+    "event": 38,
+    "quote": "Skipped uploading one or more documents",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 40,
+    "quote": "Skipped uploading one or more documents",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 40,
+    "quote": "No before and after photos",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "006",
+    "event": 23,
+    "quote": "Skipped uploading one or more documents",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 35,
+    "quote": "Skipped uploading one or more documents",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 46,
+    "quote": "No photos attached",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "011",
+    "event": 30,
+    "quote": "Reason provided",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "012",
+    "event": 27,
+    "quote": "not needed",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "019",
+    "event": 42,
+    "quote": "not applicable",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "021",
+    "event": 25,
+    "quote": "No quote required, repaired on site",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "022",
+    "event": 21,
+    "quote": "Reason provided",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "023",
+    "event": 23,
+    "quote": "No further documents to add",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "024",
+    "event": 20,
+    "quote": "Skipped uploading one or more documents",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "026",
+    "event": 34,
+    "quote": "Skipped uploading one or more documents",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "029",
+    "event": 18,
+    "quote": "Skipped uploading one or more documents",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "031",
+    "event": 25,
+    "quote": "No other docs required",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "033",
+    "event": 40,
+    "quote": "Not required",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "034",
+    "event": 14,
+    "quote": "Invoice sent to LL",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "039",
+    "event": 26,
+    "quote": "Skipped uploading one or more documents",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "042",
+    "event": 29,
+    "quote": "Skipped uploading one or more documents",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "043",
+    "event": 21,
+    "quote": "Skipped uploading one or more documents",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "044",
+    "event": 23,
+    "quote": "Skipped uploading one or more documents",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 48,
+    "quote": "Skipped uploading one or more documents",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "048",
+    "event": 32,
+    "quote": "Skipped uploading one or more documents",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "050",
+    "event": 41,
+    "quote": "Skipped uploading one or more documents",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "Whether a skip needs approval is not shown. 002 later adds an invoice (ev048) after skipping at ev038. [B2] Skip reasons seen: contractor invoices landlord directly (006), no before/after photos (007), no photos attached (008). Note 007 ev031 says the contractor sent photos while ev035 says none. [B7] 033 and 031 closed with an invoice received and no forward logged. Do not copy that silently: forward it or record a real reason. [B8] Skip reasons seen: 'no quotes needed' (039), supervisor completion with no reason (037).",
+  "first_batch": 1,
+  "confidence_history": [
+   "MEDIUM->HIGH in batch 2"
+  ]
+ },
+ {
+  "id": "P-014",
+  "statement": "Route the checkout clean/works invoice to the landlord for payment, not to the tenant.",
+  "trigger": "Checkout cleaning or maintenance invoice received.",
+  "action": "Send the invoice to the landlord; the landlord pays (the agency does not pay or recharge in these cases).",
+  "actor": "agency, landlord",
+  "category": "financial",
+  "confidence": "HIGH",
+  "flag": "CONFLICT",
+  "evidence": [
+   {
+    "case": "003",
+    "event": 20,
+    "quote": "Please see invoice from",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "003",
+    "event": 23,
+    "quote": "Paid",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 37,
+    "quote": "please find the invoice",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "001",
+    "event": 43,
+    "quote": "LL pays directly",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "003",
+    "event": "attachment-01-checkout-inspection-report.pdf",
+    "quote": "potentially deducted from the deposit",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1,
+    "role": "contradicts"
+   },
+   {
+    "case": "005",
+    "event": "attachment-01-check-out-inspection-report.pdf",
+    "quote": "may be deducted from the tenant",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1,
+    "role": "contradicts"
+   },
+   {
+    "case": "006",
+    "event": 23,
+    "quote": "invoices landlord directly",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 33,
+    "quote": "invoice for payment",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 45,
+    "quote": "Please pass this for payment",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": "attachment-01-check-out-inspection-report.pdf",
+    "quote": "deducted from the tenant",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": "attachment-03-check-out-inspection-report.pdf",
+    "quote": "deducted from the tenant",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "013",
+    "event": 28,
+    "quote": "I will pass the invoice of",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "034",
+    "event": 11,
+    "quote": "charged a call out",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   }
+  ],
+  "notes": "Observed handling: landlord receives and pays. The inspection reports (template text) say cleaning cost may be deducted from the tenant's deposit. No case shows a deposit deduction or says when each route applies. Not resolved. 004 ev010 'The clean will be for the tenant' is ambiguous. [B2] Landlord-pays handling now in 6 cases; no case shows a deposit deduction or discusses one. Template conflict still open. Possible distinguishing conditions (not used): defect not tenant-caused, property already vacated. [B3] 013: invoice 'to come from the rent' (landlord's rent), which is not a tenant-deposit deduction.",
+  "first_batch": 1,
+  "confidence_history": [
+   "MEDIUM->HIGH in batch 2"
+  ],
+  "decision": "Send invoices to the landlord for payment. Never deduct from a tenant deposit autonomously; if the report shows tenant-caused damage or poor cleaning, flag to a human for the deposit decision."
+ },
+ {
+  "id": "P-015",
+  "statement": "For external/communal works the landlord may commission their own contractor; the agency liaises and waits on the landlord.",
+  "trigger": "External or communal area issue (garden, hedge).",
+  "action": "Ask the landlord how to respond; track quotes and start dates; landlord pays contractor directly.",
+  "actor": "landlord, agency, contractor",
+  "category": "responsibility",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "001",
+    "event": 7,
+    "quote": "awaiting quotes for various works",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "001",
+    "event": 33,
+    "quote": "landlord contractor",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "001",
+    "event": 43,
+    "quote": "LL pays directly",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "028",
+    "event": 3,
+    "quote": "arrange your own contractor",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "028",
+    "event": 7,
+    "quote": "We will sort this issue",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "028",
+    "event": 13,
+    "quote": "Landlord confirmed job complete",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "035",
+    "event": 6,
+    "quote": "he is going to get the parts",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "035",
+    "event": 11,
+    "quote": "confirmed this is all done",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "041",
+    "event": 11,
+    "quote": "I have sent the details to",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "045",
+    "event": 18,
+    "quote": "keep this job open until its finished",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "047",
+    "event": 10,
+    "quote": "I have arranged plumber to visit",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "047",
+    "event": 35,
+    "quote": "Landlord's contractor confirmed job complete.",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "[B6] 028 extends this beyond communal works: when the landlord says they will sort a tenant-reported repair, the agency does not dispatch, holds naming the landlord, chases for an update (P-051), and closes on the landlord's written confirmation. [B7] 035: landlord elected to source parts and fit it himself; his phone confirmation was accepted as completion, with no tenant re-check. [B9] 041 and 045: landlord-led repairs stayed open for weeks on hold with periodic chasing and closed on the landlord's confirmation. [B10] 047: the agency also assigned its own provider (ev16) and never logged cancelling it; avoid double-dispatch once the landlord says he has arranged someone.",
+  "first_batch": 1,
+  "decision": "If the landlord says they will arrange the repair, do not dispatch. Chase for an update and close on their written confirmation; ask the tenant to confirm the fix when it is a leak or other damage risk.",
+  "confidence_history": [
+   "LOW->MEDIUM in batch 6",
+   "MEDIUM->HIGH in batch 7"
+  ]
+ },
+ {
+  "id": "P-016",
+  "statement": "Present optional line items in a quote to the landlord as a separate decision.",
+  "trigger": "Quote contains discretionary items (e.g. carpet cleaning).",
+  "action": "Ask the landlord whether to proceed with or without the optional items; relay the decision to the contractor.",
+  "actor": "agency, landlord",
+  "category": "approval-authority",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "005",
+    "event": 15,
+    "quote": "not the carpets",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "005",
+    "event": 16,
+    "quote": "Let them do the carpets too",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   }
+  ],
+  "notes": "",
+  "first_batch": 1
+ },
+ {
+  "id": "P-017",
+  "statement": "On a vacated property confirm the clean is done and keys are returned before closing.",
+  "trigger": "Checkout clean on a vacated property.",
+  "action": "Hold to check clean completed and keys returned; record key return before closure.",
+  "actor": "agency",
+  "category": "closure-checklist",
+  "confidence": "HIGH",
+  "flag": "CONFLICT",
+  "evidence": [
+   {
+    "case": "005",
+    "event": 25,
+    "quote": "keys returned",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "005",
+    "event": 36,
+    "quote": "Keys return confirmed",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "006",
+    "event": 25,
+    "quote": "check the key return before completing",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "006",
+    "event": 26,
+    "quote": "Keys return confirmed",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 37,
+    "quote": "All checks have been completed",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 48,
+    "quote": "All checks have been completed",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "012",
+    "event": 30,
+    "quote": "Keys return confirmed",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "013",
+    "event": 32,
+    "quote": "check the key return before completing",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "021",
+    "event": 28,
+    "quote": "Keys return confirmed",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "023",
+    "event": 25,
+    "quote": "check the key return before completing the request",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "024",
+    "event": 22,
+    "quote": "check the key return before completing the request",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "022",
+    "event": 20,
+    "quote": "added to keys and copied",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "026",
+    "event": 37,
+    "quote": "Keys return confirmed",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "029",
+    "event": 20,
+    "quote": "check the key return before completing the request",
+    "evidence_type": "EXPLICIT",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "033",
+    "event": 42,
+    "quote": "check the key return before completing the request",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "043",
+    "event": 23,
+    "quote": "check the key return before completing the request",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "044",
+    "event": 25,
+    "quote": "check the key return before completing the request",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 50,
+    "quote": "check the key return before completing the request",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "048",
+    "event": 35,
+    "quote": "Keys return confirmed",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "[B2] 006 gates closure on key return; 007 and 008 (vacated properties, repair jobs) closed with no key-return step visible (007 keys were held by a caretaker). Distinguishing condition may be the job type (works vs clean) or key handling; not resolved. [B3] 012 and 013 are occupied tenancies and also check key return, so the check is not specific to vacated properties. [B5] Also required on occupied tenancies and lock/key repairs. 021: confirmation was logged within hours of a promised next-day key drop with no receipt evidence; do not confirm without evidence. [B6] The key-return step appears on almost every visit-based job, vacated or not (012, 013, 021, 023, 024, 026, 029). [B10] 046, 048: key return was checked on occupied properties too, supporting our decision to confirm on every visit-based job.",
+  "first_batch": 1,
+  "confidence_history": [
+   "LOW->MEDIUM in batch 2",
+   "MEDIUM->HIGH in batch 3"
+  ],
+  "decision": "Treat key return as a standard closure step on every visit-based job; skip only when no keys or access were involved. Cases 007/008 are the outliers."
+ },
+ {
+  "id": "P-018",
+  "statement": "Sequence a dependent clean after prior works are finished, and confirm a specific day with the contractor.",
+  "trigger": "Cleaning depends on other checkout works.",
+  "action": "Tell landlord and contractor the clean will be actioned once works finish; later propose a day and get confirmation.",
+  "actor": "agency, contractor",
+  "category": "process-timing",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "004",
+    "event": 13,
+    "quote": "once the check out works are completed",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": 29,
+    "quote": "you will be going on Friday",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   }
+  ],
+  "notes": "",
+  "first_batch": 1
+ },
+ {
+  "id": "P-019",
+  "statement": "Keep the reporting tenant informed of contractor instruction, visit and schedule; tell them to inform the provider of pets.",
+  "trigger": "Contractor instructed or visit booked for a tenanted property.",
+  "action": "Email (and SMS) tenant with visit details; ask them to tell the provider about any pets.",
+  "actor": "agency, tenant",
+  "category": "communication",
+  "confidence": "HIGH",
+  "flag": "CONFLICT",
+  "evidence": [
+   {
+    "case": "002",
+    "event": 7,
+    "quote": "If you have any pets, please ensure you inform our provider.",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "001",
+    "event": 25,
+    "quote": "has been instructed",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "001",
+    "event": 31,
+    "quote": "hoping to start the gardening works",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "001",
+    "event": 36,
+    "quote": "no contact needed",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1,
+    "role": "contradicts"
+   },
+   {
+    "case": "006",
+    "event": 4,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 15,
+    "quote": "currently not tenanted",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "role": "context",
+    "verified": true
+   },
+   {
+    "case": "011",
+    "event": 12,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "012",
+    "event": 14,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "013",
+    "event": 5,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "015",
+    "event": 9,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "016",
+    "event": 13,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "018",
+    "event": 7,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "021",
+    "event": 11,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "024",
+    "event": 12,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "025",
+    "event": 12,
+    "quote": "inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "029",
+    "event": 4,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "030",
+    "event": 7,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "032",
+    "event": 10,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "033",
+    "event": 35,
+    "quote": "inform the Maintenance Provider",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "036",
+    "event": 19,
+    "quote": "inform the Maintenance Provider",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "037",
+    "event": 10,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "039",
+    "event": 11,
+    "quote": "inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "042",
+    "event": 12,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "043",
+    "event": 9,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "044",
+    "event": 14,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 31,
+    "quote": "Maintenance Provider Name",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "048",
+    "event": 10,
+    "quote": "please ensure you inform our provider",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "050",
+    "event": 30,
+    "quote": "Maintenance Provider Name",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "Within case 001 the agency updated tenants (ev025, ev031) but later held with 'no contact needed' for the external job (ev036). Not resolved. [B2] 006 emailed the tenant (who was vacating); 007 and 008 are vacated properties with no tenant contact at all. Pattern 'tenanted/vacating = inform, vacant = no contact' is an INFERRED reading only; case 001 ev036 'no contact needed' remains the contrary observation. [B6] 028: after the first email the tenant was told nothing further, even on completion.",
+  "first_batch": 1,
+  "confidence_history": [
+   "MEDIUM->HIGH in batch 2"
+  ],
+  "decision": "Contact the tenant when the property is tenanted or vacating and access/pets matter. No tenant contact for vacant properties or external/communal works that need no access."
+ },
+ {
+  "id": "P-020",
+  "statement": "Intake asks about access arrangements and pets for the affected area.",
+  "trigger": "New request intake.",
+  "action": "Ask clarifying questions on access codes/alarms and pets.",
+  "actor": "system",
+  "category": "safety-security",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "001",
+    "event": 2,
+    "quote": "Are there any pets at the property?",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "002",
+    "event": 7,
+    "quote": "pets",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "038",
+    "event": 2,
+    "quote": "Are there any pets at the property?",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 1,
+  "confidence_history": [
+   "LOW->MEDIUM in batch 2",
+   "MEDIUM->HIGH in batch 8"
+  ]
+ },
+ {
+  "id": "P-021",
+  "statement": "If no work result is recorded after the visit date, the system raises a chase and staff check what is happening.",
+  "trigger": "Visit date passed with no result recorded.",
+  "action": "Staff check whether a provider response is needed, else return to auto mode.",
+  "actor": "system, agency",
+  "category": "escalation-trigger",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "002",
+    "event": 14,
+    "quote": "No work results",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "002",
+    "event": 32,
+    "quote": "No work results",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "012",
+    "event": 22,
+    "quote": "No work results",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "013",
+    "event": 25,
+    "quote": "No work results",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "022",
+    "event": 12,
+    "quote": "No work results",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "025",
+    "event": 30,
+    "quote": "No work results",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "030",
+    "event": 34,
+    "quote": "No work results",
+    "evidence_type": "EXPLICIT",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "030",
+    "event": 37,
+    "quote": "missed the confirmed date",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "032",
+    "event": 17,
+    "quote": "No work results",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "033",
+    "event": 17,
+    "quote": "No work results",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "036",
+    "event": 21,
+    "quote": "No work results",
+    "evidence_type": "EXPLICIT",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "042",
+    "event": 20,
+    "quote": "No work results",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 36,
+    "quote": "No work results",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "048",
+    "event": 21,
+    "quote": "No work results",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "[B6] 030: contractor missed a confirmed visit; staff phoned both parties, held, accepted a rebook, did not reassign.",
+  "first_batch": 1,
+  "confidence_history": [
+   "LOW->HIGH in batch 3"
+  ]
+ },
+ {
+  "id": "P-022",
+  "statement": "The system auto-pauses a request that passes its visit/move-out/hold deadline.",
+  "trigger": "Deadline exceeded.",
+  "action": "Pause automatically; staff must intervene.",
+  "actor": "system",
+  "category": "escalation-trigger",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "002",
+    "event": 43,
+    "quote": "exceeded visit/move-out/hold deadline",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   }
+  ],
+  "notes": "The 2-day figure in the message is an example, not a threshold.",
+  "first_batch": 1
+ },
+ {
+  "id": "P-023",
+  "statement": "Report system faults to the team channel and hold the request; a supervisor can complete the task.",
+  "trigger": "Closed job reappears or system misbehaves.",
+  "action": "Post to the Slack questions channel, hold 'system issues', supervisor completes.",
+  "actor": "agency, supervisor",
+  "category": "escalation-trigger",
+  "confidence": "MEDIUM",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "002",
+    "event": 44,
+    "quote": "Can somebody please assist",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "002",
+    "event": 49,
+    "quote": "completed by supervisor",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "015",
+    "event": 18,
+    "quote": "completed by supervisor",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 1,
+  "confidence_history": [
+   "LOW->MEDIUM in batch 3"
+  ]
+ },
+ {
+  "id": "P-024",
+  "statement": "Inbound landlord/tenant messages flagged by the system are reviewed and progressed manually.",
+  "trigger": "System flags an inbound landlord or tenant message.",
+  "action": "Staff read and act by hand.",
+  "actor": "system, agency",
+  "category": "escalation-trigger",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "001",
+    "event": 6,
+    "quote": "Please review and proceed manually",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "001",
+    "event": 21,
+    "quote": "Please review and proceed manually",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "017",
+    "event": 6,
+    "quote": "Please review and proceed manually",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "021",
+    "event": 5,
+    "quote": "Please review and proceed manually",
+    "evidence_type": "EXPLICIT",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "038",
+    "event": 8,
+    "quote": "Please review and proceed manually",
+    "evidence_type": "EXPLICIT",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "040",
+    "event": 7,
+    "quote": "Please review and proceed manually",
+    "evidence_type": "EXPLICIT",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "049",
+    "event": 6,
+    "quote": "Please review and proceed manually",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 1,
+  "confidence_history": [
+   "LOW->MEDIUM in batch 4",
+   "MEDIUM->HIGH in batch 5"
+  ]
+ },
+ {
+  "id": "P-025",
+  "statement": "Defer works when a practical or safety blocker arises (e.g. nesting wildlife) and re-hold.",
+  "trigger": "Contractor reports a blocker.",
+  "action": "Hold and re-schedule; keep waiting for provider confirmation.",
+  "actor": "contractor, agency",
+  "category": "safety-security",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "001",
+    "event": 37,
+    "quote": "Pigeon nesting in tree",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   }
+  ],
+  "notes": "",
+  "first_batch": 1
+ },
+ {
+  "id": "P-026",
+  "statement": "Contractor calls carry a recording notice.",
+  "trigger": "Agency phones a contractor.",
+  "action": "Call opens with a recording notice.",
+  "actor": "agency",
+  "category": "communication",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "001",
+    "event": 41,
+    "quote": "may be recorded for training and monitoring purposes",
+    "evidence_type": "OBSERVED",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "025",
+    "event": 33,
+    "quote": "may be recorded",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "030",
+    "event": 36,
+    "quote": "recorded for training and monitoring purposes",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 1,
+  "confidence_history": [
+   "LOW->MEDIUM in batch 5",
+   "MEDIUM->HIGH in batch 6"
+  ]
+ },
+ {
+  "id": "P-027",
+  "statement": "Checkout inspection reports place smoke/CO alarm upkeep on the tenant, except battery replacement.",
+  "trigger": "Inspection report template.",
+  "action": "Document states tenant responsibility.",
+  "actor": "tenant",
+  "category": "tenancy-legal",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "003",
+    "event": "attachment-01-checkout-inspection-report.pdf",
+    "quote": "other than battery replacement",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "005",
+    "event": "attachment-01-check-out-inspection-report.pdf",
+    "quote": "other than battery replacement",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "004",
+    "event": "attachment-01-checkout-inspection-report.pdf",
+    "quote": "other than battery replacement",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   }
+  ],
+  "notes": "Template text in three reports (so listed MEDIUM-worthy in count, but it is document boilerplate, not agency behaviour); kept LOW until exercised in a case.",
+  "first_batch": 1
+ },
+ {
+  "id": "P-028",
+  "statement": "Checkout reports rate cleanliness on a scale where Poor means light cleaning and Unacceptable means professional cleaning; quotes are scoped from the cleaning items only.",
+  "trigger": "Scoping a checkout clean from an inspection report.",
+  "action": "Map cleanliness ratings to cleaning scope; treat condition defects (repairs) as separate.",
+  "actor": "agency",
+  "category": "responsibility",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "004",
+    "event": "attachment-01-checkout-inspection-report.pdf",
+    "quote": "Light cleaning required",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   },
+   {
+    "case": "005",
+    "event": "attachment-01-check-out-inspection-report.pdf",
+    "quote": "professional cleaning required",
+    "evidence_type": "EXPLICIT",
+    "verified": true,
+    "batch": 1
+   }
+  ],
+  "notes": "Exclusion of repair defects from the clean is INFERRED from case 004 (the quote covered the three cleaning items only).",
+  "first_batch": 1
+ },
+ {
+  "id": "P-029",
+  "statement": "Treat 3 or more unanswered reminders to a provider as a trigger for staff to check what is happening.",
+  "trigger": "Contractor has not booked an appointment after repeated reminders.",
+  "action": "System flags the case; staff check and hold for the quote.",
+  "actor": "system, agency",
+  "category": "escalation-trigger",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "006",
+    "event": 8,
+    "quote": "3+ reminders have been sent to provider",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "013",
+    "event": 16,
+    "quote": "3+ reminders have been sent to provider",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "018",
+    "event": 12,
+    "quote": "3+ reminders have been sent to provider",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "030",
+    "event": 15,
+    "quote": "3+ reminders have been sent to provider",
+    "evidence_type": "EXPLICIT",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "044",
+    "event": 20,
+    "quote": "3+ reminders have been sent to provider",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   }
+  ],
+  "notes": "Single case. Staff held for the quote rather than reassigning the provider (006 ev009). [B6] 030: staff sent a personal nudge, then phoned; no alternative provider was chosen.",
+  "first_batch": 2,
+  "confidence_history": [
+   "LOW->MEDIUM in batch 3",
+   "MEDIUM->HIGH in batch 4"
+  ]
+ },
+ {
+  "id": "P-030",
+  "statement": "After landlord approval, tell the contractor the quote is approved and ask for a start/attendance date; hold and chase if none is given.",
+  "trigger": "Landlord has approved a quote.",
+  "action": "Email (and SMS) the contractor confirming approval, ask for dates; chase if no date.",
+  "actor": "agency, contractor",
+  "category": "communication",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "004",
+    "event": 16,
+    "quote": "Your quote for this clean has been approved",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "005",
+    "event": 17,
+    "quote": "please proceed with the quote for cleaning",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "006",
+    "event": 16,
+    "quote": "Can you confirm a start and completion date please?",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "006",
+    "event": 17,
+    "quote": "If not, chase",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 17,
+    "quote": "Your quote for this job has been approved",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 20,
+    "quote": "Please let me know when you will be able to attend",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "032",
+    "event": 25,
+    "quote": "please proceed with a new toilet flusher",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 2
+ },
+ {
+  "id": "P-031",
+  "statement": "A short informal landlord reply (e.g. 'Pls go ahead') is accepted as quote approval.",
+  "trigger": "Landlord replies to a quote email.",
+  "action": "Treat the reply as approval and instruct the contractor.",
+  "actor": "landlord, agency",
+  "category": "approval-authority",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "004",
+    "event": 12,
+    "quote": "Pls go ahead.",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "006",
+    "event": 15,
+    "quote": "Pls go ahead",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "007",
+    "event": 11,
+    "quote": "Pls go ahead",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "005",
+    "event": 16,
+    "quote": "Yes please go ahead.",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "011",
+    "event": 9,
+    "quote": "Yes please go ahead",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "011",
+    "event": 22,
+    "quote": "Please go ahead",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "015",
+    "event": 7,
+    "quote": "Please get Imogen to have a look at it",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "019",
+    "event": 25,
+    "quote": "Please go ahead with the removal",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "021",
+    "event": 6,
+    "quote": "approves the maintenance action regarding the broken key",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "023",
+    "event": 6,
+    "quote": "sounds like it needs sorting",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "024",
+    "event": 10,
+    "quote": "yes please",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "026",
+    "event": 9,
+    "quote": "Yes go ahead",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "032",
+    "event": 24,
+    "quote": "👍",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "033",
+    "event": 23,
+    "quote": "approves the request to proceed with raising an order",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "036",
+    "event": 6,
+    "quote": "Yes please!",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "037",
+    "event": 7,
+    "quote": "Please get the shower hose replaced.",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "038",
+    "event": 9,
+    "quote": "Yes this is fine.",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "042",
+    "event": 8,
+    "quote": "Yes please arrange an engineer",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "043",
+    "event": 13,
+    "quote": "fine to send out a contractor",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "044",
+    "event": 12,
+    "quote": "Please go ahead",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 18,
+    "quote": "happy to ahead with that",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "048",
+    "event": 6,
+    "quote": "Yes please get that sorted",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "050",
+    "event": 21,
+    "quote": "Yes please proceed",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "No formal approval format is required in any case. No evidence of a value limit above which more is needed. [B7] An emoji-only reply (thumbs-up) to a quote request was accepted as approval in 032, then the agency instructed the contractor at the quoted amount incl. VAT status.",
+  "first_batch": 2
+ },
+ {
+  "id": "P-032",
+  "statement": "Answer a contractor's access/key question with where the keys are.",
+  "trigger": "Contractor asks about keys or access.",
+  "action": "Reply by email and SMS with key location.",
+  "actor": "agency",
+  "category": "communication",
+  "confidence": "MEDIUM",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "007",
+    "event": 25,
+    "quote": "The keys for the studio will be with the caretaker",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "030",
+    "event": 22,
+    "quote": "will someone be home",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   }
+  ],
+  "notes": "[B6] 030: when the provider proposed a slot, staff asked the tenant about being home or collecting keys before confirming.",
+  "first_batch": 2,
+  "confidence_history": [
+   "LOW->MEDIUM in batch 6"
+  ]
+ },
+ {
+  "id": "P-033",
+  "statement": "When the contractor invoices the landlord directly, the agency does not forward an invoice; record that as the document-skip reason and still close.",
+  "trigger": "Contractor bills the landlord directly.",
+  "action": "Log skip reason; no invoice relay; landlord pays contractor.",
+  "actor": "contractor, landlord, agency",
+  "category": "financial",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "006",
+    "event": 23,
+    "quote": "invoices landlord directly",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "001",
+    "event": 43,
+    "quote": "LL pays directly",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "030",
+    "event": 40,
+    "quote": "LL pays contractor directly",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 2,
+  "confidence_history": [
+   "MEDIUM->HIGH in batch 6"
+  ]
+ },
+ {
+  "id": "P-034",
+  "statement": "If the landlord asks for a comparison quote, assign a second provider, then present all quotes with prices and VAT status and ask the landlord to decide.",
+  "trigger": "Landlord asks for another quote after seeing the first.",
+  "action": "Assign new provider, hold for the second quote, chase, email both prices, state which charge VAT, ask how to proceed.",
+  "actor": "agency, landlord, contractor",
+  "category": "approval-authority",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "008",
+    "event": 9,
+    "quote": "for comparison",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 11,
+    "quote": "New provider has been assigned",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 34,
+    "quote": "doesn't charge VAT",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 36,
+    "quote": "Please let me know how you wish to proceed",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   }
+  ],
+  "notes": "In 008 the landlord took ~20 days of chasing to decide; no rule on how long to wait or whether the agency may choose.",
+  "first_batch": 2
+ },
+ {
+  "id": "P-035",
+  "statement": "Before instructing the chosen contractor, raise any unpaid earlier invoice with the landlord and check the contractor is willing to proceed.",
+  "trigger": "Contractor is owed money by the same landlord.",
+  "action": "Ask landlord about the earlier invoice; ask contractor if willing; hold Waiting for Provider.",
+  "actor": "agency, landlord, contractor",
+  "category": "financial",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "008",
+    "event": 24,
+    "quote": "has that been paid",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 39,
+    "quote": "took a long time to pay",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "008",
+    "event": 41,
+    "quote": "proceeding with works",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 2
+ },
+ {
+  "id": "P-036",
+  "statement": "When forwarding a final invoice that differs from the quote, explain the difference to the landlord.",
+  "trigger": "Invoice total differs from quote.",
+  "action": "State the reason in the covering email.",
+  "actor": "agency",
+  "category": "financial",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "008",
+    "event": 45,
+    "quote": "cheaper then the original quote",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   }
+  ],
+  "notes": "Not consistently applied: in 007 the invoice (240 inc VAT) differed slightly from the quote (198.37 + VAT) and no variance was noted or checked. Figures are examples, not thresholds. [B9] 042: invoice 75.11 against 'about 75 + VAT' told to the landlord, with no explanation of the small difference (figures are examples).",
+  "first_batch": 2
+ },
+ {
+  "id": "P-037",
+  "statement": "A contractor quote may widen the scope beyond the original request; the whole quote still goes to the landlord for approval.",
+  "trigger": "Quote includes extra works discovered on site.",
+  "action": "Itemise all lines to the landlord and ask for a single go-ahead.",
+  "actor": "agency, landlord",
+  "category": "approval-authority",
+  "confidence": "MEDIUM",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "006",
+    "event": 13,
+    "quote": "chrome waste",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "006",
+    "event": 13,
+    "quote": "give the go ahead",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 15,
+    "quote": "can we please do while there",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "008 shows scope reductions (carpet kept, tap not replaced) without separate landlord sign-off visible. Who authorises scope change is a gap.",
+  "first_batch": 2,
+  "confidence_history": [
+   "LOW->MEDIUM in batch 10"
+  ]
+ },
+ {
+  "id": "P-038",
+  "statement": "To get evidence from a tenant (photos), email the request, hold waiting for tenant, phone if no reply, repeat the email, then relay to the landlord if the landlord needs it.",
+  "trigger": "Evidence needed from a tenant (garden condition, meter reading).",
+  "action": "Email request; Hold; call; resend; acknowledge receipt; forward or close.",
+  "actor": "agency, tenant",
+  "category": "process-timing",
+  "confidence": "MEDIUM",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "009",
+    "event": 1,
+    "quote": "provide some photos to confirm this is done",
+    "evidence_type": "EXPLICIT",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "009",
+    "event": 2,
+    "quote": "WAITING FOR TENANT",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "010",
+    "event": 6,
+    "quote": "clear photo of your solar panel readings",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "010",
+    "event": 9,
+    "quote": "await photos",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "010",
+    "event": 10,
+    "quote": "clear photo of your solar panel readings",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   }
+  ],
+  "notes": "No stated number of chasers or interval; dates are scrambled. Photo adequacy is never checked in the visible record.",
+  "first_batch": 2
+ },
+ {
+  "id": "P-039",
+  "statement": "Items raised at inspection as the tenant's responsibility (e.g. front garden) are chased with the tenant only; accept the stated delay and recheck, with no landlord or contractor step.",
+  "trigger": "Inspection flags tenant-maintained garden item.",
+  "action": "Chase tenant, accept delay explanation, close when evidence arrives.",
+  "actor": "agency, tenant",
+  "category": "responsibility",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "009",
+    "event": 1,
+    "quote": "provide some photos to confirm this is done",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "009",
+    "event": 22,
+    "quote": "Thank you it has come through this time",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   }
+  ],
+  "notes": "No deadline, sanction or escalation to landlord appears. If the tenant's email is not arriving, fall back to a call and a follow-up email (009 ev021).",
+  "first_batch": 2
+ },
+ {
+  "id": "P-040",
+  "statement": "For a recurring compliance task, hold until the due period, collect the tenant's evidence, forward it to the landlord and ask when it is next needed.",
+  "trigger": "Periodic task such as a solar meter reading.",
+  "action": "Hold with a waiting-for-month note; request photo; forward to landlord; ask next due date.",
+  "actor": "agency, tenant, landlord",
+  "category": "process-timing",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "010",
+    "event": 1,
+    "quote": "Not yet relevant",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "010",
+    "event": 4,
+    "quote": "waiting for mid june",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "010",
+    "event": 13,
+    "quote": "Let us know when you next need these",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   }
+  ],
+  "notes": "The next date the landlord gave (15 September) differs from the assumed mid-June cadence and nothing shows a follow-on task being created.",
+  "first_batch": 2
+ },
+ {
+  "id": "P-041",
+  "statement": "Close non-maintenance tasks (tenant evidence, compliance admin) with a single 'complete' update as soon as the evidence is sent; do not wait for the landlord's reply.",
+  "trigger": "Tenant evidence received and, where relevant, forwarded to landlord.",
+  "action": "Log 'complete'; no contractor, approval or Result stage.",
+  "actor": "agency",
+  "category": "closure-checklist",
+  "confidence": "HIGH",
+  "flag": "CONFLICT",
+  "evidence": [
+   {
+    "case": "009",
+    "event": 23,
+    "quote": "complete done",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "010",
+    "event": 14,
+    "quote": "done complete",
+    "evidence_type": "OBSERVED",
+    "batch": 2,
+    "verified": true
+   },
+   {
+    "case": "014",
+    "event": 14,
+    "quote": "COMPLETE",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   }
+  ],
+  "notes": "Differs from the maintenance closure sequence in P-010 (Result, final checks). Distinguishing condition is job type; recorded, not resolved. [B3] 014: no works done (landlord workaround), closed with one update. [B4] Routine inspections (020) also close once the report is sent to the landlord, with no Result/final-checks events.",
+  "first_batch": 2,
+  "decision": "Same as P-010: apply by job type.",
+  "confidence_history": [
+   "MEDIUM->HIGH in batch 3"
+  ]
+ },
+ {
+  "id": "P-042",
+  "statement": "For a tenant-reported appliance fault, send a self-help troubleshooting checklist and book an engineer only if the fault persists.",
+  "trigger": "Tenant reports an appliance not working.",
+  "action": "Email the checklist, wait for the tenant's reply, then instruct an engineer if still failing.",
+  "actor": "agency, tenant",
+  "category": "process-timing",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "012",
+    "event": 5,
+    "quote": "avoid the risk of being liable for an unnecessary call-out",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "017",
+    "event": 9,
+    "quote": "let me know if everything is working correctly",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "024",
+    "event": 3,
+    "quote": "manual explaining the settings",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "027",
+    "event": 2,
+    "quote": "plunger",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "039",
+    "event": 3,
+    "quote": "nothing inside the machine hitting the sides",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "041",
+    "event": 9,
+    "quote": "Please advise once this has been done",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   }
+  ],
+  "notes": "Single case. Wording ties it to avoiding no-fault-found call-out charges. [B4] 017: the landlord supplied the fix (a switch by the hob) and the tenant was asked to check before any contractor. [B5] 024: manual and dial settings sent first; engineer only after the tenant said it persisted. 025 sent an engineer straight away (prior-fitter warranty route). [B6] 026: the tenant had already tested the fault and an engineer was booked straight away. [B9] 042 and 043 sent an engineer at once: in 043 the tenant had already cleaned the filter; in 042 nothing explains it.",
+  "first_batch": 3,
+  "confidence_history": [
+   "LOW->MEDIUM in batch 4",
+   "MEDIUM->HIGH in batch 5"
+  ]
+ },
+ {
+  "id": "P-043",
+  "statement": "Do not treat a tenant reply as confirmation if it cannot be tied to the open issue; log it, keep the request on hold and ask again.",
+  "trigger": "Tenant reply is ambiguous or stale.",
+  "action": "Note it, re-send the request, wait.",
+  "actor": "agency",
+  "category": "escalation-trigger",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "012",
+    "event": 4,
+    "quote": "unable to ascertain this was re the dishwasher",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 3
+ },
+ {
+  "id": "P-044",
+  "statement": "Landlord invoices may be settled out of the rent; tell the landlord the amount.",
+  "trigger": "Contractor invoice received on a rent-managed property.",
+  "action": "Email landlord that the invoice will come from the rent.",
+  "actor": "agency, landlord",
+  "category": "financial",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "013",
+    "event": 28,
+    "quote": "to come from the rent",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "018",
+    "event": 13,
+    "quote": "invoiced off the rent",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "019",
+    "event": 38,
+    "quote": "deduct it off the rental amount",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   }
+  ],
+  "notes": "Only case. Not evidenced whether landlord consent is needed or any limit applies.",
+  "first_batch": 3,
+  "confidence_history": [
+   "LOW->HIGH in batch 4"
+  ]
+ },
+ {
+  "id": "P-045",
+  "statement": "When the landlord offers a self-help workaround for a minor fault, relay it to the tenant, tell the landlord the outcome, and close unless the tenant comes back.",
+  "trigger": "Minor fault; landlord suggests trying a fix first and a contractor only if needed.",
+  "action": "Do not instruct a contractor; relay workaround; close; reopen on recurrence.",
+  "actor": "agency, landlord, tenant",
+  "category": "process-timing",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "014",
+    "event": 13,
+    "quote": "I will close this down unless she comes back to us",
+    "evidence_type": "EXPLICIT",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "014",
+    "event": 10,
+    "quote": "Can they try this first",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "017",
+    "event": 8,
+    "quote": "There is a switch to the righthand side of the hob",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "017",
+    "event": 12,
+    "quote": "we will close this job down now",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "049",
+    "event": 7,
+    "quote": "approves the tenant to fix the door",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "[B4] 017: no landlord outcome message is logged before closing.",
+  "first_batch": 3,
+  "decision": "Follow the landlord's lead on minor faults, but if the fault affects door/window/lock security, flag to a human instead of closing (see P-049).",
+  "confidence_history": [
+   "LOW->MEDIUM in batch 4",
+   "MEDIUM->HIGH in batch 10"
+  ]
+ },
+ {
+  "id": "P-046",
+  "statement": "Close a task with no cost incurred as 'completed without payment'.",
+  "trigger": "Case closed with no contractor work or no payment due.",
+  "action": "Complete with the without-payment status.",
+  "actor": "agency",
+  "category": "closure-checklist",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "001",
+    "event": 44,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "014",
+    "event": 15,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "016",
+    "event": 26,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "017",
+    "event": 14,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "025",
+    "event": 64,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "027",
+    "event": 17,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "028",
+    "event": 14,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "030",
+    "event": 41,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "035",
+    "event": 13,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "036",
+    "event": 52,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "038",
+    "event": 13,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "040",
+    "event": 12,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "041",
+    "event": 25,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "045",
+    "event": 37,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "047",
+    "event": 36,
+    "quote": "Task has been completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "049",
+    "event": 14,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "[B5] 024 used the same label although an invoice was received, so the label does not prove nothing was spent; 025 was a free warranty repair.",
+  "first_batch": 3,
+  "confidence_history": [
+   "MEDIUM->HIGH in batch 4"
+  ]
+ },
+ {
+  "id": "P-047",
+  "statement": "If the landlord names a specific contractor, instruct that contractor and notify the tenant and contractor.",
+  "trigger": "Landlord's reply names who should attend.",
+  "action": "Assign that provider, email the tenant and the contractor.",
+  "actor": "landlord, agency",
+  "category": "approval-authority",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "015",
+    "event": 7,
+    "quote": "Please get Imogen to have a look at it",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 3
+ },
+ {
+  "id": "P-048",
+  "statement": "After a repair, tell the landlord about any recurrence risk or recommended replacement; do not order a replacement without their decision.",
+  "trigger": "Contractor reports an underlying condition.",
+  "action": "Email the landlord the finding.",
+  "actor": "agency, landlord",
+  "category": "communication",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "015",
+    "event": 16,
+    "quote": "issue may reoccur",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 3
+ },
+ {
+  "id": "P-049",
+  "statement": "For faults that may affect home security (door will not latch, lock, glass), keep the tenant informed and ask them to report any security concern; treat as routine unless evidence says otherwise.",
+  "trigger": "Door/lock/window fault.",
+  "action": "Interim email to tenant while waiting on the landlord; do not close with the fault unresolved.",
+  "actor": "agency, tenant",
+  "category": "safety-security",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "015",
+    "event": 4,
+    "quote": "any security concerns",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   }
+  ],
+  "notes": "014: tenant relayed a warning that the door could shatter glass; the agency still applied the landlord's workaround and closed. 015: handled as routine. [B5] 021, 022, 023: stiff or broken door locks and a snapped key were all handled as routine with no urgency or security advice. Our escalate-same-day default for unsecurable doors still stands. [B8] 037: a leaking shower hose was handled as routine with no interim advice.",
+  "first_batch": 3,
+  "decision": "No emergency handling is evidenced. Escalate to a human the same day if a door/window/lock cannot be secured, glass is cracked, or the tenant reports a security risk; do not wait for landlord approval in that case."
+ },
+ {
+  "id": "P-050",
+  "statement": "If a contractor's reply is empty or unreadable, a human takes over; the agent must not invent its content, dates or amounts.",
+  "trigger": "Inbound contractor email has no usable text.",
+  "action": "Flag for manual handling.",
+  "actor": "agency",
+  "category": "escalation-trigger",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "015",
+    "event": 12,
+    "quote": "Manually updated via Change Mode",
+    "evidence_type": "OBSERVED",
+    "batch": 3,
+    "verified": true
+   },
+   {
+    "case": "016",
+    "event": 21,
+    "quote": "could not be extracted",
+    "evidence_type": "EXPLICIT",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "034",
+    "event": 9,
+    "quote": "could not be extracted",
+    "evidence_type": "EXPLICIT",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 32,
+    "quote": "Please review manually",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "050",
+    "event": 17,
+    "quote": "Please review manually",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "Same empty-email pattern in 013 ev011/017. [B7] The real content arrived in the next event; do not act on the unreadable one.",
+  "first_batch": 3,
+  "confidence_history": [
+   "LOW->MEDIUM in batch 4",
+   "MEDIUM->HIGH in batch 7"
+  ]
+ },
+ {
+  "id": "P-051",
+  "statement": "If the landlord has not replied by the 3-day flag, re-send the request, hold, and keep chasing by phone and email; never proceed without approval.",
+  "trigger": "Landlord silent after the first request.",
+  "action": "Re-email (trim to the fault), call, remind; hold Waiting for Landlord.",
+  "actor": "agency",
+  "category": "process-timing",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "016",
+    "event": 6,
+    "quote": "Please advise if you would like us to send one of our contractors",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "019",
+    "event": 22,
+    "quote": "any thoughts on previous email",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "019",
+    "event": 12,
+    "quote": "unable to leave a voicemail",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "041",
+    "event": 5,
+    "quote": "If not, chase via phone",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   }
+  ],
+  "notes": "No chaser count or spacing is evidenced.",
+  "first_batch": 4,
+  "decision": "After repeated unanswered chasers, escalate to a human with a case summary; never decide spend or scope for the landlord (case 019 chased for about two months).",
+  "confidence_history": [
+   "MEDIUM->HIGH in batch 9"
+  ]
+ },
+ {
+  "id": "P-052",
+  "statement": "If a quote rises after the landlord approved it, get approval again for the new amount; an old approval does not cover a higher price.",
+  "trigger": "Revised quote above the approved figure.",
+  "action": "Explain the reason and new figure to the landlord; hold until a fresh reply.",
+  "actor": "agency, landlord",
+  "category": "approval-authority",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "019",
+    "event": 19,
+    "quote": "the quote is going to be around",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   }
+  ],
+  "notes": "Case 019: approval at the first figure, then a revised quote was sent for approval again. The figures are examples, not thresholds.",
+  "first_batch": 4
+ },
+ {
+  "id": "P-053",
+  "statement": "If the contractor finds nothing to fix and no invoice is due, tell the landlord the outcome and close without payment.",
+  "trigger": "Contractor reports no work needed.",
+  "action": "Thank contractor, email landlord, close as completed without payment.",
+  "actor": "agency",
+  "category": "closure-checklist",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "016",
+    "event": 22,
+    "quote": "no invoice is required",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 4
+ },
+ {
+  "id": "P-054",
+  "statement": "A newly used provider with no portal access invoices by email; record the invoice and assigned provider manually.",
+  "trigger": "Provider not set up on the portal.",
+  "action": "Note it, set provider via manual mode change, forward invoice.",
+  "actor": "agency",
+  "category": "process-timing",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "019",
+    "event": 33,
+    "quote": "no access to the portal",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 4
+ },
+ {
+  "id": "P-055",
+  "statement": "For routine inspections, notify the tenant by SMS and email with the visit window and management-key access; reschedule on request by phone, rebook and cancel the old slot.",
+  "trigger": "Routine inspection due or tenant asks to move it.",
+  "action": "Send notice; on tenant request call, agree new date, cancel old booking, confirm by email/SMS.",
+  "actor": "agency, tenant",
+  "category": "communication",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "020",
+    "event": 2,
+    "quote": "we will access using our management key",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   },
+   {
+    "case": "020",
+    "event": 7,
+    "quote": "cancel over inspection",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 4
+ },
+ {
+  "id": "P-056",
+  "statement": "After an inspection, email the landlord a summary with the full report and record whether issues were found; minor tenant-caused marks are left to the tenant to make good.",
+  "trigger": "Inspection results added.",
+  "action": "Email landlord, upload the report, mark Inspection issues YES/NO.",
+  "actor": "agency, landlord",
+  "category": "closure-checklist",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "020",
+    "event": 17,
+    "quote": "Download the full inspection report here",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   }
+  ],
+  "notes": "020: the email said no issues were identified while the report itself listed a tenant-fitted item and a defect. Do not copy the summary line blindly.",
+  "first_batch": 4
+ },
+ {
+  "id": "P-057",
+  "statement": "If a landlord's reply to an inspection raises permission (e.g. an unapproved fixture) or key custody, hand it to a human; do not grant permission or invent where keys are.",
+  "trigger": "Landlord email after inspection raises a tenancy or key question.",
+  "action": "Flag for a human with the case context.",
+  "actor": "agency",
+  "category": "escalation-trigger",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "020",
+    "event": 20,
+    "quote": "dog flap installation that was not approved",
+    "evidence_type": "OBSERVED",
+    "batch": 4,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 4,
+  "decision": "Escalate. No policy on permissions or key custody is evidenced."
+ },
+ {
+  "id": "P-058",
+  "statement": "Dispatch a contractor to attend and quote only 'if the job requires quotation'; a minor fix done on site needs no quote.",
+  "trigger": "Routine repair (lock, key, small fault) where the landlord has agreed to a contractor attending.",
+  "action": "Tell the contractor to quote and wait only if a quote is needed; skip the quote step when the fix is made on site.",
+  "actor": "agency, contractor",
+  "category": "approval-authority",
+  "confidence": "HIGH",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "021",
+    "event": 25,
+    "quote": "No quote required, repaired on site",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "023",
+    "event": 10,
+    "quote": "If the job requires quotation",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "029",
+    "event": 5,
+    "quote": "If the job requires quotation",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "029",
+    "event": 15,
+    "quote": "No quote required",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "030",
+    "event": 8,
+    "quote": "If the job requires quotation",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "031",
+    "event": 6,
+    "quote": "If the job requires quotation",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "032",
+    "event": 11,
+    "quote": "If the job requires quotation",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "034",
+    "event": 7,
+    "quote": "If the job requires quotation",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "037",
+    "event": 11,
+    "quote": "If the job requires quotation",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "039",
+    "event": 12,
+    "quote": "If the job requires quotation",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "043",
+    "event": 10,
+    "quote": "If the job requires quotation",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "044",
+    "event": 15,
+    "quote": "If the job requires quotation",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 12,
+    "quote": "If the job requires quotation",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "048",
+    "event": 11,
+    "quote": "If the job requires quotation",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "050",
+    "event": 14,
+    "quote": "If the job requires quotation",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "Cost of such on-site fixes was never discussed in 021-024.",
+  "first_batch": 5,
+  "decision": "Landlord's go-ahead to attend covers a minor on-site fix; anything needing a quote or extra cost goes back to the landlord first.",
+  "confidence_history": [
+   "MEDIUM->HIGH in batch 6"
+  ]
+ },
+ {
+  "id": "P-059",
+  "statement": "If the landlord names a prior installer or warranty route, contact that party first; do not accept 'out of warranty' as final or authorise paid work until the position is verified.",
+  "trigger": "Landlord points to a previous fitter or the appliance may be under warranty.",
+  "action": "Phone the installer, send the job, chase, relay only the verified warranty position to the landlord.",
+  "actor": "agency, landlord, contractor",
+  "category": "responsibility",
+  "confidence": "MEDIUM",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "025",
+    "event": 42,
+    "quote": "2-year manufacturer",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "025",
+    "event": 20,
+    "quote": "no longer under warranty",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "041",
+    "event": 21,
+    "quote": "new washer fitted by them",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   }
+  ],
+  "notes": "025: the first 'out of warranty' answer was later contradicted; the tenant went about a month without an oven. Correct the landlord if an earlier update proves wrong. [B8] 036: the landlord said the taps were under guarantee; the same contractor then replaced the faulty tap at no charge. Nothing contradicts the rule. [B9] 041: the landlord went to the original installer himself.",
+  "first_batch": 5,
+  "confidence_history": [
+   "LOW->MEDIUM in batch 9"
+  ]
+ },
+ {
+  "id": "P-060",
+  "statement": "Before closing, tell the landlord the outcome (fixed, no work needed, recurrence risk, cost route).",
+  "trigger": "Work finished or no work needed.",
+  "action": "Short email to the landlord, then close.",
+  "actor": "agency, landlord",
+  "category": "communication",
+  "confidence": "HIGH",
+  "flag": "CONFLICT",
+  "evidence": [
+   {
+    "case": "014",
+    "event": 13,
+    "quote": "I just wanted to let you know",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "015",
+    "event": 16,
+    "quote": "issue may reoccur",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "016",
+    "event": 22,
+    "quote": "no invoice is required",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "018",
+    "event": 13,
+    "quote": "invoiced off the rent",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "034",
+    "event": 11,
+    "quote": "repair this on site",
+    "evidence_type": "OBSERVED",
+    "batch": 7,
+    "verified": true
+   },
+   {
+    "case": "037",
+    "event": 23,
+    "quote": "FYI",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "038",
+    "event": 10,
+    "quote": "Your landlord said it's fine to replace it with your own",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "040",
+    "event": 11,
+    "quote": "Completed- no further action",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "042",
+    "event": 25,
+    "quote": "for a cost of",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "043",
+    "event": 17,
+    "quote": "re-fitted",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 42,
+    "quote": "the window issue was now resolved",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "050",
+    "event": 36,
+    "quote": "the window repair is now complete",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "048",
+    "event": 36,
+    "quote": "the request is now closed",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "047",
+    "event": 36,
+    "quote": "completed without payment",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "role": "contradicts",
+    "verified": true
+   }
+  ],
+  "notes": "[B6] Most cases (021-030) close with no landlord outcome message, including 026-030. Flagged as a conflict between our decision and the common practice. [B7] 034 is a clean example: outcome plus invoice emailed to the landlord before closing. [B8] 040 is the clearest failure: the landlord agreed to a check, was never answered, closed with 'no further action', and chased afterwards. [B9] 042 and 043 told the landlord the fix and the cost before closing. [B10] 047, 048: closed with no outcome message to the landlord logged.",
+  "first_batch": 5,
+  "decision": "Always send the landlord a short outcome message before closing. Cases 021-025 closed without one and we treat that as a gap, not a pattern to copy."
+ },
+ {
+  "id": "P-061",
+  "statement": "Unrelated issues raised on an open request (e.g. a fence, a roof leak) must not be answered or claimed fixed in it; open a separate request.",
+  "trigger": "Tenant raises another problem on an open or closed case.",
+  "action": "Log it as its own request; closing message covers only what this request fixed.",
+  "actor": "agency",
+  "category": "process-timing",
+  "confidence": "LOW",
+  "flag": "CONFLICT",
+  "evidence": [
+   {
+    "case": "024",
+    "event": 15,
+    "quote": "fence",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "024",
+    "event": 16,
+    "quote": "have both been fixed and everything",
+    "evidence_type": "OBSERVED",
+    "batch": 5,
+    "verified": true
+   },
+   {
+    "case": "027",
+    "event": 12,
+    "quote": "contacted block management on your behalf",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "role": "contradicts",
+    "verified": true
+   }
+  ],
+  "notes": "024: the closing email claimed the fence was fixed with nothing in the case supporting it; a later leak report after closing got no reply. [B6] 027: a new parking query on a closed task was answered in the same record.",
+  "first_batch": 5,
+  "decision": "Answer the tenant's new point, but log it as its own request; never claim it fixed under the old one."
+ },
+ {
+  "id": "P-062",
+  "statement": "A minor tenant-responsibility fault (e.g. a blocked internal drain) gets a tenant-responsibility notice with self-help steps and a warning that call-out and repair are billed to the tenant; no landlord or contractor is involved.",
+  "trigger": "Tenant reports a blockage or similar fault that is theirs to clear.",
+  "action": "Email self-help steps and the cost warning; chase once; close when the tenant confirms it is fixed.",
+  "actor": "agency, tenant",
+  "category": "responsibility",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "027",
+    "event": 2,
+    "quote": "the full cost of the call-out and repair will be billed",
+    "evidence_type": "EXPLICIT",
+    "batch": 6,
+    "verified": true
+   },
+   {
+    "case": "027",
+    "event": 2,
+    "quote": "plunger",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   }
+  ],
+  "notes": "The tenancy clause is asserted by the agency only; no tenancy terms are visible. Cause was assumed before any inspection.",
+  "first_batch": 6,
+  "decision": "Use only for clearly tenant-side minor blockages. If the cause is unclear, or there is a flood or leak risk, ask for details and involve the landlord or escalate."
+ },
+ {
+  "id": "P-063",
+  "statement": "If a tenant does not respond to a self-help request, send one chase with a stated close-down deadline plus an SMS, then close if still silent.",
+  "trigger": "Self-help request unanswered.",
+  "action": "Chase email and SMS naming the deadline, hold, close if no reply.",
+  "actor": "agency, tenant",
+  "category": "process-timing",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "027",
+    "event": 4,
+    "quote": "Should we not hear back from you within the next 24hrs",
+    "evidence_type": "EXPLICIT",
+    "batch": 6,
+    "verified": true
+   }
+  ],
+  "notes": "The 24-hour figure is an example, not a policy.",
+  "first_batch": 6
+ },
+ {
+  "id": "P-064",
+  "statement": "If the tenant disputes the visit date, do not adjudicate; the date confirmed with the contractor stands.",
+  "trigger": "Tenant's date differs from the booked visit.",
+  "action": "Tell the tenant to go by the contractor-confirmed date and hold waiting for the provider.",
+  "actor": "agency, tenant",
+  "category": "communication",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "026",
+    "event": 23,
+    "quote": "if Keystone Compliance have confirmed a date with you",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 6
+ },
+ {
+  "id": "P-065",
+  "statement": "After a repair, phone the tenant to confirm the fix works before closing.",
+  "trigger": "Work reported complete.",
+  "action": "Call the tenant; close on their confirmation.",
+  "actor": "agency, tenant",
+  "category": "closure-checklist",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "026",
+    "event": 29,
+    "quote": "working properly after the recent repair",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   }
+  ],
+  "notes": "[B7] Absent in 031, 032, 034, 035 (no tenant fix-confirmation before close).",
+  "first_batch": 6
+ },
+ {
+  "id": "P-066",
+  "statement": "If the tenant says damage pre-dated their tenancy, record it and continue the repair; do not assign blame.",
+  "trigger": "Cause of damage asked and tenant denies it.",
+  "action": "Log the reply, proceed.",
+  "actor": "agency, tenant",
+  "category": "responsibility",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "029",
+    "event": 10,
+    "quote": "at the time I was mooving in",
+    "evidence_type": "OBSERVED",
+    "batch": 6,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 6,
+  "decision": "Do not decide liability. Flag any deposit or liability question to a human."
+ },
+ {
+  "id": "P-067",
+  "statement": "If the tenant offers to replace a landlord-supplied appliance with their own, get the landlord's consent first; the replacement is the tenant's property and liability, and no contractor is sent.",
+  "trigger": "Tenant proposes their own replacement instead of a repair.",
+  "action": "Ask the landlord (and whether they will cover removal of the old unit); relay the answer; note ownership and liability.",
+  "actor": "agency, landlord, tenant",
+  "category": "approval-authority",
+  "confidence": "MEDIUM",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "038",
+    "event": 5,
+    "quote": "willing to replaced the machine with her own",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "038",
+    "event": 12,
+    "quote": "under tenants liability",
+    "evidence_type": "EXPLICIT",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "040",
+    "event": 5,
+    "quote": "see what they would like to do",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   }
+  ],
+  "notes": "038: removal cost cover was offered to the tenant by the agency on the landlord's brief 'Yes this is fine'; the landlord never confirmed the cost cover explicitly.",
+  "first_batch": 8,
+  "decision": "Get the landlord's explicit yes on both the swap and any removal-cost cover before telling the tenant."
+ },
+ {
+  "id": "P-068",
+  "statement": "Do not close a request while a commitment to the landlord or tenant is still open (e.g. a promised check); record it as a follow-up or hold, and answer the landlord.",
+  "trigger": "Landlord has agreed to an action or asked for an update and the agency has promised something later.",
+  "action": "Keep the case open on hold, or create the follow-up, and reply to the landlord.",
+  "actor": "agency",
+  "category": "closure-checklist",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "040",
+    "event": 10,
+    "quote": "check this when you're back",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "040",
+    "event": 13,
+    "quote": "seeking an update on the washing machine repair request",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   }
+  ],
+  "notes": "Single case; counted as a failure example, not an agency rule.",
+  "first_batch": 8,
+  "decision": "Our rule. In 040 the agency promised a later check, closed with 'no further action', and the landlord had to chase."
+ },
+ {
+  "id": "P-069",
+  "statement": "If the contractor's earlier work was faulty and they replace it, no charge applies; record the reason and close without payment.",
+  "trigger": "Repeat visit for a defect in the contractor's own earlier work or an item under guarantee.",
+  "action": "Chase for photos and confirmation; close as completed without payment once the contractor confirms.",
+  "actor": "contractor, agency",
+  "category": "financial",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "036",
+    "event": 50,
+    "quote": "faulty tap",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   },
+   {
+    "case": "036",
+    "event": 43,
+    "quote": "guarantee",
+    "evidence_type": "OBSERVED",
+    "batch": 8,
+    "verified": true
+   }
+  ],
+  "notes": "036: about six weeks of chasing; the landlord complained of delay and missing photos; the agency kept holding and never reassigned the job.",
+  "first_batch": 8
+ },
+ {
+  "id": "P-070",
+  "statement": "A landlord's go-ahead may cover only a simple fix; if parts or complexity arise, the contractor must quote and wait for further approval.",
+  "trigger": "Landlord approves attendance without a price.",
+  "action": "Pass the conditional scope to the contractor; any quote goes back to the landlord.",
+  "actor": "agency, landlord, contractor",
+  "category": "approval-authority",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "043",
+    "event": 11,
+    "quote": "needs part or is more complex, please quote it",
+    "evidence_type": "EXPLICIT",
+    "batch": 9,
+    "verified": true
+   }
+  ],
+  "notes": "Supports P-002/P-058; no spend limit is stated.",
+  "first_batch": 9
+ },
+ {
+  "id": "P-071",
+  "statement": "Before giving a tenant's contact details to a landlord's own contractor, get the tenant's consent.",
+  "trigger": "Landlord's contractor asks for the tenant's contact details.",
+  "action": "Phone the tenant, get authorisation, then pass them on.",
+  "actor": "agency, tenant",
+  "category": "safety-security",
+  "confidence": "LOW",
+  "flag": "CONFLICT",
+  "evidence": [
+   {
+    "case": "045",
+    "event": 12,
+    "quote": "gave authorisation to pass on her details",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 24,
+    "quote": "requesting the tenant's mobile number",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "role": "contradicts",
+    "verified": true
+   },
+   {
+    "case": "046",
+    "event": 25,
+    "quote": "07700 900298",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "role": "contradicts",
+    "verified": true
+   }
+  ],
+  "notes": "[B10] 046: tenant's number was emailed to the contractor with no consent step logged; 050 ev24 also sent tenant details (a different name) to the contractor. Consent is our safer default.",
+  "first_batch": 9,
+  "decision": "Our decision: get tenant consent (or confirm on the thread that the tenant agreed) before passing a number to a contractor; never send another person's details."
+ },
+ {
+  "id": "P-072",
+  "statement": "If the request is unclear, ask the tenant first (which item, was it landlord-requested) before approaching the landlord.",
+  "trigger": "Tenant report lacks the detail needed to brief the landlord.",
+  "action": "Email the tenant, hold Waiting for Tenant, then write to the landlord with the detail.",
+  "actor": "agency, tenant",
+  "category": "communication",
+  "confidence": "MEDIUM",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "044",
+    "event": 5,
+    "quote": "Which window is this please?",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   },
+   {
+    "case": "045",
+    "event": 3,
+    "quote": "Was this requested by your landlord?",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 9
+ },
+ {
+  "id": "P-073",
+  "statement": "If the landlord restricts scope for budget reasons, do not pursue the deferred items.",
+  "trigger": "Landlord approves part of the work only.",
+  "action": "Instruct or track only the approved part; note the deferred item.",
+  "actor": "landlord, agency",
+  "category": "financial",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "045",
+    "event": 11,
+    "quote": "budget for the windows for now",
+    "evidence_type": "OBSERVED",
+    "batch": 9,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 9
+ },
+ {
+  "id": "P-074",
+  "statement": "When the landlord's reply or the contractor's findings give alternatives (e.g. handle or lock), relay the priced options with VAT to the landlord rather than choosing; a blanket 'proceed with whatever is needed' then covers either.",
+  "trigger": "Contractor reply is ambiguous on the fault or offers options.",
+  "action": "Send options and prices to the landlord, then tell the contractor to proceed as approved; do not trust an unreadable summary as the quote.",
+  "actor": "agency, landlord, contractor",
+  "category": "approval-authority",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "050",
+    "event": 19,
+    "quote": "A new handle would be",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "050",
+    "event": 23,
+    "quote": "Please go ahead with whatever needed",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "Closing note records a quote given (49.40 incl VAT) that matches neither option; figures are examples.",
+  "first_batch": 10
+ },
+ {
+  "id": "P-075",
+  "statement": "Ask the contractor to send the invoice as a PDF.",
+  "trigger": "Visit date has passed and the invoice is outstanding.",
+  "action": "Ask whether the job was done and request a PDF invoice.",
+  "actor": "agency, contractor",
+  "category": "process-timing",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "046",
+    "event": 38,
+    "quote": "send it in PDF",
+    "evidence_type": "EXPLICIT",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 10
+ },
+ {
+  "id": "P-076",
+  "statement": "If a tenant withdraws part of a multi-issue request, tell the landlord and tenant and continue only with what remains.",
+  "trigger": "Tenant says one of several faults is fixed.",
+  "action": "Email landlord the narrowed scope, confirm to tenant, hold. If the landlord replies about a different scope or address, restate what remains.",
+  "actor": "agency, tenant, landlord",
+  "category": "communication",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "047",
+    "event": 6,
+    "quote": "My mother managed to fix the toilet.",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "047",
+    "event": 11,
+    "quote": "It is just the window issue that needs to be assessed now.",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "",
+  "first_batch": 10
+ },
+ {
+  "id": "P-077",
+  "statement": "For a minor fault the tenant offers to fix, ask the landlord whether the tenant may self-fix or a contractor is wanted; relay it, chase once for confirmation, and close without payment if fixed or no reply.",
+  "trigger": "Tenant reports a minor fault and is willing to fix it.",
+  "action": "No contractor until the tenant says they cannot; one chase stating the job will close without a reply.",
+  "actor": "agency, landlord, tenant",
+  "category": "process-timing",
+  "confidence": "LOW",
+  "flag": null,
+  "evidence": [
+   {
+    "case": "049",
+    "event": 4,
+    "quote": "Are you happy for them to do this",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "049",
+    "event": 8,
+    "quote": "Please let me know if not and I will then get a contractor",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   },
+   {
+    "case": "049",
+    "event": 12,
+    "quote": "if no reply will close off the job",
+    "evidence_type": "OBSERVED",
+    "batch": 10,
+    "verified": true
+   }
+  ],
+  "notes": "Extends P-045. 049 logged 'Proceed to provider selection' but no provider was assigned.",
+  "first_batch": 10
+ }
+]
