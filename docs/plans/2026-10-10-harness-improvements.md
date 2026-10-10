@@ -47,7 +47,8 @@ Tests: one prompt test that checks the Now value and the days-since line for cas
 ## 4. Attachment text
 
 - An attachment becomes visible when the event that links it becomes visible. The parser records the attachment links of each event. Files that no event links count as visible from the start.
-- PDF text is extracted once per file and cached next to the state. The library is a pinned npm PDF text library, published at least 7 days ago; I will choose it during the build. Each file is capped at about 8,000 characters, with a note when the text is cut.
+- PDF text comes from `unpdf@1.8.1`, pinned exactly. The package has no dependencies, is 2 MB, bundles pdf.js, and was released on 2026-08-13. Its `extractText(..., { mergePages: true })` read all 25 public PDFs in 2–52 ms each, and it kept the money totals. pypdf lost one: it read "Total:" with no amount on the case 003 invoice, where unpdf read "Total: £125". The PDFs contain text, not scans; their "Image evidence" blocks hold text captions only. OCR is therefore not needed.
+- The text is extracted once per file and cached next to the state. Each file is capped at about 8,000 characters, with a note when the text is cut. Most invoices and quotes are 0.9–1.7k characters. The inspection reports are 9–15k characters, so they get cut. The cut keeps the start of the report, which holds the summary and the defects.
 - `.txt`, `.csv` and `.md` files are included as text.
 - PNG and JPEG files become image blocks in the model call. Only the other tracks have images today.
 - A file that fails to extract shows as "could not read", with the error, and the run continues.
