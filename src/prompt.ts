@@ -75,30 +75,16 @@ export async function renderCase(c: Case, state: CaseState, visible: CaseEvent[]
     (a) => `- run ${a.run}, after event ${a.afterEvent}: ${a.tool} ${JSON.stringify(a.input)} -> ${a.ok ? "ok" : "failed"}: ${a.result}`,
   );
 
-  // Determine visible attachments
-  const visibleAttachmentNames = new Set<string>();
-
-  // Collect all attachments linked by ANY event in the case (to determine which are unlinked)
-  const allLinkedAttachments = new Set<string>();
-  for (const event of c.events) {
-    for (const att of event.attachments) {
-      allLinkedAttachments.add(att);
-    }
-  }
-
-  // Attachments visible: (1) those linked by visible events, (2) unlinked files (visible from start)
-  for (const event of visible) {
-    for (const att of event.attachments) {
-      visibleAttachmentNames.add(att);
-    }
-  }
-
-  // Add unlinked attachments (visible from start)
-  for (const att of c.attachments) {
-    if (!allLinkedAttachments.has(att)) {
-      visibleAttachmentNames.add(att);
-    }
-  }
+  // A document exists from the moment its event happened, even when the carrier is an agency email the agent
+  // never sees: the agent gets the document, not the email. Files no event links are visible from the start.
+  const reached = visible.length ? visible[visible.length - 1].n : 0;
+  const receivedWith = new Map<string, CaseEvent>();
+  for (const event of c.events) for (const att of event.attachments) if (!receivedWith.has(att)) receivedWith.set(att, event);
+  const visibleAttachmentNames = new Set(c.attachments.filter((att) => (receivedWith.get(att)?.n ?? 0) <= reached));
+  const received = (att: string) => {
+    const e = receivedWith.get(att);
+    return e ? `Received with event ${String(e.n).padStart(3, "0")} on ${e.at}.\n\n` : "";
+  };
 
   // Build attachment section and collect images
   const attachmentLines: string[] = [];
@@ -112,14 +98,14 @@ export async function renderCase(c: Case, state: CaseState, visible: CaseEvent[]
       if (content.type === "document") {
         nativeBudget -= Buffer.byteLength(content.data, "base64");
         documents.push({ filename, data: content.data });
-        attachmentLines.push(`### ${filename}\n\n(PDF attached in full: ${content.pages} page${content.pages === 1 ? "" : "s"})`);
+        attachmentLines.push(`### ${filename}\n\n${received(filename)}(PDF attached in full: ${content.pages} page${content.pages === 1 ? "" : "s"})`);
       } else if (content.type === "text") {
-        attachmentLines.push(`### ${filename}\n\n${content.text}`);
+        attachmentLines.push(`### ${filename}\n\n${received(filename)}${content.text}`);
       } else if (content.type === "image") {
         images.push({ filename, format: content.format, data: content.data });
-        attachmentLines.push(`### ${filename}\n\n(Image file: ${filename})`);
+        attachmentLines.push(`### ${filename}\n\n${received(filename)}(Image file: ${filename})`);
       } else {
-        attachmentLines.push(`### ${filename}\n\nCould not read: ${content.error}`);
+        attachmentLines.push(`### ${filename}\n\n${received(filename)}Could not read: ${content.error}`);
       }
     }
   }
