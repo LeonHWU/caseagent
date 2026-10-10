@@ -15,7 +15,7 @@ export type CloseChecks = {
 export type Status =
   | { kind: "open" }
   | { kind: "hold"; reason: HoldReason }
-  | { kind: "escalated"; summary: string }
+  | { kind: "escalated"; summary: string; checked?: string; missing_or_conflict?: string; decision_needed?: string }
   | { kind: "closed"; checks: CloseChecks };
 
 export type Action = {
@@ -43,6 +43,7 @@ export type CaseState = {
   notes: Note[];
   incomplete: boolean;
   approvalOnFile?: boolean;
+  landlordReplied?: boolean;
 };
 
 export function newState(caseId: string, initialSeen: number): CaseState {

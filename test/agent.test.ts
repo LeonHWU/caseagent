@@ -135,7 +135,7 @@ test("a tool that fails twice is escalated by the model, and both failures are r
   const f = fake([
     [use("a", "send_message", send)],
     [use("b", "send_message", send)],
-    [use("c", "escalate", { summary: "send_message failed twice (provider error). A person must contact the tenant.", reason: "Tool failed twice." })],
+    [use("c", "escalate", { checked: "the outbox and the tool errors", missing_or_conflict: "send_message failed twice (provider error)", decision_needed: "a person must contact the tenant", reason: "Tool failed twice." })],
   ]);
   await runCase({ ...base, state: s, client: f.client, adapters });
   assert.deepEqual(s.actions.map((a) => a.ok), [false, false, true]);
@@ -151,4 +151,23 @@ test("a fresh run keeps the previous trace instead of overwriting it", async () 
   assert.equal(files.length, 2);
   assert.ok(files.includes("027.jsonl"));
   for (const f of files) assert.match(readFileSync(join(out, "traces", f), "utf8"), /"kind":"run_start"/);
+});
+
+test("the landlord answer is only on file once a landlord event follows the request", async () => {
+  const c4 = loadCase("data/public/Property Management/004");
+  const s = newState("004", 4);
+  s.runs = 1;
+  s.seen = 12;
+  s.actions.push({ run: 1, afterEvent: 9, tool: "request_landlord_approval", input: {}, ok: true, result: "sent" });
+  const { client } = fake([[use("a", "hold", { waiting_for: "Waiting for Tenant", reason: "r" })]]);
+  await runCase({ c: c4, state: s, newFrom: 12, client, model: "fake", policy: "policy", trace: () => {} });
+  assert.equal(s.landlordReplied, true);
+
+  const s2 = newState("004", 4);
+  s2.runs = 1;
+  s2.seen = 11;
+  s2.actions.push({ run: 1, afterEvent: 9, tool: "request_landlord_approval", input: {}, ok: true, result: "sent" });
+  const { client: client2 } = fake([[use("a", "hold", { waiting_for: "Waiting for Landlord", reason: "r" })]]);
+  await runCase({ c: c4, state: s2, newFrom: 11, client: client2, model: "fake", policy: "policy", trace: () => {} });
+  assert.equal(s2.landlordReplied, false);
 });
