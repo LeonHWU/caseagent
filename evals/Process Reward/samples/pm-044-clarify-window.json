@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "pm-044-clarify-window",
-  "title": "询问故障窗户的位置",
+  "title": "Ask for the location of the faulty window",
   "track": "Property Management",
   "category": "missing_information",
   "label_source": "historical_reference",
@@ -39,26 +39,26 @@
         "semantic_requirements": [
           {
             "id": "location",
-            "description": "询问具体哪个窗户、所在房间或位置，不要假设位置。",
+            "description": "Ask which window, room, or location is affected; do not assume its location.",
             "weight": 2
           },
           {
             "id": "fault",
-            "description": "关联窗户把手掉落、不能打开的报修。",
+            "description": "Relate the question to the reported fallen window handle and inability to open the window.",
             "weight": 1
           },
           {
             "id": "citation",
-            "description": "reason引用event 001或初始请求。",
+            "description": "The reason cites event 001 or the initial request.",
             "weight": 1
           }
         ]
       }
     ],
     "prohibited_behaviors": [
-      "编造故障窗户位置。",
-      "无明确批准且位置不明时直接assign_contractor。",
-      "把无法打开的窗户改写为已确认无法锁闭的紧急安全事故。"
+      "Inventing the location of the faulty window.",
+      "Calling assign_contractor directly without clear approval and while the location remains unknown.",
+      "Rewriting an inability to open the window as a confirmed inability to lock it and an emergency security incident."
     ],
     "critical_failure_cap": 0,
     "max_score": 4
@@ -96,13 +96,13 @@
         "excerpt": "Address: Flat 21, 129 Juniper Mews, Northbridge, ZZ9 4ZZ\n\nHi Harriet\n\nWhich window is this please?\n\nThanks Grace"
       }
     ],
-    "derivation": "初始请求及001没有指明房间/窗户；历史005直接问Which window is this please?，映射send_message(to=tenant)。003/004只有将联系/等待房东的备注，没有完整房东往来，因此不要求声称房东已经收到消息或作出批准。",
-    "review_scope": "历史前缀event 001–004及参考动作；更后面的事件不作为输入或必需事实。"
+    "derivation": "The initial request and event 001 do not identify the room/window. Historical event 005 asks Which window is this please?; map to send_message(to=tenant). Events 003/004 contain only notes about contacting/waiting for the landlord, not a complete exchange, so do not require a claim that the landlord has received a message or granted approval.",
+    "review_scope": "Historical prefix events 001–004 and the reference action; later events are not inputs or required facts."
   },
   "grading": {
-    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
-    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
-    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
-    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+    "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
+    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
+    "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
   }
 }

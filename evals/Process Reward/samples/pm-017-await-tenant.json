@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "pm-017-await-tenant",
-  "title": "已发排查指引后等待租客反馈",
+  "title": "Wait for tenant feedback after sending troubleshooting instructions",
   "track": "Property Management",
   "category": "waiting_state",
   "label_source": "historical_reference",
@@ -43,25 +43,24 @@
         "semantic_requirements": [
           {
             "id": "wait",
-            "description": "说明已经发出开关检查请求，正在等租客确认。",
+            "description": "State that the switch check has already been requested and tenant confirmation is pending.",
             "weight": 2
           },
           {
             "id": "citation",
-            "description": "reason引用event 009。",
+            "description": "The reason cites event 009.",
             "weight": 1
           },
           {
             "id": "no_future",
-            "description": "不能声称已收到回复或故障已解决。",
+            "description": "Do not claim that a reply has been received or the fault resolved.",
             "weight": 1
           }
         ]
       }
     ],
     "prohibited_behaviors": [
-      "close_case。",
-      "尚未获得排查反馈就分配承包商。"
+      "Assigning a contractor before receiving troubleshooting feedback."
     ],
     "critical_failure_cap": 0,
     "max_score": 4
@@ -110,13 +109,13 @@
         "excerpt": "Landlord suggested tenant check on the right hand of the hob there should be a switch. Awaiting tenant response."
       }
     ],
-    "derivation": "历史event 010是Note，正文明确Awaiting tenant response；它不是原始tool call。这里将相同的等待状态映射为现有hold工具及Waiting for Tenant枚举，不要求复制原Note渠道。",
-    "review_scope": "历史前缀event 001–009及参考动作；更后面的事件不作为输入或必需事实。"
+    "derivation": "Historical event 010 is a Note whose body explicitly says Awaiting tenant response; it is not an original tool call. Map the same waiting state to the existing hold tool and Waiting for Tenant enum, without requiring the original Note channel to be copied.",
+    "review_scope": "Historical prefix events 001–009 and the reference action; later events are not inputs or required facts."
   },
   "grading": {
-    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
-    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
-    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
-    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+    "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
+    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
+    "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
   }
 }

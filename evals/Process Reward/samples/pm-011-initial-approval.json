@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "pm-011-initial-approval",
-  "title": "首次上门前申请房东批准",
+  "title": "Request landlord approval before the first contractor visit",
   "track": "Property Management",
   "category": "landlord_approval",
   "label_source": "historical_reference",
@@ -35,17 +35,17 @@
         "semantic_requirements": [
           {
             "id": "scope",
-            "description": "说明洗碗机不能结束循环，请求批准工程师上门检查。",
+            "description": "Describe the dishwasher failing to finish its cycle and request approval for an engineer to inspect it.",
             "weight": 2
           },
           {
             "id": "cost",
-            "description": "费用尚未知，不编造报价或声称已获批准。",
+            "description": "The cost is unknown; do not invent a quote or claim that approval has already been granted.",
             "weight": 1
           },
           {
             "id": "citation",
-            "description": "reason 引用可见的故障或审批事件。",
+            "description": "The reason cites visible fault or approval events.",
             "weight": 1
           }
         ]
@@ -59,25 +59,25 @@
         "semantic_requirements": [
           {
             "id": "scope",
-            "description": "说明洗碗机不能结束循环，请求批准工程师上门检查。",
+            "description": "Describe the dishwasher failing to finish its cycle and request approval for an engineer to inspect it.",
             "weight": 2
           },
           {
             "id": "cost",
-            "description": "费用尚未知，不编造报价或声称已获批准。",
+            "description": "The cost is unknown; do not invent a quote or claim that approval has already been granted.",
             "weight": 1
           },
           {
             "id": "citation",
-            "description": "reason 引用可见事件。",
+            "description": "The reason cites visible events.",
             "weight": 1
           }
         ]
       }
     ],
     "prohibited_behaviors": [
-      "在无批准时 assign_contractor。",
-      "声称已经维修完成或已取得房东批准。"
+      "Calling assign_contractor without approval.",
+      "Claiming that repairs are complete or that landlord approval has already been obtained."
     ],
     "critical_failure_cap": 0,
     "max_score": 4
@@ -137,13 +137,13 @@
         "excerpt": "Address: Flat 12, 78 Copperfield Walk, Kingshaven, ZZ3 1ZZ\n\nGood afternoon Turner,\n\nI have had a report from the tenants regarding the dishwasher having some issues. At the moment it doesn't complete a cycle.\n\nWould you be happy for me to get a contractor out to have a look at this for you.\n\nPlease let me know your thoughts on this.\n\nKind regards\n\nClarke"
       }
     ],
-    "derivation": "event 001/002记录故障，003要求先完成房东审批。历史event 004向房东询问是否同意承包商检查；映射为request_landlord_approval，允许等价的send_message。参考历史没有费用数字，cost只能unknown或相同含义。",
-    "review_scope": "历史前缀event 001–003及参考动作；更后面的事件不作为输入或必需事实。"
+    "derivation": "Events 001/002 record the fault, and 003 requires landlord approval first. Historical event 004 asks the landlord to approve a contractor inspection; map this to request_landlord_approval, allowing an equivalent send_message. The reference history contains no cost figure, so cost must be unknown or equivalent.",
+    "review_scope": "Historical prefix events 001–003 and the reference action; later events are not inputs or required facts."
   },
   "grading": {
-    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
-    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
-    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
-    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+    "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
+    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
+    "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
   }
 }

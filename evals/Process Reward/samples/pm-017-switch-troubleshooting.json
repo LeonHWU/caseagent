@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "pm-017-switch-troubleshooting",
-  "title": "转达房东提供的抽油烟机开关位置",
+  "title": "Relay the extractor fan switch location supplied by the landlord",
   "track": "Property Management",
   "category": "tenant_troubleshooting",
   "label_source": "historical_reference",
@@ -43,25 +43,25 @@
         "semantic_requirements": [
           {
             "id": "instruction",
-            "description": "转达灶台右侧开关需要打开的具体信息。",
+            "description": "Relay the specific instruction to turn on the switch on the right-hand side of the hob.",
             "weight": 2
           },
           {
             "id": "confirmation",
-            "description": "请租客检查并回复是否恢复正常。",
+            "description": "Ask the tenant to check and report whether normal operation has resumed.",
             "weight": 1
           },
           {
             "id": "citation",
-            "description": "reason引用event 008，不提前使用event 011的成功结果。",
+            "description": "The reason cites event 008 without using the successful outcome in future event 011.",
             "weight": 1
           }
         ]
       }
     ],
     "prohibited_behaviors": [
-      "提前宣称抽油烟机已经正常。",
-      "尚未确认排查结果就close_case或安排收费维修。"
+      "Prematurely claiming that the extractor fan is working.",
+      "Calling close_case or arranging paid repairs before confirming the troubleshooting result."
     ],
     "critical_failure_cap": 0,
     "max_score": 4
@@ -110,13 +110,13 @@
         "excerpt": "Address: Flat 1, 31 Juniper Mews, Cedarford, ZZ7 7ZZ\n\nGood afternoon Clara,\n\nI trust you are well.\n\nThe landlord has advised that there is a switch to the right-hand side of the hob which needs to be switched on. Please could you check this and let me know if everything is working correctly?\n\nKind regards,\nImogen\nNorthbridge Lettings"
       }
     ],
-    "derivation": "event 008是房东提供的具体排查信息。历史event 009将其转达租客并要求反馈；直接映射到send_message(to=tenant,channel=email)。租客确认正常的011只能作为后续记录，不能出现在输入或决策事实中。",
-    "review_scope": "历史前缀event 001–008及参考动作；更后面的事件不作为输入或必需事实。"
+    "derivation": "Event 008 contains specific troubleshooting information from the landlord. Historical event 009 relays it to the tenant and requests feedback; map it directly to send_message(to=tenant,channel=email). The tenant confirmation in 011 is a later record and must not appear in the input or as a known decision fact.",
+    "review_scope": "Historical prefix events 001–008 and the reference action; later events are not inputs or required facts."
   },
   "grading": {
-    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
-    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
-    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
-    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+    "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
+    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
+    "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
   }
 }

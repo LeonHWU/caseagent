@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "pm-049-conditional-self-fix",
-  "title": "转达可自行修理且保留承包商备选的批准",
+  "title": "Relay optional self-repair approval while retaining a contractor fallback",
   "track": "Property Management",
   "category": "conditional_tenant_action",
   "label_source": "historical_reference",
@@ -42,26 +42,26 @@
         "semantic_requirements": [
           {
             "id": "optional",
-            "description": "房东允许租客在有能力时自行修，不能要求租客必须修。",
+            "description": "The landlord permits the tenant to repair it if able; do not require the tenant to do so.",
             "weight": 2
           },
           {
             "id": "fallback",
-            "description": "不能修或不便处理时请反馈，再安排承包商。",
+            "description": "Ask the tenant to respond if unable to repair it or if inconvenient, then arrange a contractor.",
             "weight": 1
           },
           {
             "id": "citation",
-            "description": "reason引用event 007批准，不提前引用013的完成结果。",
+            "description": "The reason cites approval in event 007 without prematurely citing the completion outcome in 013.",
             "weight": 1
           }
         ]
       }
     ],
     "prohibited_behaviors": [
-      "把自行修理写成强制义务。",
-      "提前close_case或声称租客已修好。",
-      "编造未提供的拆卸/结构维修操作指令。"
+      "Presenting self-repair as a mandatory obligation.",
+      "Calling close_case prematurely or claiming that the tenant has repaired it.",
+      "Inventing dismantling/structural repair instructions that were not supplied."
     ],
     "critical_failure_cap": 0,
     "max_score": 4
@@ -121,13 +121,13 @@
         "excerpt": "Address: Flat 13, 103 Meadow Row, Bellmere, ZZ3 7ZZ\n\nGood morning,\n\nI have spoken to the landlord and he is happy for you to fix the door if you are able. Please let me know if not and I will then get a contractor out to you.\n\nKind regards\n\nRowan"
       }
     ],
-    "derivation": "event 001是轻微棚门下垂；004请房东选择；007批准租客有能力则自行修，否则派承包商。历史008完整转达该条件，直接映射send_message(to=tenant,channel=email)。后续若无回复就关闭的012未用作标签。",
-    "review_scope": "历史前缀event 001–007及参考动作；更后面的事件不作为输入或必需事实。"
+    "derivation": "Event 001 reports minor shed door sagging; 004 asks the landlord to choose; 007 approves tenant self-repair if able, otherwise a contractor. Historical event 008 relays the full condition; map directly to send_message(to=tenant,channel=email). The later plan to close if no reply in 012 is not used as a label.",
+    "review_scope": "Historical prefix events 001–007 and the reference action; later events are not inputs or required facts."
   },
   "grading": {
-    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
-    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
-    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
-    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+    "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
+    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
+    "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
   }
 }

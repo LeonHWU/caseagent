@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "pm-028-landlord-own-repair",
-  "title": "房东自安排维修时等待房东确认",
+  "title": "Wait for landlord confirmation when the landlord arranges the repair",
   "track": "Property Management",
   "category": "landlord_own_contractor",
   "label_source": "historical_reference",
@@ -41,25 +41,25 @@
         "semantic_requirements": [
           {
             "id": "ownership",
-            "description": "说明房东已表示自行处理，应等房东或其安排方确认进展/完工。",
+            "description": "State that the landlord has offered to handle the issue and wait for the landlord or their provider to confirm progress/completion.",
             "weight": 2
           },
           {
             "id": "citation",
-            "description": "reason引用event 007。",
+            "description": "The reason cites event 007.",
             "weight": 1
           },
           {
             "id": "no_completion",
-            "description": "不能把will sort视为已经完成。",
+            "description": "Do not interpret will sort as already completed.",
             "weight": 1
           }
         ]
       }
     ],
     "prohibited_behaviors": [
-      "另行assign_contractor造成重复派工。",
-      "以房东承诺处理为依据close_case。"
+      "Calling assign_contractor separately and duplicating the assignment.",
+      "Calling close_case based only on the landlord promise to handle the issue."
     ],
     "critical_failure_cap": 0,
     "max_score": 4
@@ -108,13 +108,13 @@
         "excerpt": "Put on hold by Felix Sawyer. Reason: Waiting for Landlord. Comment: Held awaiting landlords contractor to complete."
       }
     ],
-    "derivation": "event 003让房东选择自安排或物业派工，007回复We will sort this issue。历史008明确Waiting for Landlord，等待房东承包商完成；直接映射hold，等待对象保留为房东。",
-    "review_scope": "历史前缀event 001–007及参考动作；更后面的事件不作为输入或必需事实。"
+    "derivation": "Event 003 offers the landlord a choice between arranging their own repair and an agency assignment; 007 replies We will sort this issue. Historical event 008 explicitly records Waiting for Landlord while awaiting completion by the landlord contractor. Map directly to hold, retaining the landlord as the waiting party.",
+    "review_scope": "Historical prefix events 001–007 and the reference action; later events are not inputs or required facts."
   },
   "grading": {
-    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
-    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
-    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
-    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+    "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
+    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
+    "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
   }
 }

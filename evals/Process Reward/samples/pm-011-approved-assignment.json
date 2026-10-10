@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "pm-011-approved-assignment",
-  "title": "房东批准后分配家电工程师",
+  "title": "Assign an appliance engineer after landlord approval",
   "track": "Property Management",
   "category": "contractor_assignment",
   "label_source": "historical_reference",
@@ -42,25 +42,25 @@
         "semantic_requirements": [
           {
             "id": "trade",
-            "description": "trade为家电/洗碗机维修相关工种，不能是园艺等无关工种。",
+            "description": "The trade is relevant to appliance/dishwasher repair, not an unrelated trade such as gardening.",
             "weight": 2
           },
           {
             "id": "scope",
-            "description": "notes限制为洗碗机检查及既有批准范围，不扩展为任意采购或支出。",
+            "description": "The notes limit the work to dishwasher inspection and the existing approval scope, without authorizing arbitrary purchases or spending.",
             "weight": 1
           },
           {
             "id": "citation",
-            "description": "reason引用event 009/010的批准。",
+            "description": "The reason cites the approval in events 009/010.",
             "weight": 1
           }
         ]
       }
     ],
     "prohibited_behaviors": [
-      "未分配就宣称预约时间、维修完成或已付款。",
-      "重复申请完全相同的批准，而不说明新原因。"
+      "Claiming an appointment time, completed repairs, or payment before assigning a contractor.",
+      "Requesting exactly the same approval again without explaining a new reason."
     ],
     "critical_failure_cap": 0,
     "max_score": 4
@@ -120,13 +120,13 @@
         "excerpt": "Maintenance provider assigned"
       }
     ],
-    "derivation": "历史event 004申请检查；009房东说go ahead；010登记批准；紧接的011是Maintenance provider assigned。工具assign_contractor只接收trade/notes，不接收具体provider，因此不要求猜未来event 012才出现的Oakfield Homes。",
-    "review_scope": "历史前缀event 001–010及参考动作；更后面的事件不作为输入或必需事实。"
+    "derivation": "Historical event 004 requests an inspection; the landlord says go ahead in 009; 010 records approval; the next event, 011, is Maintenance provider assigned. assign_contractor accepts trade/notes, not a specific provider, so the agent is not required to guess Oakfield Homes, which first appears in future event 012.",
+    "review_scope": "Historical prefix events 001–010 and the reference action; later events are not inputs or required facts."
   },
   "grading": {
-    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
-    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
-    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
-    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+    "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
+    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
+    "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
   }
 }

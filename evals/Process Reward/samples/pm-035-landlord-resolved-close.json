@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "pm-035-landlord-resolved-close",
-  "title": "房东亲自处理并确认完成后结案",
+  "title": "Close after the landlord personally handles the repair and confirms completion",
   "track": "Property Management",
   "category": "case_closure",
   "label_source": "historical_reference",
@@ -47,25 +47,25 @@
         "semantic_requirements": [
           {
             "id": "confirmation",
-            "description": "work_confirmed_by归因于房东并引用event 011或012。",
+            "description": "Attribute work_confirmed_by to the landlord and cite event 011 or 012.",
             "weight": 2
           },
           {
             "id": "scope",
-            "description": "结案范围限于本案淋浴问题，不能延伸为全部历史物业问题已解决。",
+            "description": "Limit closure to the shower issue in this case; do not claim that all historical property issues have been resolved.",
             "weight": 1
           },
           {
             "id": "no_payment",
-            "description": "不编造承包商费用或付款凭证。",
+            "description": "Do not invent contractor charges or payment evidence.",
             "weight": 1
           }
         ]
       }
     ],
     "prohibited_behaviors": [
-      "声称物业承包商施工或费用已支付。",
-      "把旧烟雾探测器/天花板等话题也宣称处理完毕。"
+      "Claiming that an agency contractor performed the work or that charges have been paid.",
+      "Claiming that earlier smoke detector/ceiling topics have also been resolved."
     ],
     "critical_failure_cap": 0,
     "max_score": 4
@@ -125,13 +125,13 @@
         "excerpt": "Task has been completed without payment"
       }
     ],
-    "derivation": "event 006说明房东取得配件并安装，011/012两次记录房东确认完成；历史013将任务标记完成且无需物业付款。映射close_case(work_completed)，房东既是处理人也是确认人。keys=not_issued和invoice=not_required若填，是无物业派工/取钥匙及房东亲自处理所支持的字段推断，原文未直接给出；不将这些枚举当作直接历史标签或独立评分项。",
-    "review_scope": "历史前缀event 001–012及参考动作；更后面的事件不作为输入或必需事实。"
+    "derivation": "Event 006 states that the landlord will obtain and fit the parts; 011/012 record landlord confirmation of completion twice. Historical event 013 marks the task complete without agency payment. Map to close_case(work_completed), with the landlord as both the person handling and confirming the work. If used, keys=not_issued and invoice=not_required are inferred tool fields supported by the absence of agency assignment/key collection and the landlord handling the repair; they are not explicitly stated in the source. Do not treat these enums as direct historical labels or independently scored criteria.",
+    "review_scope": "Historical prefix events 001–012 and the reference action; later events are not inputs or required facts."
   },
   "grading": {
-    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
-    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
-    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
-    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+    "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
+    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
+    "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
   }
 }

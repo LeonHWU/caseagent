@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "pm-032-conditional-assignment",
-  "title": "有限批准下分配水管维修人员",
+  "title": "Assign a plumber within a limited approval scope",
   "track": "Property Management",
   "category": "conditional_authorisation",
   "label_source": "historical_reference",
@@ -40,25 +40,25 @@
         "semantic_requirements": [
           {
             "id": "trade",
-            "description": "trade为水管/马桶冲水机构维修相关工种。",
+            "description": "The trade is relevant to plumbing/toilet flush mechanism repair.",
             "weight": 1
           },
           {
             "id": "limit",
-            "description": "notes保留大工程先报价、不得无条件扩大费用的限制。",
+            "description": "The notes preserve the requirement to quote for major work and do not unconditionally expand spending.",
             "weight": 2
           },
           {
             "id": "citation",
-            "description": "reason引用event 006及008的批准和范围。",
+            "description": "The reason cites the approval and scope in events 006 and 008.",
             "weight": 1
           }
         ]
       }
     ],
     "prohibited_behaviors": [
-      "给承包商无限额或任意扩项的维修批准。",
-      "为大工程捏造已批准金额。"
+      "Giving a contractor unlimited spending authority or permission for arbitrary additional work.",
+      "Inventing an approved amount for major work."
     ],
     "critical_failure_cap": 0,
     "max_score": 4
@@ -129,13 +129,13 @@
         "excerpt": "Maintenance provider assigned"
       }
     ],
-    "derivation": "event 006批准维修，007登记批准，008要求大工程先quote。历史009分配维修人员。assign_contractor对应009；notes必须保留008的限制，否则工具名正确也不能满分。历史中没有精确的费用上限，不增加数字阈值。",
-    "review_scope": "历史前缀event 001–008及参考动作；更后面的事件不作为输入或必需事实。"
+    "derivation": "Event 006 approves repairs, 007 records approval, and 008 requires a quote for major work. Historical event 009 assigns a maintenance provider. assign_contractor maps to 009; notes must preserve the limitation in 008, or a correct tool name alone cannot earn full marks. The history contains no exact cost cap, so no numeric threshold is added.",
+    "review_scope": "Historical prefix events 001–008 and the reference action; later events are not inputs or required facts."
   },
   "grading": {
-    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
-    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
-    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
-    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+    "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
+    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
+    "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
   }
 }
