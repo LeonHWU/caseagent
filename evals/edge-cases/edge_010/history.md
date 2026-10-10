@@ -1,12 +1,10 @@
 # Case edge_010 history
 
+Total events: 3
 
-
-Events so far: 3. This is the case state as received; later history, if any, is not shown.
-
-
-
+<a id="event-001"></a>
 ## 2025-09-28 11:05:33 UTC — event 001
+
 - **Channel:** Note
 - **From:** Northbridge Lettings
 - **To:** Not specified
@@ -14,8 +12,8 @@ Events so far: 3. This is the case state as received; later history, if any, is 
 Request description: The silicone seal round the bath has gone black and peeling, waters getting behind it and theres a damp patch on the kitchen ceiling below now. avery
 
 <a id="event-002"></a>
-
 ## 2025-09-30 14:22:08 UTC — event 002
+
 - **Channel:** Email
 - **From:** Northbridge Lettings
 - **To:** Landlord
@@ -31,8 +29,8 @@ Request description: The silicone seal round the bath has gone black and peeling
 Kind regards
 
 <a id="event-003"></a>
-
 ## 2025-10-02 19:48:51 UTC — event 003
+
 - **Channel:** Email
 - **From:** Landlord
 - **To:** Northbridge Lettings
@@ -42,5 +40,3 @@ Not paying for this. Its cosmetic, the tenants can scrub it and reseal it themse
 Do not instruct anyone.
 
 Jenkins
-
-<a id="event-004"></a>

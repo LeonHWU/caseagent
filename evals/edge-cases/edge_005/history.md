@@ -1,12 +1,10 @@
 # Case edge_005 history
 
+Total events: 2
 
-
-Events so far: 2. This is the case state as received; later history, if any, is not shown.
-
-
-
+<a id="event-001"></a>
 ## 2026-02-02 14:37:55 UTC — event 001
+
 - **Channel:** Email
 - **From:** Landlord
 - **To:** Northbridge Lettings
@@ -20,8 +18,8 @@ Don't bother me with options, just get a proper one fitted and invoice me as usu
 Oscar
 
 <a id="event-002"></a>
-
 ## 2026-02-02 14:38:10 UTC — event 002
+
 - **Channel:** Note
 - **From:** Northbridge Lettings
 - **To:** Not specified
@@ -35,5 +33,3 @@ Oscar
   Heating & Hot Water
   **Severity:** ROUTINE
   **Confidence:** medium
-
-<a id="event-003"></a>

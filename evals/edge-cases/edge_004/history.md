@@ -1,12 +1,10 @@
 # Case edge_004 history
 
+Total events: 1
 
-
-Events so far: 1. This is the case state as received; later history, if any, is not shown.
-
-
-
+<a id="event-001"></a>
 ## 2025-12-08 10:02:41 UTC — event 001
+
 - **Channel:** Note
 - **From:** Northbridge Lettings
 - **To:** Not specified
@@ -27,5 +25,3 @@ Please confirm the current occupier's full name, mobile number and email address
 
 Regards,
 Vertex Utilities
-
-<a id="event-002"></a>

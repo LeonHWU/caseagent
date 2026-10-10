@@ -1,12 +1,10 @@
 # Case edge_001 history
 
+Total events: 3
 
-
-Events so far: 3. This is the case state as received; later history, if any, is not shown.
-
-
-
+<a id="event-001"></a>
 ## 2025-11-14 09:12:38 UTC — event 001
+
 - **Channel:** Note
 - **From:** Northbridge Lettings
 - **To:** Not specified
@@ -14,8 +12,8 @@ Events so far: 3. This is the case state as received; later history, if any, is 
 Request description: hiya, the kitchen tap wont stop dripping, been going about a week now its driving me mad. also one of the cupboard doors under the sink is hanging off the hinge. can someone come sort it cheers. wendy
 
 <a id="event-002"></a>
-
 ## 2025-11-14 09:12:39 UTC — event 002
+
 - **Channel:** Note
 - **From:** Northbridge Lettings
 - **To:** Not specified
@@ -39,12 +37,10 @@ Request description: hiya, the kitchen tap wont stop dripping, been going about 
   **A:** Margot Preece i think, we only moved in september
 
 <a id="event-003"></a>
-
 ## 2025-11-14 09:13:02 UTC — event 003
+
 - **Channel:** Update
 - **From:** Northbridge Lettings
 - **To:** Not specified
 
 Please complete landlord approval step first
-
-<a id="event-004"></a>
