@@ -9,11 +9,12 @@ function answerMd(c: Case, s: CaseState, visible: CaseEvent[]): string {
   const received = visible.map((e) => `- [event ${String(e.n).padStart(3, "0")}] ${e.channel} from ${e.from}`).join("\n");
   const rows = s.actions.map((a) => `| ${a.run} | ${a.afterEvent} | ${a.tool} | ${a.ok ? "ok" : "failed"} | ${cell(a.result)} |`).join("\n");
   const failed = s.actions.filter((a) => !a.ok).map((a) => `- ${a.tool}: ${a.result}`).join("\n");
+  const loaderNote = c.layer === "raw" ? "\n\n**Raw mode loaded:** this case was reconstructed from unstructured files. Review for leaks." : "";
   return `# Case ${c.id}: ${c.title}
 
 **Final status:** ${statusLabel(s.status)}
-**Runs:** ${s.runs} · **Events seen:** up to event ${s.seen}
-${s.incomplete ? "\n**Incomplete:** the agent did not finish this run, so the system escalated the case to a person.\n" : ""}
+**Runs:** ${s.runs} · **Events seen:** up to event ${s.seen} · **Loaded with:** ${c.layer}
+${s.incomplete ? "\n**Incomplete:** the agent did not finish this run, so the system escalated the case to a person.\n" : ""}${loaderNote}
 ## What the system received
 
 - The case details and the initial request from index.md. The Overview and Outcome sections were withheld.

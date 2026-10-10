@@ -40,3 +40,43 @@ test("isAgency: Northbridge and the system are the agency, everyone else is outs
   for (const from of ["Agency / system", "Northbridge Lettings", "Northbridge Lettings system"]) assert.equal(isAgency(from), true, from);
   for (const from of ["Tenant", "Landlord", "Contractor", "Maintenance provider", "Juniper Surveying"]) assert.equal(isAgency(from), false, from);
 });
+
+test("strict parser: loads case with standard format", () => {
+  const c = loadCase("test/fixtures/strict");
+  assert.equal(c.id, "strict");
+  assert.equal(c.layer, "strict");
+  assert.equal(c.events.length, 2);
+  assert.doesNotMatch(JSON.stringify(c), /Outcome|Overview/);
+});
+
+test("lenient parser: loads case with relaxed formatting", () => {
+  const c = loadCase("test/fixtures/lenient");
+  assert.equal(c.id, "lenient");
+  assert.equal(c.layer, "lenient");
+  assert.equal(c.events.length, 2);
+  assert.doesNotMatch(JSON.stringify(c), /Outcome|Overview/);
+});
+
+test("loose parser: loads case from separate files", () => {
+  const c = loadCase("test/fixtures/loose");
+  assert.equal(c.id, "loose");
+  assert.equal(c.layer, "loose");
+  assert.equal(c.events.length, 2);
+  assert.match(c.events[0].body, /leak/i);
+});
+
+test("raw parser: loads case from unstructured content with stripping", () => {
+  const c = loadCase("test/fixtures/raw");
+  assert.equal(c.id, "raw");
+  assert.equal(c.layer, "raw");
+  assert.equal(c.events.length, 1);
+  assert.doesNotMatch(c.details, /Overview|Resolution|Summary|Status|Completed/);
+  assert.match(c.details, /broken pipe|plumbing work/i);
+});
+
+test("unreadable folder fails with error message", () => {
+  assert.throws(
+    () => loadCase("test/fixtures/unreadable"),
+    (e) => String(e).includes("could not load case")
+  );
+});

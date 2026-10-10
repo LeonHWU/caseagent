@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { runCase, type ModelClient, type Trace } from "./agent.ts";
 import { writeAnswer } from "./answers.ts";
 import { initialSeen, nextSeen, visibleEvents } from "./cut.ts";
@@ -24,7 +24,31 @@ export function summary(state: CaseState): string {
 
 export async function processCase(deps: RunDeps, dir: string, next: boolean): Promise<CaseState> {
   const { out, client, model, policy } = deps;
-  const c = loadCase(dir);
+
+  let c: ReturnType<typeof loadCase>;
+  let loadError = false;
+  try {
+    c = loadCase(dir);
+  } catch (e) {
+    loadError = true;
+    const message = e instanceof Error ? e.message : String(e);
+    const id = basename(dir);
+    const statePath = join(out, "state", `${id}.json`);
+    const tracePath = join(out, "traces", `${id}.jsonl`);
+    mkdirSync(dirname(tracePath), { recursive: true });
+    writeFileSync(tracePath, "");
+    const state = newState(id, 0);
+    state.incomplete = true;
+    state.status = { kind: "escalated", summary: `Loading error: ${message}. A person must review case ${id}.` };
+    const trace: Trace = (kind, data) =>
+      appendFileSync(tracePath, JSON.stringify({ t: new Date().toISOString(), kind, ...data }) + "\n");
+    const emptyCase = { id, title: id, details: "", request: "", events: [], attachments: [], layer: "raw" as const };
+    saveState(statePath, state);
+    writeAnswer(out, emptyCase, state, [], []);
+    trace("error", { message });
+    return state;
+  }
+
   const statePath = join(out, "state", `${c.id}.json`);
   const tracePath = join(out, "traces", `${c.id}.jsonl`);
   mkdirSync(dirname(tracePath), { recursive: true });
