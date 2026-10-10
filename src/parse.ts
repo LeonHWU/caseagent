@@ -195,7 +195,7 @@ function tryLoose(dir: string): Case | null {
 
 function stripHiddenContent(text: string): string {
   let result = text;
-  result = result.replace(/^#{1,6}\s+(Overview|Outcome|Resolution|Summary)\b[^\n]*\n(?:(?!^#{1,6}\s)[\s\S])*?(?=^#{1,6}\s|$)/gim, "");
+  result = result.replace(/^#{1,6}\s+(Overview|Outcome|Resolution|Summary)\b[^\n]*\n(?:(?!^#{1,6}\s)[\s\S])*/gim, "");
   result = result.split("\n").filter((line) => !/^\*\*(Status|Updated|Completed):/i.test(line)).join("\n");
   return result;
 }

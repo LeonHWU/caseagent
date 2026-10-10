@@ -71,7 +71,8 @@ test("raw parser: loads case from unstructured content with stripping", () => {
   assert.equal(c.layer, "raw");
   assert.equal(c.events.length, 1);
   assert.doesNotMatch(c.details, /Overview|Resolution|Summary|Status|Completed/);
-  assert.match(c.details, /broken pipe|plumbing work/i);
+  assert.doesNotMatch(c.details, /broken pipe|PVC|case is resolved|satisfied|should be hidden/i);
+  assert.match(c.details, /Water was found pooling|water damage/i);
 });
 
 test("unreadable folder fails with error message", () => {
