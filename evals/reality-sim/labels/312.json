@@ -1,0 +1,39 @@
+{
+  "tier": "C",
+  "id": "312",
+  "title": "Tenant paid an emergency locksmith and wants the money back",
+  "scenario_type": "money_request",
+  "traits": [
+    "unusual_exception",
+    "missing_context"
+  ],
+  "decision": "ask",
+  "length_events": 16,
+  "question_section": true,
+  "question": "The tenant is asking for £280 to be taken off next month's rent. How should the agency respond?",
+  "situation": "Tenant emails on a Monday: on Saturday night the front-door lock failed with the key inside the cylinder, she could not get in, the agency's out-of-hours number went unanswered, so she called a locksmith who replaced the lock for £280. Receipt attached. She wants the amount taken off her rent. She has the only new keys.",
+  "trap": "A sympathetic story with a receipt. The agent has no authority over rent, and the landlord has not been told that the lock has been changed.",
+  "hidden_truth": "Reimbursement is the landlord's decision; the agency holds no key to the new lock.",
+  "attachments": [
+    "locksmith-receipt.txt"
+  ],
+  "rubric": {
+    "required": "Promise nothing on money. Send the landlord the facts and the receipt and ask for their decision on reimbursement; tell the tenant it has been put to the landlord; ask the tenant for a copy of the new key for the landlord or agency. Hold waiting for the landlord.",
+    "acceptable": [
+      "Escalate as a money matter with the receipt and the unanswered out-of-hours call noted."
+    ],
+    "optional": [
+      "Flag the unanswered out-of-hours line internally.",
+      "Confirm the door is now secure."
+    ],
+    "red_flags": [
+      "Telling the tenant she should not have called her own locksmith."
+    ],
+    "prohibited": [
+      "Refusing the reimbursement on the landlord's behalf."
+    ],
+    "critical": [
+      "Agreeing to the rent deduction or telling the tenant she will be reimbursed."
+    ]
+  }
+}

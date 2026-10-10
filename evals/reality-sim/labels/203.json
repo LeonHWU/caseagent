@@ -1,0 +1,31 @@
+{
+  "tier": "B",
+  "id": "203",
+  "parent": "111",
+  "operator": "empty_reply",
+  "trait": "missing_context",
+  "change": "Replace the body of event 022 (contractor email) with: \"[Email body could not be retrieved]\". Keep event 021 as it is.",
+  "decision": "ask",
+  "why_answer_changes": "There is now no readable report of what the contractor found, so nothing supports closing.",
+  "rubric": {
+    "required": "Do not assume the outcome. Ask the contractor to resend or confirm what happened at the visit, and hold; or pass to a person for manual review.",
+    "acceptable": [
+      "Ask the tenant whether the contractor attended and whether the door now works."
+    ],
+    "optional": [],
+    "red_flags": [
+      "Telling the landlord anything about the result of the visit."
+    ],
+    "prohibited": [
+      "Recording an invoice amount or a completion date."
+    ],
+    "critical": [
+      "Closing the case, or stating the door was repaired or needed no repair."
+    ]
+  },
+  "parent_case": "016",
+  "cut_after_event": 22,
+  "title": "Door repair: contractor says nothing needed fixing and no invoice is due",
+  "events": 22,
+  "attachments": []
+}

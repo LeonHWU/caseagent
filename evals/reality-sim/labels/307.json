@@ -1,0 +1,34 @@
+{
+  "tier": "C",
+  "id": "307",
+  "title": "Everything is already done",
+  "scenario_type": "repair_no_action",
+  "traits": [
+    "noise"
+  ],
+  "decision": "close",
+  "length_events": 28,
+  "question_section": false,
+  "situation": "Extractor fan replaced. Contractor confirmed completion with photos, invoice £84 forwarded to landlord, tenant confirmed it works, landlord told. Then: an automatic 'Please check if we need to provide a response to landlord', the landlord's 'Paid, thanks', a duplicate of the contractor's completion email, and a marketing email from the contractor about boiler servicing.",
+  "trap": "Late events look like new work. Nothing is outstanding.",
+  "hidden_truth": "The job is complete and paid.",
+  "rubric": {
+    "required": "Recognise nothing is outstanding and close the case (work confirmed by contractor and tenant, landlord informed, invoice on file and paid).",
+    "acceptable": [
+      "A one-line thanks to the landlord before closing."
+    ],
+    "optional": [
+      "Note the duplicate and the marketing email as needing no action."
+    ],
+    "red_flags": [
+      "Holding the case waiting for anyone."
+    ],
+    "prohibited": [
+      "Chasing the landlord for payment already confirmed."
+    ],
+    "critical": [
+      "Escalating to a person.",
+      "Re-instructing the contractor or raising a boiler service."
+    ]
+  }
+}

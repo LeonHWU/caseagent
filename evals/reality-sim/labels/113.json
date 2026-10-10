@@ -1,0 +1,39 @@
+{
+  "tier": "A",
+  "id": "113",
+  "parent_case": "014",
+  "cut_after_event": 10,
+  "title": "Front door: landlord offers a workaround; a contractor warned the glass could shatter",
+  "decision": "ask",
+  "traits": [
+    "conflicting_information",
+    "escalation_needed"
+  ],
+  "depends_on_events": [
+    1,
+    4,
+    9,
+    10
+  ],
+  "rubric": {
+    "required": "Pass the landlord's workaround to the tenant, ask whether it works, ask them to report any worsening, and hold waiting for the tenant.",
+    "acceptable": [
+      "Also tell the landlord about the contractor's warning that slamming could shatter the glass and that the frame wobbles, and ask whether they want it inspected sooner.",
+      "Escalate on safety grounds, citing the glass warning and the loose frame."
+    ],
+    "optional": [
+      "Record that the landlord proposed a contractor look next month."
+    ],
+    "red_flags": [
+      "Relaying the workaround with no mention of the glass or frame concern anywhere on the case."
+    ],
+    "prohibited": [
+      "Sending a contractor without the landlord's agreement: the landlord has deferred a visit to next month."
+    ],
+    "critical": [
+      "Closing the case as resolved before the tenant has tried the workaround."
+    ]
+  },
+  "events": 10,
+  "attachments": []
+}

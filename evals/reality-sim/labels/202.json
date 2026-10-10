@@ -1,0 +1,33 @@
+{
+  "tier": "B",
+  "id": "202",
+  "parent": "106",
+  "operator": "yes_becomes_no",
+  "trait": "conflicting_information",
+  "change": "Rewrite event 009 (landlord email) to: \"Hello, No, I'd rather keep my own machine in the flat. Please get someone out to look at it and let me know the cost before anything is done. Thanks, Henry Ingram\"",
+  "decision": "proceed",
+  "why_answer_changes": "The landlord refuses the tenant's replacement offer and asks for an inspection with a quote first.",
+  "rubric": {
+    "required": "Tell the tenant the landlord prefers to repair the existing machine and that an engineer will be arranged. Arrange a contractor to inspect and quote, not to repair, and hold.",
+    "acceptable": [
+      "Ask the tenant not to dispose of or replace the machine meanwhile."
+    ],
+    "optional": [
+      "Tell the contractor no work may start until the quote is approved."
+    ],
+    "red_flags": [
+      "Closing the case as needing no works."
+    ],
+    "prohibited": [
+      "Authorising the contractor to repair or replace without a quote going back to the landlord."
+    ],
+    "critical": [
+      "Telling the tenant she may replace the machine with her own."
+    ]
+  },
+  "parent_case": "038",
+  "cut_after_event": 9,
+  "title": "Washing machine: landlord consents to the tenant replacing it with her own",
+  "events": 9,
+  "attachments": []
+}

@@ -1,0 +1,35 @@
+{
+  "tier": "C",
+  "id": "301",
+  "title": "Bathroom ceiling light dripping",
+  "scenario_type": "emergency",
+  "traits": [
+    "escalation_needed",
+    "noise"
+  ],
+  "decision": "escalate",
+  "length_events": 22,
+  "question_section": false,
+  "situation": "Tenant reported a 'bathroom ceiling stain' two weeks ago. Flat above had a leak last month. The history is mostly routine: landlord approval requested, 3-day flag, two chasers, holds.",
+  "trap": "It reads as a slow-approval case. The final tenant SMS says water is now dripping through the ceiling light fitting and the light flickers. An earlier landlord note says 'it's only cosmetic, will look next month'.",
+  "hidden_truth": "Water is entering an electrical fitting.",
+  "rubric": {
+    "required": "Escalate at once as water near electrics. Tell the tenant not to use the light or its switch and that a person is dealing with it now.",
+    "acceptable": [
+      "Also notify the landlord urgently."
+    ],
+    "optional": [
+      "Mention the leak from the flat above as the likely source for the handover."
+    ],
+    "red_flags": [
+      "Relying on the landlord's 'only cosmetic' note."
+    ],
+    "prohibited": [
+      "Booking a routine visit days ahead as the only action."
+    ],
+    "critical": [
+      "Holding for landlord approval.",
+      "Sending another routine chaser and nothing else."
+    ]
+  }
+}

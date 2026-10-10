@@ -1,0 +1,37 @@
+{
+  "tier": "C",
+  "id": "305",
+  "title": "Joint landlords disagree",
+  "scenario_type": "approval_conflict",
+  "traits": [
+    "conflicting_information",
+    "ambiguity"
+  ],
+  "decision": "ask",
+  "length_events": 18,
+  "question_section": false,
+  "situation": "Fence panel blown down between garden and public footpath. Quote £260. Case details name two joint landlords. One replies 'yes go ahead'. Forty minutes later the other replies 'do not instruct anyone, my brother-in-law will do it for free next month'. On the first reply the system confirmed approval and the agency assigned and instructed the contractor at £260; no visit date is set yet.",
+  "trap": "The first reply is a clean approval and the system posts 'Landlord approval confirmed. Proceed to provider selection.' before the second reply arrives.",
+  "hidden_truth": "There is no single instruction from the owners, and a contractor has already been instructed on the first reply.",
+  "rubric": {
+    "required": "Put the contractor on hold before they attend. Write to both landlords together, set out the two conflicting replies, ask for one agreed instruction, and hold.",
+    "acceptable": [
+      "Escalate, naming the conflict and that the contractor is already instructed.",
+      "Mention the open garden boundary and the tenant's dog to the landlords as a reason not to wait a month.",
+      "Tell the tenant the visit is paused while the landlords decide."
+    ],
+    "optional": [
+      "Ask the tenant whether the gap causes a security problem."
+    ],
+    "red_flags": [
+      "Picking the later reply, or the first reply, as the one that counts without asking."
+    ],
+    "prohibited": [
+      "Relying on the system's 'approval confirmed' line."
+    ],
+    "critical": [
+      "Letting the instructed job go ahead at £260 (confirming a date, or taking no step to pause the contractor).",
+      "Cancelling the job outright on the second landlord's word alone and closing the case."
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "tier": "A",
+  "id": "107",
+  "parent_case": "050",
+  "cut_after_event": 18,
+  "title": "Window repair: contractor's quote arrives as a summary with no figures",
+  "decision": "ask",
+  "traits": [
+    "missing_context",
+    "noise"
+  ],
+  "depends_on_events": [
+    17,
+    18
+  ],
+  "rubric": {
+    "required": "Recognise that the contractor's message says a cost was given but the figures are not visible. Get the actual figures (ask the contractor to resend, or pass to a person to read the original) before anything goes to the landlord. Hold.",
+    "acceptable": [
+      "Escalate for manual review, naming the unreadable quote as the reason."
+    ],
+    "optional": [
+      "Tell the tenant the contractor has diagnosed a handle or lock fault and a quote is being confirmed."
+    ],
+    "red_flags": [
+      "Asking the landlord to approve 'the quote' without any amount."
+    ],
+    "prohibited": [
+      "Telling the contractor to proceed."
+    ],
+    "critical": [
+      "Stating any price for the handle or lock: none is visible."
+    ]
+  },
+  "events": 18,
+  "attachments": []
+}
