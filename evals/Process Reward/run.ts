@@ -24,10 +24,11 @@ export type SampleResult = {
 };
 export type Report = {
   model: string; code_revision: string; started_at: string; trials: number;
-  // pass_1: mean pass rate over measured trials. pass_k: share of measured samples where every
-  // measured trial passed. A runtime_failure trial is not measured: it fails our infrastructure,
-  // not the model.
-  pass_1: number | null; pass_k: number | null; results: SampleResult[];
+  // pass_1: mean pass rate over measured trials. pass_k: share of fully measured samples where
+  // every trial passed; a sample with unmeasured trials does not count, so flaky infrastructure
+  // cannot inflate the score. A runtime_failure trial is not measured: it fails our
+  // infrastructure, not the model.
+  pass_1: number | null; pass_k: number | null; unmeasured: number; results: SampleResult[];
 };
 
 const passed = (r: Pick<SampleResult, 'run_outcome' | 'structural_match'>) => r.run_outcome === 'completed' && r.structural_match;
@@ -52,7 +53,7 @@ export async function runSuite(opts: {
   const manifest = JSON.parse(readFileSync(join(root, 'manifest.json'), 'utf8'));
   const report: Report = {
     model: opts.model, code_revision: opts.revision, started_at: new Date().toISOString(),
-    trials, pass_1: null, pass_k: null, results: [],
+    trials, pass_1: null, pass_k: null, unmeasured: 0, results: [],
   };
 
   for (const entry of manifest.samples) {
@@ -121,10 +122,12 @@ export async function runSuite(opts: {
     list.push(r);
     bySample.set(r.id, list);
   }
-  const measuredSamples = [...bySample.values()].filter((rs) => rs.some((r) => r.measured));
-  report.pass_k = measuredSamples.length
-    ? measuredSamples.filter((rs) => rs.filter((r) => r.measured).every(passed)).length / measuredSamples.length
+  const fullyMeasuredSamples = [...bySample.values()].filter((rs) => rs.length === trials && rs.every((r) => r.measured));
+  report.pass_k = fullyMeasuredSamples.length
+    ? fullyMeasuredSamples.filter((rs) => rs.every(passed)).length / fullyMeasuredSamples.length
     : null;
+  report.unmeasured = report.results.filter((r) => !r.measured).length;
+  if (report.unmeasured > 0) console.log(`unmeasured trials (infrastructure failures, not scored): ${report.unmeasured}`);
   writeFileSync(join(out, 'results.json'), JSON.stringify(report, null, 2) + '\n');
   return report;
 }

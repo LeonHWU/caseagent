@@ -1,13 +1,15 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { visibleEvents } from "./cut.ts";
-import type { Case } from "./parse.ts";
+import { isAgency, type Case } from "./parse.ts";
 import { renderCase } from "./prompt.ts";
 import type { CaseState } from "./state.ts";
 import { runTool, TOOL_SPECS, type ToolAdapter } from "./tools.ts";
 
 export const MAX_TURNS = 15;
 // The agency's own records of a landlord approval that came before the agent's first run.
-const APPROVAL_ON_FILE = /landlord approval confirmed|landlord who approved/i;
+// Positive grants only: "landlord approval pending" or "approve the quote with the landlord" must not match.
+const APPROVAL_ON_FILE =
+  /landlord(?:'s)? approval (?:confirmed|granted|received|given|on file|obtained)|landlord (?:who |has )?approv(?:ed|es)\b|approved by (?:the )?landlord\b/i;
 const NUDGE = "End the run now with exactly one of hold, escalate or close_case.";
 
 export type ModelClient = {
@@ -32,7 +34,8 @@ export async function runCase(opts: {
   state.runs += 1;
   state.status = { kind: "open" };
   const visible = visibleEvents(c, state.initialSeen, state.seen);
-  state.approvalOnFile = visible.some((e) => APPROVAL_ON_FILE.test(e.body));
+  // Only the agency's own record counts: a tenant writing "landlord approval confirmed" in an email is not evidence.
+  state.approvalOnFile = visible.some((e) => isAgency(e.from) && APPROVAL_ON_FILE.test(e.body));
   // Asking is not approval: a prior request counts only once a landlord event comes after it.
   const request = state.actions.find((a) => a.tool === "request_landlord_approval" && a.ok);
   state.landlordReplied = request ? visible.some((e) => e.n > request.afterEvent && /landlord/i.test(e.from)) : false;
@@ -109,13 +112,29 @@ export async function runCase(opts: {
       continue;
     }
     const results: Anthropic.ToolResultBlockParam[] = [];
+    let ended = false;
+    let executed = 0;
     for (const u of uses) {
+      // Calls after an end tool, or after the first call in single-action mode, are refused and
+      // recorded so the trace and the answer show them instead of silently dropping them.
+      const skip = ended ? "the run already ended" : opts.singleStep && executed > 0 ? "one action per call" : null;
+      if (skip) {
+        const result = `refused: ${skip}; the action was not executed`;
+        state.actions.push({ run: state.runs, afterEvent: state.seen, tool: u.name, input: u.input as Record<string, unknown>, ok: false, result });
+        trace("tool", { name: u.name, input: u.input, ok: false, ends: false, result });
+        continue;
+      }
       const out = runTool(u.name, u.input, state, adapters);
       state.actions.push({ run: state.runs, afterEvent: state.seen, tool: u.name, input: u.input as Record<string, unknown>, ok: out.ok, result: out.result });
       trace("tool", { name: u.name, input: u.input, ...out });
-      if (out.ends || opts.singleStep) return;
+      executed++;
+      if (out.ends) {
+        ended = true;
+        continue;
+      }
       results.push({ type: "tool_result", tool_use_id: u.id, content: out.result, is_error: !out.ok });
     }
+    if (ended || opts.singleStep) return;
     messages.push({ role: "user", content: results });
   }
 

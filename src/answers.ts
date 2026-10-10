@@ -3,8 +3,8 @@ import { join } from "node:path";
 import type { Case, CaseEvent } from "./parse.ts";
 import { statusLabel, type CaseState, type Action } from "./state.ts";
 
-function summarizeLine(s: string, maxLen: number = 80): string {
-  return s.split("\n")[0].slice(0, maxLen);
+function summarizeLine(s: string): string {
+  return s.split("\n")[0].slice(0, 60);
 }
 
 // Events a run received: those after the previous run's last seen event, up to its own last seen event.
@@ -35,7 +35,7 @@ function answerMd(c: Case, s: CaseState, visible: CaseEvent[]): string {
     const runActions = runs.get(run) || [];
     const runEvts = runEvents(s, visible, run);
     const eventLines = runEvts.map((e) => {
-      const excerpt = summarizeLine(e.body, 60);
+      const excerpt = summarizeLine(e.body);
       return `- event ${String(e.n).padStart(3, "0")}: ${e.channel} from ${e.from} · ${excerpt}`;
     });
 

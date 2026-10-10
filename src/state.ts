@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
 export const HOLD_REASONS = ["Waiting for Landlord", "Waiting for Tenant", "Waiting for Provider", "Waiting for Quote"] as const;
@@ -52,13 +52,40 @@ export function newState(caseId: string, initialSeen: number): CaseState {
 
 export function loadState(path: string): CaseState | null {
   if (!existsSync(path)) return null;
-  const state = JSON.parse(readFileSync(path, "utf8")) as CaseState;
-  return state;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(readFileSync(path, "utf8"));
+  } catch {
+    // A truncated or corrupt state file is moved aside so resume reports "no saved state"
+    // instead of crashing on the same bytes every time.
+    try {
+      renameSync(path, `${path}.corrupt`);
+    } catch {
+      /* nothing to preserve */
+    }
+    return null;
+  }
+  // Fields absent in older or partial files get their defaults rather than reaching callers as undefined.
+  const state = parsed as Partial<CaseState>;
+  return {
+    caseId: state.caseId ?? "unknown",
+    initialSeen: state.initialSeen ?? state.seen ?? 0,
+    seen: state.seen ?? 0,
+    runs: state.runs ?? 0,
+    status: state.status ?? { kind: "open" },
+    actions: state.actions ?? [],
+    notes: state.notes ?? [],
+    incomplete: state.incomplete ?? false,
+    approvalOnFile: state.approvalOnFile,
+    landlordReplied: state.landlordReplied,
+  };
 }
 
 export function saveState(path: string, state: CaseState): void {
   mkdirSync(dirname(path), { recursive: true });
-  writeFileSync(path, JSON.stringify(state, null, 2) + "\n");
+  const tmp = `${path}.tmp`;
+  writeFileSync(tmp, JSON.stringify(state, null, 2) + "\n");
+  renameSync(tmp, path);
 }
 
 export function statusLabel(s: Status): string {

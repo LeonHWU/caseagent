@@ -121,3 +121,22 @@ test("trials: a runtime_failure trial is not measured, and the rest still score"
   assert.equal(report.pass_1, 1);
   assert.equal(report.pass_k, 1);
 });
+
+test("trials: a partially measured sample does not count for or against pass_k", async () => {
+  const wrong = reply([{ type: "tool_use", id: "w", name: "hold", input: { waiting_for: "Waiting for Nobody", reason: "test" } }]);
+  const replies = correctReplies(2);
+  let calls = 0;
+  // Sample 0: trial 1 unmeasured (API down), trial 2 completed but wrong. Under the old rule this
+  // sample counted as a pass_k failure; now it is excluded and unmeasured is reported.
+  const flaky: ModelClient = {
+    messages: { create: () => (++calls === 1 ? Promise.reject(new Error("API down")) : Promise.resolve(calls === 2 ? wrong : replies[calls - 1])) },
+  };
+  const out = mkdtempSync(join(tmpdir(), "eval-"));
+  const report = await runSuite({ out, makeDeps: deps(flaky), model: "fake", revision: "test", trials: 2 });
+
+  const first = report.results.filter((r) => r.id === manifest.samples[0].id);
+  assert.equal(first[0].measured, false);
+  assert.equal(first[1].measured, true);
+  assert.equal(report.pass_k, 1);
+  assert.equal(report.unmeasured, 1);
+});

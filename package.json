@@ -12,7 +12,9 @@
     "mcp": "node --env-file-if-exists=.env --import tsx src/mcp.ts",
     "extract": "uv run scripts/extract.py",
     "test": "node --import tsx --test test/*.test.ts",
-    "typecheck": "tsc -p ."
+    "typecheck": "tsc -p .",
+    "eval:edge": "node --env-file-if-exists=.env --import tsx \"evals/edge-cases/run.ts\"",
+    "eval:process": "node --env-file-if-exists=.env --import tsx \"evals/Process Reward/run.ts\""
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.131.0",

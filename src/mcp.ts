@@ -23,15 +23,10 @@ export function createServer(opts: { casesDir: string; deps: RunDeps }): McpServ
   };
   const answer = (id: string) => readFileSync(join(deps.out, "ANSWERS", id, "ANSWER.md"), "utf8");
   const reply = (t: string) => ({ content: [{ type: "text" as const, text: t }] });
-  const run = async (id: string, next: boolean, step?: number) => {
-    const state = await processCase(deps, caseDir(id), next, { step, singleStep: true });
-    return reply(`${summary(state)}\n\n${answer(id)}`);
-  };
-
-  const runToEnd = async (id: string) => {
-    const state = await processToEnd(deps, caseDir(id));
-    return reply(`${summary(state)}\n\n${answer(id)}`);
-  };
+  const replyWith = (id: string, state: Awaited<ReturnType<typeof processCase>>) => reply(`${summary(state)}\n\n${answer(id)}`);
+  const run = async (id: string, next: boolean, step?: number) =>
+    replyWith(id, await processCase(deps, caseDir(id), next, { step, singleStep: true }));
+  const runToEnd = async (id: string) => replyWith(id, await processToEnd(deps, caseDir(id)));
 
   server.registerTool(
     "list_cases",
