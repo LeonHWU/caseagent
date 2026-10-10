@@ -85,8 +85,12 @@ function answerMd(c: Case, s: CaseState, visible: CaseEvent[]): string {
 `;
   }
 
-  // Escalation
-  const escalation = s.status.kind === "escalated" ? s.status.summary : "None.";
+  // Escalation: an agent escalation shows its three fields; a system escalation shows plain text.
+  const st = s.status;
+  const escalation =
+    st.kind !== "escalated" ? "None."
+    : st.checked ? `- **Checked:** ${st.checked}\n- **Missing or in conflict:** ${st.missing_or_conflict}\n- **Decision needed:** ${st.decision_needed}`
+    : st.summary;
 
   // Failed, refused or invalid actions
   const failed = s.actions.filter((a) => !a.ok);

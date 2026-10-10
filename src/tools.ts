@@ -77,14 +77,17 @@ const TOOLS: Record<string, Tool> = {
     },
   }),
   escalate: tool({
-    description: "End this run. A person takes over the case.",
+    description: "End this run. A person takes over the case. The handover needs three fields: what you checked, what is missing or in conflict, and the one decision the person must make.",
     schema: z.object({
-      summary: z.string().min(1).describe("The handover: what you checked, what is missing or in conflict, and what the person must decide."),
+      checked: z.string().min(1).describe("What you checked, citing events as [event 007]."),
+      missing_or_conflict: z.string().min(1).describe("What is missing, unclear or in conflict."),
+      decision_needed: z.string().min(1).describe("The one decision the person must make."),
       reason,
     }),
     end: true,
     apply: (i, s) => {
-      s.status = { kind: "escalated", summary: i.summary };
+      const summary = `Checked: ${i.checked}\nMissing or in conflict: ${i.missing_or_conflict}\nDecision needed: ${i.decision_needed}`;
+      s.status = { kind: "escalated", summary, checked: i.checked, missing_or_conflict: i.missing_or_conflict, decision_needed: i.decision_needed };
       return "case escalated to a person";
     },
   }),

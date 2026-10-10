@@ -135,7 +135,7 @@ test("a tool that fails twice is escalated by the model, and both failures are r
   const f = fake([
     [use("a", "send_message", send)],
     [use("b", "send_message", send)],
-    [use("c", "escalate", { summary: "send_message failed twice (provider error). A person must contact the tenant.", reason: "Tool failed twice." })],
+    [use("c", "escalate", { checked: "the outbox and the tool errors", missing_or_conflict: "send_message failed twice (provider error)", decision_needed: "a person must contact the tenant", reason: "Tool failed twice." })],
   ]);
   await runCase({ ...base, state: s, client: f.client, adapters });
   assert.deepEqual(s.actions.map((a) => a.ok), [false, false, true]);

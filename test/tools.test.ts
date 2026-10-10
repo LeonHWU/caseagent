@@ -106,3 +106,25 @@ test("an adapter cannot skip the approval check", () => {
   const out = runTool("assign_contractor", assignInput, s, { assign_contractor: () => "assigned by API" });
   assert.equal(out.ok, false);
 });
+
+test("escalate requires all three handover fields and stores them", () => {
+  const s = newState("027", 1);
+  const bad = runTool("escalate", { checked: "the events [event 001]", missing_or_conflict: "two reports conflict", decision_needed: "", reason: "r" }, s);
+  assert.equal(bad.ok, false);
+  assert.match(bad.result, /decision_needed/);
+
+  const out = runTool("escalate", {
+    checked: "the events [event 001]",
+    missing_or_conflict: "two reports conflict",
+    decision_needed: "refund or escalate to legal",
+    reason: "r",
+  }, s);
+  assert.equal(out.ok, true);
+  assert.equal(out.ends, true);
+  assert.ok(s.status.kind === "escalated");
+  if (s.status.kind === "escalated") {
+    assert.equal(s.status.missing_or_conflict, "two reports conflict");
+    assert.match(s.status.summary, /Checked: the events \[event 001\]/);
+    assert.match(s.status.summary, /Decision needed: refund or escalate to legal/);
+  }
+});

@@ -24,7 +24,7 @@ const inputFor: Record<string, Record<string, unknown>> = {
   request_landlord_approval: { scope: "repair", cost: "unknown" },
   assign_contractor: { trade: "plumber", notes: "attend and report" },
   close_case: { outcome: "work_completed", work_confirmed_by: "tenant [event 001]", landlord_informed: true, keys: "returned", invoice: "on_file" },
-  escalate: { summary: "needs a person" },
+  escalate: { checked: "the events", missing_or_conflict: "two reports conflict", decision_needed: "pick a side" },
 };
 const correctInput = (tool: string, exact: Record<string, unknown>): Record<string, unknown> => ({
   ...inputFor[tool], ...exact, reason: "test",
