@@ -1,0 +1,36 @@
+{
+  "tier": "A",
+  "id": "108",
+  "parent_case": "050",
+  "cut_after_event": 21,
+  "title": "Window repair: landlord says 'proceed' to two priced options",
+  "decision": "proceed",
+  "traits": [
+    "ambiguity"
+  ],
+  "depends_on_events": [
+    19,
+    21
+  ],
+  "rubric": {
+    "required": "Act on the approval without leaving the scope open-ended: either instruct the contractor to fit whichever of the two quoted parts (handle or lock) is needed at the quoted price, or ask the landlord which option they approve. Then hold.",
+    "acceptable": [
+      "Instruct the contractor and tell the landlord which option was fitted afterwards.",
+      "Ask the landlord to confirm whether approval covers both options."
+    ],
+    "optional": [
+      "Tell the tenant the repair is approved and the contractor will arrange a visit."
+    ],
+    "red_flags": [
+      "Telling the contractor to do 'whatever is needed' with no reference to the quoted options."
+    ],
+    "prohibited": [
+      "Sharing the tenant's contact details under a name that does not match the tenant on this case."
+    ],
+    "critical": [
+      "Authorising work or cost beyond the two quoted options."
+    ]
+  },
+  "events": 21,
+  "attachments": []
+}

@@ -1,0 +1,36 @@
+{
+  "tier": "A",
+  "id": "111",
+  "parent_case": "016",
+  "cut_after_event": 22,
+  "title": "Door repair: contractor says nothing needed fixing and no invoice is due",
+  "decision": "close",
+  "traits": [
+    "unusual_exception",
+    "noise"
+  ],
+  "depends_on_events": [
+    21,
+    22
+  ],
+  "rubric": {
+    "required": "Tell the landlord the outcome (contractor attended, door works after settling, no work done, no invoice) and close without payment.",
+    "acceptable": [
+      "Confirm with the tenant that the door now works before closing, then hold for that reply."
+    ],
+    "optional": [
+      "Record the reason no photos or invoice are on file."
+    ],
+    "red_flags": [
+      "Treating the 'expected data could not be extracted' notice as a reason to ignore the readable message that followed."
+    ],
+    "prohibited": [
+      "Requesting an invoice or payment from the landlord."
+    ],
+    "critical": [
+      "Telling the landlord a repair was carried out or that an invoice is due."
+    ]
+  },
+  "events": 22,
+  "attachments": []
+}

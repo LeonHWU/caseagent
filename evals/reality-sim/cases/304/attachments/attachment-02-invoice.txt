@@ -1,0 +1,26 @@
+HARBOUR SERVICES LTD
+Plumbing & Heating Engineers
+14 Mill Row, Cedarford, ZZ3 5ZZ
+Tel: 07700 900431   Email: office@harbourservices.example.com
+VAT Reg: GB 000 1234 56
+
+TAX INVOICE
+
+Invoice no:  INV-5518
+Date:        2026-03-12
+Job ref:     NBL-304-4821
+Site:        Flat 3, 18 Harrow Court, Cedarford, ZZ3 4ZZ
+Bill to:     Northbridge Lettings
+
+Description                                        Amount
+Labour - 4.0 hrs @ £50.00                         £200.00
+Supply and fit new chrome monobloc mixer tap       £85.00
+Supply and fit 2 x isolation valves (15mm)         £30.00
+Additional pipework and fittings                   £80.00
+
+Subtotal                                          £395.00
+VAT @ 20%                                          £79.00
+TOTAL DUE                                         £474.00
+
+Payment terms: 14 days from invoice date.
+Bank: Harbour Services Ltd  Sort code 00-00-00  Acc 00000000

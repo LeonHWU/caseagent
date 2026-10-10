@@ -33,7 +33,15 @@ async function nativePdf(path: string, maxBytes: number): Promise<AttachmentCont
   }
 }
 
+// Extracted text is cached per file modification time, so resumes of the same case do not parse
+// the same PDF again.
+const pdfTextCache = new Map<string, { mtimeMs: number; text: string }>();
+
 async function extractPdfText(pdfPath: string): Promise<string> {
+  const { mtimeMs } = statSync(pdfPath);
+  const hit = pdfTextCache.get(pdfPath);
+  if (hit && hit.mtimeMs === mtimeMs) return hit.text;
+
   const buffer = readFileSync(pdfPath);
   const data = new Uint8Array(buffer);
   const pdf = await pdfjs.getDocument({ data }).promise;
@@ -42,11 +50,13 @@ async function extractPdfText(pdfPath: string): Promise<string> {
   for (let i = 1; i <= pdf.numPages; i++) {
     const page = await pdf.getPage(i);
     const textContent = await page.getTextContent();
-    const pageText = textContent.items.map((item: any) => item.str).join(" ");
+    const pageText = textContent.items.map((item) => ("str" in item ? item.str : "")).join(" ");
     texts.push(pageText);
   }
 
-  return texts.join("\n");
+  const text = texts.join("\n");
+  pdfTextCache.set(pdfPath, { mtimeMs, text });
+  return text;
 }
 
 function truncateText(text: string): string {

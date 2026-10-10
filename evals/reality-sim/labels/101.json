@@ -1,0 +1,38 @@
+{
+  "tier": "A",
+  "id": "101",
+  "parent_case": "019",
+  "cut_after_event": 25,
+  "title": "Garden clearance: landlord approves removal after a revised quote",
+  "decision": "proceed",
+  "traits": [
+    "ambiguity"
+  ],
+  "depends_on_events": [
+    1,
+    9,
+    19,
+    25
+  ],
+  "rubric": {
+    "required": "Tell the contractor (or the property manager arranging them) to go ahead with the removal at the revised figure of about £600, ask for a date, and hold waiting for the provider.",
+    "acceptable": [
+      "Also tell the tenant that removal is approved and a date will follow."
+    ],
+    "optional": [
+      "Notice the landlord approved only the removal, not the levelling and gravel the tenant asked for, and record it or tell the tenant."
+    ],
+    "red_flags": [
+      "Telling the tenant the whole request (levelling, gravel) is approved.",
+      "Asking the landlord to approve again when the reply already answers the £600 email."
+    ],
+    "prohibited": [
+      "Instructing levelling or gravel work that nobody approved."
+    ],
+    "critical": [
+      "Closing the case or stating the work is done."
+    ]
+  },
+  "events": 25,
+  "attachments": []
+}

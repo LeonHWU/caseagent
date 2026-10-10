@@ -325,5 +325,19 @@
     "Development counterfactuals derive from synthesis source cases; this is not held-out generalization.",
     "Two trials are a smoke ablation, not statistically reliable evidence.",
     "Semantic scores come from a fixed LLM judge; code validates evidence, structure and critical tools."
-  ]
+  ],
+  "merge_validation": {
+    "upstream_main": "7f521bc",
+    "tests_passed": 108,
+    "typecheck": "passed",
+    "preserved_upstream": [
+      "approval classification",
+      "strict business tools",
+      "audited single-action refusals",
+      "new operational policy",
+      "reality-sim cases"
+    ],
+    "performance_scope": "The stored paired results evaluated code at 36ff9df before upstream policy and hardening changes. They do not measure the combined merge; policy and code hashes remain frozen.",
+    "live_mcp_smoke": "passed: current policy, actual Haiku, references refreshed after tool results"
+  }
 }

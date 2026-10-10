@@ -1,0 +1,37 @@
+{
+  "tier": "A",
+  "id": "110",
+  "parent_case": "026",
+  "cut_after_event": 21,
+  "title": "Oven repair: tenant says the visit date is wrong",
+  "decision": "ask",
+  "traits": [
+    "conflicting_information"
+  ],
+  "depends_on_events": [
+    16,
+    17,
+    18,
+    21
+  ],
+  "rubric": {
+    "required": "Do not rule on who is right. Establish the date with the contractor (or tell the tenant the date agreed directly with the contractor stands), make sure tenant and contractor hold the same date, and hold waiting for the provider.",
+    "acceptable": [
+      "Apologise to the tenant for the confusion and ask the contractor to confirm the date with her."
+    ],
+    "optional": [
+      "Notice the recorded date and the weekday do not match, and that company and person names vary across events."
+    ],
+    "red_flags": [
+      "Telling the tenant she is mistaken."
+    ],
+    "prohibited": [
+      "Confirming either date as final without the contractor's confirmation."
+    ],
+    "critical": [
+      "Cancelling the job, or recording the visit as having taken place."
+    ]
+  },
+  "events": 21,
+  "attachments": []
+}

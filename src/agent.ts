@@ -1,6 +1,7 @@
 import type Anthropic from "@anthropic-ai/sdk";
+import { APPROVAL_MODEL, classifyLandlordReply } from "./approval.ts";
 import { visibleEvents } from "./cut.ts";
-import type { Case } from "./parse.ts";
+import { isAgency, type Case } from "./parse.ts";
 import { renderCase } from "./prompt.ts";
 import type { CaseState } from "./state.ts";
 import { runTool, TOOL_SPECS, type ToolAdapter } from "./tools.ts";
@@ -8,7 +9,9 @@ import { playbookContext, type PlaybookOptions } from "./playbooks.ts";
 
 export const MAX_TURNS = 15;
 // The agency's own records of a landlord approval that came before the agent's first run.
-const APPROVAL_ON_FILE = /landlord approval confirmed|landlord who approved/i;
+// Positive grants only: "landlord approval pending" or "approve the quote with the landlord" must not match.
+const APPROVAL_ON_FILE =
+  /landlord(?:'s)? approval (?:confirmed|granted|received|given|on file|obtained)|landlord (?:who |has )?approv(?:ed|es)\b|approved by (?:the )?landlord\b/i;
 const NUDGE = "End the run now with exactly one of hold, escalate or close_case.";
 
 export type ModelClient = {
@@ -33,15 +36,28 @@ export async function runCase(opts: {
   adapters?: Record<string, ToolAdapter>;
   singleStep?: boolean;
   playbooks?: PlaybookOptions | false;
+  approvalModel?: string;
 }): Promise<void> {
   const { c, state, client, model, policy, trace, caseDir, adapters } = opts;
   state.runs += 1;
   state.status = { kind: "open" };
   const visible = visibleEvents(c, state.initialSeen, state.seen);
-  state.approvalOnFile = visible.some((e) => APPROVAL_ON_FILE.test(e.body));
-  // Asking is not approval: a prior request counts only once a landlord event comes after it.
-  const request = state.actions.find((a) => a.tool === "request_landlord_approval" && a.ok);
-  state.landlordReplied = request ? visible.some((e) => e.n > request.afterEvent && /landlord/i.test(e.from)) : false;
+  // Only the agency's own record counts: a tenant writing "landlord approval confirmed" in an email is not evidence.
+  state.approvalOnFile = visible.some((e) => isAgency(e.from) && APPROVAL_ON_FILE.test(e.body));
+  // Asking is not approval, and a reply is not approval either: the latest earlier-run request counts
+  // only once a small model reads the landlord's replies to it as a clear yes.
+  const request = state.actions.findLast((a) => a.tool === "request_landlord_approval" && a.ok && a.run < state.runs);
+  const replies = request ? visible.filter((e) => e.n > request.afterEvent && /landlord/i.test(e.from)) : [];
+  if (!request || replies.length === 0) {
+    state.landlordAnswer = undefined;
+  } else if (state.landlordAnswer?.throughEvent !== replies[replies.length - 1].n || state.landlordAnswer.requestAfter !== request.afterEvent) {
+    const asked = `${String(request.input.scope ?? "")} (cost: ${String(request.input.cost ?? "unknown")})`;
+    const answer = await classifyLandlordReply(client, opts.approvalModel ?? APPROVAL_MODEL, asked, replies.map((e) => `${e.at}\n${e.body}`), (error) =>
+      trace("approval_check_error", { error }),
+    );
+    state.landlordAnswer = { answer, requestAfter: request.afterEvent, throughEvent: replies[replies.length - 1].n };
+    trace("approval_check", { request: asked, through_event: replies[replies.length - 1].n, answer });
+  }
   const prompt = await renderCase(c, state, visible, opts.newFrom, caseDir);
 
   // Build message content with text and images
@@ -69,8 +85,10 @@ export async function runCase(opts: {
   const retrievalQuery = [c.title, c.request, ...visible.slice(-3).map((e) => e.body)].join("\n");
 
   // Add cache control to tools - last tool definition gets the breakpoint
+  // strict: the API enforces each input schema, so a call cannot arrive with a required field missing.
   const toolsWithCache: Anthropic.Tool[] = TOOL_SPECS.map((t, i) => ({
     ...t,
+    strict: true,
     ...(i === TOOL_SPECS.length - 1 ? { cache_control: { type: "ephemeral" } } : {}),
   })) as Anthropic.Tool[];
 
@@ -127,17 +145,43 @@ export async function runCase(opts: {
       continue;
     }
     const results: Anthropic.ToolResultBlockParam[] = [];
+    let ended = false;
+    let failed = false;
+    let executed = 0;
     for (const u of uses) {
+      // Calls after an end tool, or after the first call in single-action mode, are refused and
+      // recorded so the trace and the answer show them instead of silently dropping them.
+      // Calls after a failed call in the same response are not run: the model wrote them before it
+      // saw the failure, so a later message could claim the failed action happened.
+      const skip = ended
+        ? "refused: the run already ended"
+        : opts.singleStep && executed > 0
+          ? "refused: one action per call"
+          : failed
+            ? "not executed: an earlier action in this response failed. Read its error, then decide again"
+            : null;
+      if (skip) {
+        const result = `${skip}; the action was not executed`;
+        state.actions.push({ run: state.runs, afterEvent: state.seen, tool: u.name, input: u.input as Record<string, unknown>, ok: false, result });
+        trace("tool", { name: u.name, input: u.input, ok: false, ends: false, result });
+        results.push({ type: "tool_result", tool_use_id: u.id, content: result, is_error: true });
+        continue;
+      }
       const out = runTool(u.name, u.input, state, adapters);
       state.actions.push({ run: state.runs, afterEvent: state.seen, tool: u.name, input: u.input as Record<string, unknown>, ok: out.ok, result: out.result });
       trace("tool", { name: u.name, input: u.input, ...out });
-      if (out.ends || opts.singleStep) return;
+      executed++;
+      if (!out.ok) failed = true;
+      if (out.ends) {
+        ended = true;
+        continue;
+      }
       results.push({ type: "tool_result", tool_use_id: u.id, content: out.result, is_error: !out.ok });
     }
+    if (ended || opts.singleStep) return;
     messages.push({ role: "user", content: results });
   }
 
-  state.incomplete = true;
-  state.status = { kind: "escalated", summary: `The agent did not end the run within ${MAX_TURNS} turns. A person must review case ${c.id}.` };
+  state.status = { kind: "escalated", by: "system", summary: `The agent did not end the run within ${MAX_TURNS} turns. A person must review case ${c.id}.` };
   trace("auto_escalate", { turns: MAX_TURNS });
 }

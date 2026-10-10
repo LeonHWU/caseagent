@@ -89,7 +89,7 @@ test("assign_contractor refuses an approval request made in the same run", () =>
 test("assign_contractor accepts an approval request from an earlier run once the landlord answered", () => {
   const s = newState("027", 1);
   s.runs = 2;
-  s.landlordReplied = true;
+  s.landlordAnswer = { answer: "approved", requestAfter: 1, throughEvent: 2 };
   s.actions.push({ run: 1, afterEvent: 1, tool: "request_landlord_approval", input: {}, ok: true, result: "sent" });
   assert.equal(runTool("assign_contractor", assignInput, s).ok, true);
 });
@@ -132,7 +132,7 @@ test("escalate requires all three handover fields and stores them", () => {
   assert.equal(out.ok, true);
   assert.equal(out.ends, true);
   assert.ok(s.status.kind === "escalated");
-  if (s.status.kind === "escalated") {
+  if (s.status.kind === "escalated" && s.status.by === "agent") {
     assert.equal(s.status.missing_or_conflict, "two reports conflict");
     assert.match(s.status.summary, /Checked: the events \[event 001\]/);
     assert.match(s.status.summary, /Decision needed: refund or escalate to legal/);

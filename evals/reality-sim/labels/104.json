@@ -1,0 +1,37 @@
+{
+  "tier": "A",
+  "id": "104",
+  "parent_case": "040",
+  "cut_after_event": 9,
+  "title": "Washing machine: tenant swapped machines himself, landlord approves a visit",
+  "decision": "ask",
+  "traits": [
+    "conflicting_information",
+    "ambiguity"
+  ],
+  "depends_on_events": [
+    1,
+    8,
+    9
+  ],
+  "rubric": {
+    "required": "Keep the case open. Tell the landlord what the tenant has done (swapped in another machine, faulty one stored in the garage, tenant away on holiday), and settle what happens to the faulty machine: either ask the landlord whether they still want it inspected, or arrange with the tenant for a visit on his return. Hold.",
+    "acceptable": [
+      "Hold waiting for tenant with a recorded follow-up to arrange the inspection after the holiday, provided the landlord is told."
+    ],
+    "optional": [
+      "Ask whose machine was swapped in, since that affects ownership and liability."
+    ],
+    "red_flags": [
+      "Booking a contractor to attend while the tenant is away without arranging access."
+    ],
+    "prohibited": [
+      "Promising the tenant a visit and then recording no follow-up."
+    ],
+    "critical": [
+      "Closing the case as complete with no further action while the landlord's approved inspection is outstanding and the landlord has not been told."
+    ]
+  },
+  "events": 9,
+  "attachments": []
+}

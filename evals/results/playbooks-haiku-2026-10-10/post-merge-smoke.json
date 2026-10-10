@@ -1,0 +1,152 @@
+{
+  "model": "claude-haiku-4-5-20251001",
+  "policy_sha256": "bd366424eb0575f84b21f0a3b310a59c55e711dca10d986ea944374694cffe8f",
+  "mcp_tool": "run_case",
+  "case_id": "027",
+  "step": 1,
+  "state": {
+    "caseId": "027",
+    "initialSeen": 1,
+    "seen": 1,
+    "runs": 1,
+    "status": {
+      "kind": "hold",
+      "reason": "Waiting for Tenant"
+    },
+    "actions": [
+      {
+        "run": 1,
+        "afterEvent": 1,
+        "tool": "send_message",
+        "input": {
+          "to": "tenant",
+          "channel": "email",
+          "text": "Good morning,\n\nThank you for reporting the slow drainage in the bathtub at Flat 10, 30 Copperfield Walk.\n\nSlow drainage is often caused by everyday blockages such as hair or soap buildup. Before we arrange a contractor visit, please try these steps:\n\n1. Remove any visible debris from the drain opening\n2. Use a plunger firmly over the drain to help clear the blockage\n3. Pour boiling water down the drain (carefully)\n4. If available, use a drain unblocker product following the product instructions\n\nPlease let us know if these steps clear the drainage. \n\nIf the blockage persists and you need a contractor to attend, please be aware that contractor visits for blockages caused by everyday use are charged to the tenant.\n\nBest regards,\nNorthbridge Lettings",
+          "reason": "Routine bath drain blockage reported [event 001]. Per agency procedure, blockages from everyday use (hair, soap) are the tenant's responsibility. Self-help steps should be sent before escalation to landlord or contractor."
+        },
+        "ok": true,
+        "result": "email to tenant queued in the outbox"
+      },
+      {
+        "run": 1,
+        "afterEvent": 1,
+        "tool": "hold",
+        "input": {
+          "waiting_for": "Waiting for Tenant",
+          "reason": "Sent self-help steps for blocked bath drain [event 001]. Awaiting tenant response to confirm whether self-help resolves the issue or if contractor visit is required."
+        },
+        "ok": true,
+        "result": "case on hold: Waiting for Tenant"
+      }
+    ],
+    "notes": [
+      {
+        "run": 1,
+        "afterEvent": 1,
+        "text": "I'll analyze this case and take the appropriate action.\n\n## Case Analysis\n\n**Stage:** Triage - Initial maintenance request\n\n**Issue:** Blocked bath drain - water draining slowly after 2 days\n\n**Key facts:**\n- Tenant has reported water residual/slow drainage in the bathtub\n- This is a blockage issue\n- The tenant wants a contractor visit\n\n**Rule application:**\nAccording to Rule 3: \"A blockage from everyday use (hair, soap) is the tenant's responsibility. Send self-help steps, and say that a contractor visit for that cause is charged to the tenant. Do not contact the landlord.\"\n\nThis appears to be a routine blockage that could result from everyday use (hair, soap). Before involving the landlord or contractor, I should send self-help steps to the tenant, as this is a common issue that tenants can often resolve themselves.\n\n**Action:** Send self-help guidance to the tenant and clarify that if a contractor visit is needed for this cause, it will be charged to them."
+      },
+      {
+        "run": 1,
+        "afterEvent": 1,
+        "text": "Now I'll hold the case, waiting for the tenant to attempt these self-help measures and respond."
+      }
+    ],
+    "approvalOnFile": false
+  },
+  "selection": [
+    {
+      "t": "2026-10-10T13:42:30.758Z",
+      "kind": "playbook_selection",
+      "turn": 1,
+      "bank_version": 4,
+      "bank_hash": "59d6effd2b8bc394dac27578a3a130f97b3c8bd5b67a25109792abbaf59d97a8",
+      "candidates": [
+        "PB01"
+      ],
+      "selections": [
+        {
+          "playbook_id": "PB01",
+          "step_ids": [
+            "check"
+          ],
+          "reason": "The tenant reports slow bath drain after 2 days of water residual. Before contacting the landlord, rule 2 permits asking the tenant to try a supported check for a probable blockage from everyday use (hair, soap). PB01.check covers non-invasive tenant troubleshooting for blocked drains.",
+          "current_evidence_ids": [
+            "request",
+            "details"
+          ],
+          "grounding": [
+            {
+              "id": "details",
+              "text": "- **Source role:** Tenant\n- **Created:** 2026-04-17 14:15:59 UTC\n- **Property:** Flat 10, 30 Copperfield Walk, Willowbank, ZZ2 3ZZ"
+            },
+            {
+              "id": "request",
+              "text": "Goodmorning, I writing concerning Flat 10, bathtub and we have been experiencing some water residual after taking a shower for about 2 days now and currently the water keep take hours b4 draining. I would be glad if the maintenance guys could come take a look at it"
+            }
+          ]
+        }
+      ],
+      "usage": {
+        "input_tokens": 3709,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 154,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      }
+    },
+    {
+      "t": "2026-10-10T13:43:15.397Z",
+      "kind": "playbook_selection",
+      "turn": 2,
+      "bank_version": 4,
+      "bank_hash": "59d6effd2b8bc394dac27578a3a130f97b3c8bd5b67a25109792abbaf59d97a8",
+      "candidates": [
+        "PB01",
+        "PB03",
+        "PB10"
+      ],
+      "selections": [
+        {
+          "playbook_id": "PB01",
+          "step_ids": [
+            "wait"
+          ],
+          "reason": "The agency has already sent self-help steps for the suspected everyday blockage. The next decision requires the tenant's result: whether the blockage clears or persists. PB01.wait applies because we are waiting for the tenant's response to the check before moving to professional assessment or closure.",
+          "current_evidence_ids": [
+            "request",
+            "action:0"
+          ],
+          "grounding": [
+            {
+              "id": "request",
+              "text": "Goodmorning, I writing concerning Flat 10, bathtub and we have been experiencing some water residual after taking a shower for about 2 days now and currently the water keep take hours b4 draining. I would be glad if the maintenance guys could come take a look at it"
+            },
+            {
+              "id": "action:0",
+              "text": "{\"tool\":\"send_message\",\"input\":{\"to\":\"tenant\",\"channel\":\"email\",\"text\":\"Good morning,\\n\\nThank you for reporting the slow drainage in the bathtub at Flat 10, 30 Copperfield Walk.\\n\\nSlow drainage is often caused by everyday blockages such as hair or soap buildup. Before we arrange a contractor visit, please try these steps:\\n\\n1. Remove any visible debris from the drain opening\\n2. Use a plunger firmly over the drain to help clear the blockage\\n3. Pour boiling water down the drain (carefully)\\n4. If available, use a drain unblocker product following the product instructions\\n\\nPlease let us know if these steps clear the drainage. \\n\\nIf the blockage persists and you need a contractor to attend, please be aware that contractor visits for blockages caused by everyday use are charged to the tenant.\\n\\nBest regards,\\nNorthbridge Lettings\",\"reason\":\"Routine bath drain blockage reported [event 001]. Per agency procedure, blockages from everyday use (hair, soap) are the tenant's responsibility. Self-help steps should be sent before escalation to landlord or contractor.\"},\"ok\":true,\"result\":\"email to tenant queued in the outbox\"}"
+            }
+          ]
+        }
+      ],
+      "usage": {
+        "input_tokens": 5879,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 148,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      }
+    }
+  ],
+  "source_main": "7f521bc",
+  "scope": "Live MCP smoke after integrating upstream hardening and new policy; not a paired performance rerun."
+}

@@ -1,0 +1,36 @@
+{
+  "tier": "A",
+  "id": "106",
+  "parent_case": "038",
+  "cut_after_event": 9,
+  "title": "Washing machine: landlord consents to the tenant replacing it with her own",
+  "decision": "close",
+  "traits": [
+    "unusual_exception"
+  ],
+  "depends_on_events": [
+    2,
+    5,
+    9
+  ],
+  "rubric": {
+    "required": "Tell the tenant the landlord agrees she may replace the machine with her own, that the new machine is hers and her responsibility and she may take it when she leaves. Record this on the case. No contractor is needed. Close without payment, or hold only for the tenant to confirm the swap is done.",
+    "acceptable": [
+      "Ask the landlord what should happen to the old machine before closing."
+    ],
+    "optional": [
+      "Record who disposes of the old landlord-owned machine."
+    ],
+    "red_flags": [
+      "Assigning a contractor or requesting a repair quote."
+    ],
+    "prohibited": [
+      "Promising the tenant that the landlord will pay removal, disposal or purchase costs: the landlord's reply does not say so."
+    ],
+    "critical": [
+      "Telling the tenant the landlord will reimburse her for the new machine."
+    ]
+  },
+  "events": 9,
+  "attachments": []
+}

@@ -149,7 +149,7 @@ export async function runPlaybookSuite(opts: {
           await runCase({ c, state, newFrom: 1, client, model: opts.model, policy,
             singleStep: true, playbooks: arm === "playbooks" ? { model: opts.model } : false,
             trace: (kind, data) => traces.push({ kind, ...data }) });
-          if (state.incomplete) runError = "Agent exhausted its turn limit";
+          if (state.status.kind === "escalated" && state.status.by === "system") runError = state.status.summary;
         } catch (e) { runError = e instanceof Error ? e.message : String(e); }
         const duration = Date.now() - started;
         // Blind judge: no arm, retrieved guidance, selection reasons, source history or provenance.

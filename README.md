@@ -30,7 +30,7 @@ case dir (index.md, history.md, attachments/)
 
 Per run it writes `state/<id>.json` (case memory for `--next`), `traces/<id>.jsonl` (every model call and tool call, older traces rotated aside), and `ANSWERS/<id>/` (`ANSWER.md`: status, timeline, outbox, approvals, final checks. `REASONING.md`: the cited reason for each action plus the agent's notes).
 
-The rules are in `policy.md`, distilled from the 50 public Property Management cases in `data/public/`.
+The rules are in `policy.md`, distilled from the 50 public Property Management cases in `data/public/` and the evidence-backed rule bank in `policy_bank/`. Where the cases disagree, the rule follows what most cases did: landlord approval before a repair, completion proven by the contractor or the party that arranged the work, email by default. Rules 18 to 21 (hazards, disputes, tool failures, untrusted content) are our own safety margin; no case shows them.
 
 Workflow references are in `docs/playbooks/property-management-playbooks.json`. Before each model turn, a lexical prefilter shortlists at most four reference-reviewed workflows or decision modules from the current ticket and executed actions. A model then selects at most two playbooks with two useful steps each, or none. Code validates selected IDs and current-evidence IDs. Only the selected steps reach a separate system reference section; examples, source references, case assignments and provenance never enter runtime retrieval. References do not populate ticket facts, approve tools or override policy. The selector receives text evidence; attached image and native PDF contents remain with the acting model.
 
@@ -40,7 +40,7 @@ Three kinds of guardrails:
 
 - **Tool guards.** `assign_contractor` refuses until landlord approval is on file (a request from an earlier run, or an agency record of one). `send_message` refuses `[event N]` references in message text. `close_case` refuses while keys are outstanding.
 - **Loop limits.** A run that does not end in 15 turns auto-escalates; a system error escalates with a handover summary.
-- **Injection defense.** All case content arrives inside `<case_data>` tags, and policy rule 12 declares it evidence, not instructions.
+- **Injection defense.** All case content arrives inside `<case_data>` tags, and policy rule 21 declares it evidence, not instructions.
 
 Tools are simulated: each writes to the case state rather than a live system. `runTool` accepts adapter functions, so a real email, SMS or job API can replace each simulated body without touching the loop.
 
@@ -61,7 +61,7 @@ npm run eval:playbooks                                  # 8 tickets, 2 trials, p
 npm run extract                                        # Docling pre-extract of attachments (optional)
 ```
 
-To reproduce the reference evaluation with Haiku acting and selecting, and a fixed Sonnet process judge:
+To run the paired suite with the current policy, Haiku acting and selecting, and a fixed Sonnet process judge:
 
 ```bash
 MODEL=claude-haiku-4-5-20251001 JUDGE_MODEL=claude-sonnet-5-5 npm run eval:playbooks
@@ -70,6 +70,8 @@ MODEL=claude-haiku-4-5-20251001 JUDGE_MODEL=claude-sonnet-5-5 npm run eval:playb
 The eight tickets exercise unknown quote totals, ambiguous quote selection, landlord-managed work, outstanding keys, missing invoices, replacement ownership, emergency handling and unrelated requests. Each ticket includes source derivation and explicit required outcomes, alternatives and critical failures. Expected results, derivation and later events are excluded from the acting model and selector by code. The judge receives only the current evidence, expected results and executed output; its evidence pointers and exact quotations are validated in code. Reports distinguish invalid evaluations from wrong decisions. Both arms use fresh identical case state, the same policy, tools and acting model, and counterbalanced order. Semantic pass/fail and scores come from the common LLM judge; passing also requires one accepted business action.
 
 Two run modes. A plain `run` works exactly one stage: the agent sees events up to the next outside reply, acts, and ends. `--to-end` keeps resuming after each `hold` until the case closes, escalates, or has no further outside events (capped at 50 stages). Use `--to-end` for batch and Reality Test runs — a single-stage `run` decides on the opening events only, which can be under 10% of a case.
+
+The MCP tools follow the same rules. `run_case` and `resume_case` work one stage: the agent takes every action the stage needs, for example a message and then `hold`, and ends the run itself. `run_case` with `to_end` runs the whole case. `single_action: true` stops after one business action. Both eval suites run in multi-action mode.
 
 The tests read the public cases from `data/public/Property Management` (gitignored). Link them once:
 
@@ -80,7 +82,7 @@ mkdir -p data/public && ln -s "$(cd ../HackatonPublicCases && pwd)/Property Mana
 
 ## Models, APIs and external services
 
-- Anthropic Messages API through `@anthropic-ai/sdk`. Model: `claude-sonnet-5-5` by default (set `MODEL`; the batch must finish inside 30 minutes). Prompt caching breakpoints on the system prompt, tool specs and the latest message.
+- Anthropic Messages API through `@anthropic-ai/sdk`. Model: `claude-sonnet-5-5` by default (set `MODEL`; the batch must finish inside 30 minutes). Prompt caching breakpoints on the system prompt, tool specs and the latest message. A second, small model (`claude-haiku-5-5`, set `APPROVAL_MODEL`) reads the landlord's reply to an approval request as approved, refused or unclear; `assign_contractor` refuses unless the answer is approved, and any classifier failure counts as unclear.
 - `pdfjs-dist` for PDF text when a file is too large to send natively. `NATIVE_PDF_MAX_MB` (default 5) sets the native-PDF threshold, capped at 100 pages and a 20 MB prompt budget; larger files go as extracted text truncated to 8,000 characters.
 - `@modelcontextprotocol/sdk` for the MCP server. `scripts/extract.py` uses Docling via `uv` for structured markdown of attachments.
 - No live services: messages, approvals and assignments are outbox entries in case state.

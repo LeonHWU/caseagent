@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, join } from "node:path";
 
 export type CaseEvent = { n: number; at: string; channel: string; from: string; to: string; body: string; attachments: string[] };
@@ -11,15 +11,22 @@ export type Case = {
   events: CaseEvent[];
   attachments: string[];
   layer: "strict" | "lenient" | "loose" | "raw";
+  // Layers that recognised the directory but failed to parse it. The case still loads on a later
+  // layer, so these are the only sign that a file was read differently than written.
+  warnings?: string[];
 };
 
 // Status, Updated and Completed reveal how the case ended, so they never reach the agent.
-const ENDING_DETAIL = /\*\*(Status|Updated|Completed):\*\*/;
+// The same rule serves the strict detail filter and the raw stripper: optional list marker,
+// optional bold, the field name, then a colon on either side of a closing bold marker.
+const ENDING_DETAIL = /^\s*(?:[-*•]\s*)?\*{0,2}\s*(Status|Updated|Completed)\s*\*{0,2}\s*:/i;
 const HEADER_FIELD = /^- \*\*(Channel|From|To|Stage):\*\* ?(.*)$/;
 const EVENT_HEAD = /^## (.+ UTC) — event (\d+)$/;
 
 export function isAgency(from: string): boolean {
-  return /^(agency|northbridge)/i.test(from.trim());
+  // Corpus agencies: "Agency / system" and "Northbridge Lettings". The suffixes cover an unseen
+  // case that names its agency differently; a landlord or contractor org is still not the agency.
+  return /^(agency\b|northbridge\b|.*\b(lettings?|estate agents?|letting agents?|property management)\b)/i.test(from.trim());
 }
 
 function sections(md: string): Map<string, string> {
@@ -33,7 +40,6 @@ function sections(md: string): Map<string, string> {
 
 function extractAttachmentLinks(text: string): string[] {
   const links: string[] = [];
-  // Match markdown links in the format [filename](attachments/filename)
   const linkPattern = /\[([^\]]+)\]\(attachments\/([^)]+)\)/g;
   let match;
   while ((match = linkPattern.exec(text)) !== null) {
@@ -85,7 +91,7 @@ function parseHistoryLenient(md: string): CaseEvent[] {
       if (!head) throw new Error(`unrecognised event heading: ${lines[0]}`);
       let timestamp = head[1].trim();
       if (!timestamp.includes("UTC")) timestamp += " UTC";
-      timestamp = timestamp.replace(/–|-/g, "—");
+      timestamp = timestamp.replace(/–/g, "—");
       const fields: Record<string, string> = {};
       let i = 1;
       for (; i < lines.length; i++) {
@@ -105,139 +111,125 @@ function parseHistoryLenient(md: string): CaseEvent[] {
     });
 }
 
-function tryStrict(dir: string): Case | null {
-  try {
-    if (!existsSync(join(dir, "index.md")) || !existsSync(join(dir, "history.md"))) return null;
-    const index = readFileSync(join(dir, "index.md"), "utf8");
-    const s = sections(index);
-    const match = index.match(/^# Case [^:]+: (.+)$/m);
-    if (!match) return null;
-    const attachDir = join(dir, "attachments");
-    return {
-      id: basename(dir),
-      title: match[1].trim(),
-      details: (s.get("Case details") ?? "")
-        .split("\n")
-        .filter((l) => !ENDING_DETAIL.test(l))
-        .join("\n"),
-      request: s.get("Initial request") ?? "",
-      events: parseHistory(readFileSync(join(dir, "history.md"), "utf8")),
-      attachments: existsSync(attachDir) ? readdirSync(attachDir).filter((f) => !f.startsWith(".")).sort() : [],
-      layer: "strict",
-    };
-  } catch {
-    return null;
-  }
+function attachmentNames(dir: string): string[] {
+  const attachDir = join(dir, "attachments");
+  return existsSync(attachDir) ? readdirSync(attachDir).filter((f) => !f.startsWith(".")).sort() : [];
 }
 
-function tryLenient(dir: string): Case | null {
-  try {
-    if (!existsSync(join(dir, "index.md")) || !existsSync(join(dir, "history.md"))) return null;
-    const index = readFileSync(join(dir, "index.md"), "utf8");
-    const s = sections(index);
-    let title = basename(dir);
+// The index-file and attachment reading is shared; the layers differ only in the title and event grammar.
+function tryMarkdown(dir: string, strict: boolean): Case | null {
+  if (!existsSync(join(dir, "index.md")) || !existsSync(join(dir, "history.md"))) return null;
+  const index = readFileSync(join(dir, "index.md"), "utf8");
+  const s = sections(index);
+  let title: string;
+  if (strict) {
+    const match = index.match(/^# Case [^:]+: (.+)$/m);
+    if (!match) return null;
+    title = match[1].trim();
+  } else {
+    title = basename(dir);
     const titleMatch = index.match(/^#\s+(?:Case\s+)?([^:]+?)(?:\s*:\s*(.+))?$/m);
     if (titleMatch?.[2]) title = titleMatch[2].trim();
     else if (titleMatch?.[1]) title = titleMatch[1].trim();
-    const attachDir = join(dir, "attachments");
-    return {
-      id: basename(dir),
-      title,
-      details: (s.get("Case details") ?? "")
-        .split("\n")
-        .filter((l) => !ENDING_DETAIL.test(l))
-        .join("\n"),
-      request: s.get("Initial request") ?? "",
-      events: parseHistoryLenient(readFileSync(join(dir, "history.md"), "utf8")),
-      attachments: existsSync(attachDir) ? readdirSync(attachDir).filter((f) => !f.startsWith(".")).sort() : [],
-      layer: "lenient",
-    };
-  } catch {
-    return null;
   }
+  return {
+    id: basename(dir),
+    title,
+    details: (s.get("Case details") ?? "")
+      .split("\n")
+      .filter((l) => !ENDING_DETAIL.test(l))
+      .join("\n"),
+    request: s.get("Initial request") ?? "",
+    events: strict ? parseHistory(readFileSync(join(dir, "history.md"), "utf8")) : parseHistoryLenient(readFileSync(join(dir, "history.md"), "utf8")),
+    attachments: attachmentNames(dir),
+    layer: strict ? "strict" : "lenient",
+  };
 }
 
+const fileStamp = (path: string) => statSync(path).mtime.toISOString().slice(0, 19).replace("T", " ") + " UTC";
+
 function tryLoose(dir: string): Case | null {
-  try {
-    if (existsSync(join(dir, "history.md"))) return null;
-    const files = readdirSync(dir).filter(
-      (f) => !f.startsWith(".") && f !== "index.md" && /\.(eml|txt|json|csv)$/.test(f)
-    );
-    if (files.length === 0) return null;
-    const events: CaseEvent[] = files.map((f, i) => {
-      const path = join(dir, f);
-      const content = readFileSync(path, "utf8");
-      const isCall = /call|transcript/i.test(f);
-      return {
-        n: i + 1,
-        at: new Date().toISOString().slice(0, 19) + " UTC",
-        channel: isCall ? "Call" : "Email",
-        from: "",
-        to: "",
-        body: content,
-        attachments: extractAttachmentLinks(content),
-      };
-    });
-    const attachDir = join(dir, "attachments");
+  if (existsSync(join(dir, "history.md"))) return null;
+  const files = readdirSync(dir).filter(
+    (f) => !f.startsWith(".") && f !== "index.md" && /\.(eml|txt|json|csv)$/.test(f)
+  );
+  if (files.length === 0) return null;
+  const events: CaseEvent[] = files.map((f, i) => {
+    const path = join(dir, f);
+    const content = readFileSync(path, "utf8");
+    const isCall = /call|transcript/i.test(f);
     return {
-      id: basename(dir),
-      title: basename(dir),
-      details: "",
-      request: "",
-      events,
-      attachments: existsSync(attachDir) ? readdirSync(attachDir).filter((f) => !f.startsWith(".")).sort() : [],
-      layer: "loose",
+      n: i + 1,
+      at: fileStamp(path),
+      channel: isCall ? "Call" : "Email",
+      from: "",
+      to: "",
+      body: content,
+      attachments: extractAttachmentLinks(content),
     };
-  } catch {
-    return null;
-  }
+  });
+  return {
+    id: basename(dir),
+    title: basename(dir),
+    details: "",
+    request: "",
+    events,
+    attachments: attachmentNames(dir),
+    layer: "loose",
+  };
 }
 
 function stripHiddenContent(text: string): string {
   let result = text;
   result = result.replace(/^#{1,6}\s+(Overview|Outcome|Resolution|Summary)\b[^\n]*\n(?:(?!^#{1,6}\s)[\s\S])*/gim, "");
-  result = result.split("\n").filter((line) => !/^\*\*(Status|Updated|Completed):/i.test(line)).join("\n");
+  result = result.split("\n").filter((line) => !ENDING_DETAIL.test(line)).join("\n");
   return result;
 }
 
 function tryRaw(dir: string): Case | null {
-  try {
-    const files = readdirSync(dir).filter((f) => !f.startsWith(".") && f !== "index.md" && f !== "history.md");
-    let content = "";
-    for (const f of files.sort()) {
-      if (!/\.(txt|md|json|csv|eml)$/i.test(f)) continue;
-      const path = join(dir, f);
-      try {
-        content += readFileSync(path, "utf8") + "\n\n";
-      } catch {
-        /* skip unreadable files */
-      }
+  const files = readdirSync(dir).filter((f) => !f.startsWith(".") && f !== "index.md" && f !== "history.md");
+  let content = "";
+  let latest = 0;
+  for (const f of files.sort()) {
+    if (!/\.(txt|md|json|csv|eml)$/i.test(f)) continue;
+    const path = join(dir, f);
+    try {
+      content += readFileSync(path, "utf8") + "\n\n";
+      latest = Math.max(latest, statSync(path).mtimeMs);
+    } catch {
+      /* skip unreadable files */
     }
-    if (content.trim().length === 0) return null;
-    content = stripHiddenContent(content);
-    const attachDir = join(dir, "attachments");
-    return {
-      id: basename(dir),
-      title: basename(dir),
-      details: content.trim(),
-      request: "",
-      events: [{ n: 1, at: new Date().toISOString().slice(0, 19) + " UTC", channel: "Email", from: "", to: "", body: content.trim(), attachments: [] }],
-      attachments: existsSync(attachDir) ? readdirSync(attachDir).filter((f) => !f.startsWith(".")).sort() : [],
-      layer: "raw",
-    };
-  } catch {
-    return null;
   }
+  if (content.trim().length === 0) return null;
+  content = stripHiddenContent(content);
+  const at = latest > 0 ? new Date(latest).toISOString().slice(0, 19).replace("T", " ") + " UTC" : "";
+  return {
+    id: basename(dir),
+    title: basename(dir),
+    details: content.trim(),
+    request: "",
+    events: [{ n: 1, at, channel: "Email", from: "", to: "", body: content.trim(), attachments: [] }],
+    attachments: attachmentNames(dir),
+    layer: "raw",
+  };
 }
 
 export function loadCase(dir: string): Case {
-  const strict = tryStrict(dir);
-  if (strict) return strict;
-  const lenient = tryLenient(dir);
-  if (lenient) return lenient;
-  const loose = tryLoose(dir);
-  if (loose) return loose;
-  const raw = tryRaw(dir);
-  if (raw) return raw;
-  throw new Error(`could not load case from ${dir}: no valid parser succeeded`);
+  const warnings: string[] = [];
+  const attempt = (name: string, fn: () => Case | null): Case | null => {
+    try {
+      return fn();
+    } catch (e) {
+      warnings.push(`${name} loader failed on ${dir}: ${e instanceof Error ? e.message : String(e)}`);
+      return null;
+    }
+  };
+  const c =
+    attempt("strict", () => tryMarkdown(dir, true)) ??
+    attempt("lenient", () => tryMarkdown(dir, false)) ??
+    attempt("loose", () => tryLoose(dir)) ??
+    attempt("raw", () => tryRaw(dir));
+  if (!c) throw new Error(`could not load case from ${dir}: ${warnings.length ? warnings.join("; ") : "no parser recognised the directory"}`);
+  if (warnings.length) c.warnings = warnings;
+  return c;
 }
