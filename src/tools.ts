@@ -33,7 +33,10 @@ const TOOLS: Record<string, Tool> = {
       text: z.string().min(1),
       reason,
     }),
-    apply: (i) => `${i.channel} to ${i.to} queued in the outbox`,
+    apply: (i) => {
+      if (/\[event \d+\]/i.test(i.text)) throw new Refusal("the message text contains an event reference. Event references belong in reason only; rewrite the text without them.");
+      return `${i.channel} to ${i.to} queued in the outbox`;
+    },
   }),
   request_landlord_approval: tool({
     description: "Ask the landlord to approve work or a cost. Use this before any contractor visit or any spend.",

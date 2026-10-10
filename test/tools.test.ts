@@ -61,3 +61,10 @@ test("every tool spec requires a reason", () => {
   assert.equal(TOOL_SPECS.length, 7);
   for (const t of TOOL_SPECS) assert.ok((t.input_schema.required ?? []).includes("reason"), t.name);
 });
+
+test("send_message refuses text that cites events, so outside parties never see internal references", () => {
+  const s = newState("027", 1);
+  const out = runTool("send_message", { to: "tenant", channel: "email", text: "The plunger cleared it [event 007].", reason: "[event 007]" }, s);
+  assert.equal(out.ok, false);
+  assert.match(out.result, /^refused: the message text contains an event reference/);
+});
