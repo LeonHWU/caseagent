@@ -1,0 +1,63 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { newState } from "../src/state.ts";
+import { runTool, TOOL_SPECS } from "../src/tools.ts";
+
+const closeInput = {
+  outcome: "resolved_without_work",
+  work_confirmed_by: "tenant [event 007]",
+  landlord_informed: false,
+  keys: "not_issued",
+  invoice: "not_required",
+  reason: "Tenant cleared the drain with a plunger [event 007].",
+};
+
+test("hold ends the run and records what the case waits for", () => {
+  const s = newState("027", 1);
+  const out = runTool("hold", { waiting_for: "Waiting for Tenant", reason: "Asked tenant to try a plunger." }, s);
+  assert.deepEqual(out, { ok: true, ends: true, result: "case on hold: Waiting for Tenant" });
+  assert.deepEqual(s.status, { kind: "hold", reason: "Waiting for Tenant" });
+});
+
+test("work tools do not end the run", () => {
+  const s = newState("027", 1);
+  const out = runTool("send_message", { to: "tenant", channel: "email", text: "Please try a plunger.", reason: "[event 001]" }, s);
+  assert.equal(out.ok, true);
+  assert.equal(out.ends, false);
+  assert.deepEqual(s.status, { kind: "open" });
+});
+
+test("close_case refuses while keys are outstanding", () => {
+  const s = newState("027", 1);
+  const out = runTool("close_case", { ...closeInput, keys: "outstanding" }, s);
+  assert.equal(out.ok, false);
+  assert.equal(out.ends, false);
+  assert.match(out.result, /^refused: keys are outstanding/);
+  assert.deepEqual(s.status, { kind: "open" });
+});
+
+test("close_case records the final checks without the reason", () => {
+  const s = newState("027", 1);
+  const out = runTool("close_case", closeInput, s);
+  assert.equal(out.ends, true);
+  assert.equal(s.status.kind, "closed");
+  assert.ok(s.status.kind === "closed" && !("reason" in s.status.checks));
+});
+
+test("bad input goes back as text that names the field", () => {
+  const s = newState("027", 1);
+  const out = runTool("send_message", { to: "plumber", channel: "email", text: "x", reason: "r" }, s);
+  assert.equal(out.ok, false);
+  assert.match(out.result, /^invalid input:/);
+  assert.match(out.result, /at to/);
+});
+
+test("an unknown tool is an error, not a crash", () => {
+  const out = runTool("delete_case", {}, newState("027", 1));
+  assert.deepEqual(out, { ok: false, ends: false, result: 'unknown tool "delete_case"' });
+});
+
+test("every tool spec requires a reason", () => {
+  assert.equal(TOOL_SPECS.length, 7);
+  for (const t of TOOL_SPECS) assert.ok((t.input_schema.required ?? []).includes("reason"), t.name);
+});

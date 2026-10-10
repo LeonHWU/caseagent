@@ -1,0 +1,22 @@
+{
+  "name": "case-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "case": "node --env-file-if-exists=.env --import tsx src/cli.ts",
+    "test": "node --import tsx --test test/*.test.ts",
+    "typecheck": "tsc -p ."
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.131.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "25.9.9",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  }
+}
