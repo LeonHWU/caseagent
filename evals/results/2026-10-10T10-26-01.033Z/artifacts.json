@@ -1,0 +1,165 @@
+{
+  "source_run": "2026-10-10T10-26-01.033Z",
+  "files": [
+    {
+      "path": "pm-011-approved-assignment/ANSWERS/011/ANSWER.md",
+      "sha256": "52ebc41a5c06170c92a94bd7b964f3dbdfd994f916e5a4d6ab2788b31443c8fa"
+    },
+    {
+      "path": "pm-011-approved-assignment/ANSWERS/011/REASONING.md",
+      "sha256": "ffcfcf8e40a1706a7cab58cc7c784b518373612b64101675903b9887082574e5"
+    },
+    {
+      "path": "pm-011-approved-assignment/state/011.json",
+      "sha256": "4ab487dbbf7cfbf9c43a284f36fa0edc794152cef8248d4a31ac0487963eefa2"
+    },
+    {
+      "path": "pm-011-approved-assignment/traces/011.jsonl",
+      "sha256": "f714862fa9973870ece198edfabacaab8842a4110a24d9f7951224d2be38eec5"
+    },
+    {
+      "path": "pm-011-initial-approval/ANSWERS/011/ANSWER.md",
+      "sha256": "df8f8d9b6d91c7472252cace3561005699df1e22001d9eed63584ea9f31a4eeb"
+    },
+    {
+      "path": "pm-011-initial-approval/ANSWERS/011/REASONING.md",
+      "sha256": "c2f4da0d3bbda31346cee8ebdfc540120549a3857e11b8df2cea58e0c6fe4ea8"
+    },
+    {
+      "path": "pm-011-initial-approval/state/011.json",
+      "sha256": "cf2aab8a1de6747166b8afc2d40af8fe790fc1d515603d70bf4054105f81bd7a"
+    },
+    {
+      "path": "pm-011-initial-approval/traces/011.jsonl",
+      "sha256": "74dcb001489cf8054085bc153b016ccef19e7b9a1f24a8a377beb73d908c6205"
+    },
+    {
+      "path": "pm-013-report-completion/ANSWERS/013/ANSWER.md",
+      "sha256": "854561cf699a611858737375cdce8d28d8bee632164e75d401e89ef41254b8e9"
+    },
+    {
+      "path": "pm-013-report-completion/ANSWERS/013/REASONING.md",
+      "sha256": "3a125a32d2983a3db1686f0e133ec70644ab7b91528f2971bb28c08063ba0284"
+    },
+    {
+      "path": "pm-013-report-completion/state/013.json",
+      "sha256": "fc00ef8e5d48fbc039958f4558e2624b058f38e87a9dbdd78bcec770a76646c4"
+    },
+    {
+      "path": "pm-013-report-completion/traces/013.jsonl",
+      "sha256": "50f3bbb727ec6de5bba9cd5d2ced984a89d0f70bd954be2560edd28a2af62696"
+    },
+    {
+      "path": "pm-017-await-tenant/ANSWERS/017/ANSWER.md",
+      "sha256": "0cc6b850a448aca84a0056815e73ffb10a41d264ea9a9f2c8daf8504085b0d54"
+    },
+    {
+      "path": "pm-017-await-tenant/ANSWERS/017/REASONING.md",
+      "sha256": "a55ec2f3c07c67c956128c5283c89be4e355b424e94064e5d7393802762c83d5"
+    },
+    {
+      "path": "pm-017-await-tenant/state/017.json",
+      "sha256": "87236ddca2520202ffdd6b901143c7d50fc5e1490b394474ca63646f684b3a03"
+    },
+    {
+      "path": "pm-017-await-tenant/traces/017.jsonl",
+      "sha256": "0ea601a2799487a8d2e68627a7232502af0cc8e4913377a0fa037333aad209e1"
+    },
+    {
+      "path": "pm-017-switch-troubleshooting/ANSWERS/017/ANSWER.md",
+      "sha256": "92cd950357923155d2e171bf6e0bd76f7139b676d7c39538257231251d2ff93d"
+    },
+    {
+      "path": "pm-017-switch-troubleshooting/ANSWERS/017/REASONING.md",
+      "sha256": "ba49ddf1e1bf23f75a6673fcae5aa681bbd049156071b6e870ee04ee42408290"
+    },
+    {
+      "path": "pm-017-switch-troubleshooting/state/017.json",
+      "sha256": "a50193be93b7df302892a4dc5a6d68e69351add87284b432a3a2491322a972e2"
+    },
+    {
+      "path": "pm-017-switch-troubleshooting/traces/017.jsonl",
+      "sha256": "e05cdaa1f46a2b514c64ce85e711fda881e60f894c9369a3feb84e54052877df"
+    },
+    {
+      "path": "pm-028-landlord-own-repair/ANSWERS/028/ANSWER.md",
+      "sha256": "dd093da1ee583229f933647f09d7c753bc1cef8d9d70ce1bb51603abcbe883ec"
+    },
+    {
+      "path": "pm-028-landlord-own-repair/ANSWERS/028/REASONING.md",
+      "sha256": "b94687ad7adaed242ff450a8ee303fe7b083e040b2c1a6f257530e583665b829"
+    },
+    {
+      "path": "pm-028-landlord-own-repair/state/028.json",
+      "sha256": "1b09bac94ea77aa0398b666ac62db2296c6388bb2be531042b46ea7a2461c905"
+    },
+    {
+      "path": "pm-028-landlord-own-repair/traces/028.jsonl",
+      "sha256": "c06b1ee790ad2f15fade2fe54a0d0042182f4a5bdd103190d6524b68b26d4d15"
+    },
+    {
+      "path": "pm-032-conditional-assignment/ANSWERS/032/ANSWER.md",
+      "sha256": "1d8b809c10aef25c7a10cb55bd9f0c32a61b019dc1851ab980cf85df3a5bc55b"
+    },
+    {
+      "path": "pm-032-conditional-assignment/ANSWERS/032/REASONING.md",
+      "sha256": "bfd8d2387f462b063162c66d0d96d06e679021bdb7882c92b9fe67ce31888c6b"
+    },
+    {
+      "path": "pm-032-conditional-assignment/state/032.json",
+      "sha256": "a138f97f293eb1c5fe3962e0d74df38da3a46c1753f03c56d62cad174cac8bf6"
+    },
+    {
+      "path": "pm-032-conditional-assignment/traces/032.jsonl",
+      "sha256": "7b393a831e497232a39ccae74938ef72c1fa748209afb8809e73597fa3b186f0"
+    },
+    {
+      "path": "pm-035-landlord-resolved-close/ANSWERS/035/ANSWER.md",
+      "sha256": "2384590d2c98952e744ce6964f1667b6d9be7990f2ee39521219c29b6757990a"
+    },
+    {
+      "path": "pm-035-landlord-resolved-close/ANSWERS/035/REASONING.md",
+      "sha256": "a80b30b0023d0e805d556a81351d5e0fdf6047884c517a1433dfc5c18a383f59"
+    },
+    {
+      "path": "pm-035-landlord-resolved-close/state/035.json",
+      "sha256": "9bdd9d1d1466f8c7b11d6eefb84b1b9f7695d401649d76cd916cf12a081a72d0"
+    },
+    {
+      "path": "pm-035-landlord-resolved-close/traces/035.jsonl",
+      "sha256": "45b83b07fcd8136091fd988632f033150bee030a001146cd910b1418fb2d4df7"
+    },
+    {
+      "path": "pm-044-clarify-window/ANSWERS/044/ANSWER.md",
+      "sha256": "c61586a5e39ff148c984044bc2b6018e1574c68c03dd500f2441a8632970f54c"
+    },
+    {
+      "path": "pm-044-clarify-window/ANSWERS/044/REASONING.md",
+      "sha256": "b6e461d62dd9b9ba977d1855c57964995fdd4c40b46c16200826980387c7e52e"
+    },
+    {
+      "path": "pm-044-clarify-window/state/044.json",
+      "sha256": "36bdc23f6d82df059adcbe249cf2287ade487bcce00e003e748adcb55e7f7b09"
+    },
+    {
+      "path": "pm-044-clarify-window/traces/044.jsonl",
+      "sha256": "be4ad96ea8d1f299dab8f80e79e0b39026fb2ca07b6b7f7fb8d7692eb3a8a6e1"
+    },
+    {
+      "path": "pm-049-conditional-self-fix/ANSWERS/049/ANSWER.md",
+      "sha256": "e03f69a0af792fe304262692614a4a50e623ee5a208039936ca80e0208f24242"
+    },
+    {
+      "path": "pm-049-conditional-self-fix/ANSWERS/049/REASONING.md",
+      "sha256": "6611222bb59691b449830198ec1eda4a7ab085d3bc4f400ee6f7efea9a386f8b"
+    },
+    {
+      "path": "pm-049-conditional-self-fix/state/049.json",
+      "sha256": "451ecf5e452db6c4619e51f2165631e8cce6946ef5c4213620d7773ca2596402"
+    },
+    {
+      "path": "pm-049-conditional-self-fix/traces/049.jsonl",
+      "sha256": "65a47ebfedbd4c7a44a806a998f1db4548449b9d50a8264f3090ce2602b682bd"
+    }
+  ]
+}

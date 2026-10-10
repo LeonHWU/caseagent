@@ -1,0 +1,25 @@
+{
+  "caseId": "028",
+  "initialSeen": 7,
+  "seen": 7,
+  "runs": 1,
+  "status": {
+    "kind": "open"
+  },
+  "actions": [
+    {
+      "run": 1,
+      "afterEvent": 7,
+      "tool": "send_message",
+      "input": {
+        "to": "landlord",
+        "channel": "email",
+        "text": "Good afternoon Grace,\n\nThank you for your reply. We understand you will arrange your own contractor for the loose water pipe in the back garden at Flat 7, 87 Alder Lane, Bellmere, ZZ3 8ZZ, so we will not instruct anyone from our side.\n\nCould you please let us know when the contractor is expected to attend, so we can inform the tenant about access? Once the work is finished, please confirm with us that it has been completed, and send over any invoice or photos you have for our records.\n\nKind regards\nNorthbridge Lettings",
+        "reason": "Landlord said they will sort the issue themselves [event 007]; per rule 4 we let them use their own contractor and ask them to confirm when the work is done."
+      },
+      "ok": true,
+      "result": "email to landlord queued in the outbox"
+    }
+  ],
+  "incomplete": false
+}

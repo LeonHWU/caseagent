@@ -1,0 +1,24 @@
+{
+  "caseId": "011",
+  "initialSeen": 10,
+  "seen": 10,
+  "runs": 1,
+  "status": {
+    "kind": "open"
+  },
+  "actions": [
+    {
+      "run": 1,
+      "afterEvent": 10,
+      "tool": "assign_contractor",
+      "input": {
+        "trade": "Appliance engineer (dishwasher repair)",
+        "notes": "Flat 12, 78 Copperfield Walk, Kingshaven, ZZ3 1ZZ. Tenant reports the dishwasher (Riverside Services) fills and washes but never finishes or stops its cycle. Started recently. No entry codes or alarms. Two guinea pigs live in the property, so please keep them in mind when entering and ask the tenant to secure them. Please arrange the visit with the tenant. Send us a quote before any work or parts beyond the initial diagnosis. Send the invoice and a photo of the finished work afterwards.",
+        "reason": "The landlord approved a contractor visit [event 009], and the system confirmed approval and moved the case to provider selection [event 010]. The issue is routine [event 002], so I'm assigning an appliance engineer. The notes include the guinea pigs and the access details from the intake."
+      },
+      "ok": true,
+      "result": "Appliance engineer (dishwasher repair) contractor assigned"
+    }
+  ],
+  "incomplete": false
+}
