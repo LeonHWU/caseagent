@@ -66,7 +66,13 @@ Run the live model from the repository root, loading the local `.env`:
 node --env-file=.env --import tsx 'evals/Process Reward/run.ts'
 ```
 
-The default model is the repository's `claude-sonnet-5-5`; override it with `MODEL`. Results and raw traces are written to Git-ignored `runs/process-eval/`. The runner checks tools and exact arguments automatically; semantic scoring still requires review. API failures are recorded as `runtime_failure` with a null score, rather than model judgment errors.
+The default model is the repository's `claude-sonnet-5-5`; override it with `MODEL`. Results and raw traces are written to Git-ignored `runs/process-eval/`. The runner checks tools and exact arguments automatically; semantic scoring still requires review. Each result has a `run_outcome`:
+
+- `completed`: the agent ended the run itself. The result has a structural match check, and its semantic review is `pending`.
+- `model_failure`: the model used all 15 turns without an end tool. Under strict scoring, no action scores 0, so the score is `0`.
+- `runtime_failure`: the API, the case loader or the MCP call failed, for example on a timeout. The model was not judged, so the score is `null` and `error` holds the message.
+
+A failure on one sample does not stop the suite. The runner records the failure and continues, and it saves `results.json` after every sample.
 
 Read actual `actions` from `state/<case>.json` or `tool` entries from `traces/<case>.jsonl`, rather than relying only on the model's claims.
 
