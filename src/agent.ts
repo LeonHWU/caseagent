@@ -4,7 +4,7 @@ import type { Case } from "./parse.ts";
 import type { CasePrompt } from "./prompt.ts";
 import { renderCase } from "./prompt.ts";
 import type { CaseState } from "./state.ts";
-import { runTool, TOOL_SPECS } from "./tools.ts";
+import { runTool, TOOL_SPECS, type ToolAdapter } from "./tools.ts";
 
 export const MAX_TURNS = 15;
 const NUDGE = "End the run now with exactly one of hold, escalate or close_case.";
@@ -25,8 +25,9 @@ export async function runCase(opts: {
   trace: Trace;
   caseDir?: string;
   cacheDir?: string;
+  adapters?: Record<string, ToolAdapter>;
 }): Promise<string[]> {
-  const { c, state, client, model, policy, trace, caseDir, cacheDir } = opts;
+  const { c, state, client, model, policy, trace, caseDir, cacheDir, adapters } = opts;
   state.runs += 1;
   state.status = { kind: "open" };
   const visible = visibleEvents(c, state.initialSeen, state.seen);
@@ -62,7 +63,7 @@ export async function runCase(opts: {
     }
     const results: Anthropic.ToolResultBlockParam[] = [];
     for (const u of uses) {
-      const out = runTool(u.name, u.input, state);
+      const out = runTool(u.name, u.input, state, adapters);
       state.actions.push({ run: state.runs, afterEvent: state.seen, tool: u.name, input: u.input as Record<string, unknown>, ok: out.ok, result: out.result });
       trace("tool", { name: u.name, input: u.input, ...out });
       if (out.ends) return thoughts;

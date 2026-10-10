@@ -103,3 +103,42 @@ test("processToEnd: hold, then close, then stop before the later events", async 
   assert.equal(trace.match(/"kind":"run_start"/g)?.length, 2);
   assert.match(readFileSync(join(out, "ANSWERS", "027", "ANSWER.md"), "utf8"), /Run 2/);
 });
+
+test("a failing tool comes back as an error; the model retries and the run completes", async () => {
+  const s = newState("027", 1);
+  let calls = 0;
+  const adapters = {
+    send_message: (input: Record<string, unknown>) => {
+      if (++calls === 1) throw new Error("timeout");
+      return `${input.channel} to ${input.to} queued in the outbox`;
+    },
+  };
+  const send = { to: "tenant", channel: "email", text: "Please try a plunger.", reason: "[event 001]" };
+  const f = fake([
+    [use("a", "send_message", send)],
+    [use("b", "send_message", send)],
+    [use("c", "hold", { waiting_for: "Waiting for Tenant", reason: "Awaiting the tenant." })],
+  ]);
+  await runCase({ ...base, state: s, client: f.client, adapters });
+  assert.deepEqual(s.actions.map((a) => [a.tool, a.ok]), [["send_message", false], ["send_message", true], ["hold", true]]);
+  assert.equal(s.actions[0].result, "failed: timeout");
+  const back = f.calls[1].messages.at(-1)!.content as Anthropic.ToolResultBlockParam[];
+  assert.equal(back[0].is_error, true);
+  assert.equal(back[0].content, "failed: timeout");
+  assert.equal(s.status.kind, "hold");
+});
+
+test("a tool that fails twice is escalated by the model, and both failures are recorded", async () => {
+  const s = newState("027", 1);
+  const adapters = { send_message: () => { throw new Error("provider error"); } };
+  const send = { to: "tenant", channel: "email", text: "Please try a plunger.", reason: "[event 001]" };
+  const f = fake([
+    [use("a", "send_message", send)],
+    [use("b", "send_message", send)],
+    [use("c", "escalate", { summary: "send_message failed twice (provider error). A person must contact the tenant.", reason: "Tool failed twice." })],
+  ]);
+  await runCase({ ...base, state: s, client: f.client, adapters });
+  assert.deepEqual(s.actions.map((a) => a.ok), [false, false, true]);
+  assert.ok(s.status.kind === "escalated");
+  assert.match(s.status.summary, /send_message failed twice/);
+});

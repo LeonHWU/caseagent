@@ -5,6 +5,7 @@ import { HOLD_REASONS, type CaseState } from "./state.ts";
 export class Refusal extends Error {}
 
 export type ToolOutcome = { ok: boolean; result: string; ends: boolean };
+export type ToolAdapter = (input: Record<string, unknown>, state: CaseState) => string;
 
 type Tool = {
   description: string;
@@ -98,16 +99,23 @@ const TOOLS: Record<string, Tool> = {
   }),
 };
 
-export function runTool(name: string, input: unknown, state: CaseState): ToolOutcome {
+export function runTool(
+  name: string,
+  input: unknown,
+  state: CaseState,
+  adapters?: Record<string, ToolAdapter>
+): ToolOutcome {
   const t = TOOLS[name];
   if (!t) return { ok: false, ends: false, result: `unknown tool "${name}"` };
   const parsed = t.schema.safeParse(input);
   if (!parsed.success) return { ok: false, ends: false, result: `invalid input:\n${z.prettifyError(parsed.error)}` };
+  const apply = adapters?.[name] ?? t.apply;
   try {
-    return { ok: true, ends: t.end, result: t.apply(parsed.data as Record<string, unknown>, state) };
+    return { ok: true, ends: t.end, result: apply(parsed.data as Record<string, unknown>, state) };
   } catch (e) {
     if (e instanceof Refusal) return { ok: false, ends: false, result: `refused: ${e.message}` };
-    throw e;
+    const errorMsg = e instanceof Error ? e.message : String(e);
+    return { ok: false, ends: false, result: `failed: ${errorMsg}` };
   }
 }
 
