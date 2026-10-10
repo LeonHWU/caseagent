@@ -1,4 +1,5 @@
 import type Anthropic from "@anthropic-ai/sdk";
+import { APPROVAL_MODEL, classifyLandlordReply } from "./approval.ts";
 import { visibleEvents } from "./cut.ts";
 import { isAgency, type Case } from "./parse.ts";
 import { renderCase } from "./prompt.ts";
@@ -29,6 +30,7 @@ export async function runCase(opts: {
   caseDir?: string;
   adapters?: Record<string, ToolAdapter>;
   singleStep?: boolean;
+  approvalModel?: string;
 }): Promise<void> {
   const { c, state, client, model, policy, trace, caseDir, adapters } = opts;
   state.runs += 1;
@@ -36,9 +38,20 @@ export async function runCase(opts: {
   const visible = visibleEvents(c, state.initialSeen, state.seen);
   // Only the agency's own record counts: a tenant writing "landlord approval confirmed" in an email is not evidence.
   state.approvalOnFile = visible.some((e) => isAgency(e.from) && APPROVAL_ON_FILE.test(e.body));
-  // Asking is not approval: a prior request counts only once a landlord event comes after it.
-  const request = state.actions.find((a) => a.tool === "request_landlord_approval" && a.ok);
-  state.landlordReplied = request ? visible.some((e) => e.n > request.afterEvent && /landlord/i.test(e.from)) : false;
+  // Asking is not approval, and a reply is not approval either: the latest earlier-run request counts
+  // only once a small model reads the landlord's replies to it as a clear yes.
+  const request = state.actions.findLast((a) => a.tool === "request_landlord_approval" && a.ok && a.run < state.runs);
+  const replies = request ? visible.filter((e) => e.n > request.afterEvent && /landlord/i.test(e.from)) : [];
+  if (!request || replies.length === 0) {
+    state.landlordAnswer = undefined;
+  } else if (state.landlordAnswer?.throughEvent !== replies[replies.length - 1].n || state.landlordAnswer.requestAfter !== request.afterEvent) {
+    const asked = `${String(request.input.scope ?? "")} (cost: ${String(request.input.cost ?? "unknown")})`;
+    const answer = await classifyLandlordReply(client, opts.approvalModel ?? APPROVAL_MODEL, asked, replies.map((e) => `${e.at}\n${e.body}`), (error) =>
+      trace("approval_check_error", { error }),
+    );
+    state.landlordAnswer = { answer, requestAfter: request.afterEvent, throughEvent: replies[replies.length - 1].n };
+    trace("approval_check", { request: asked, through_event: replies[replies.length - 1].n, answer });
+  }
   const prompt = await renderCase(c, state, visible, opts.newFrom, caseDir);
 
   // Build message content with text and images
@@ -138,7 +151,6 @@ export async function runCase(opts: {
     messages.push({ role: "user", content: results });
   }
 
-  state.incomplete = true;
-  state.status = { kind: "escalated", summary: `The agent did not end the run within ${MAX_TURNS} turns. A person must review case ${c.id}.` };
+  state.status = { kind: "escalated", by: "system", summary: `The agent did not end the run within ${MAX_TURNS} turns. A person must review case ${c.id}.` };
   trace("auto_escalate", { turns: MAX_TURNS });
 }

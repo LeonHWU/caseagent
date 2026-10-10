@@ -30,13 +30,12 @@ export function liveDeps(out: string): RunDeps {
 }
 
 export function summary(state: CaseState): string {
-  return `${state.caseId}: ${statusLabel(state.status)}${state.incomplete ? " [incomplete]" : ""}`;
+  return `${state.caseId}: ${statusLabel(state.status)}`;
 }
 
 // Failures the agent cannot fix end the case on a person: a load failure, an API error, or a stage cap.
 function markSystemFailure(state: CaseState, label: string, message: string, caseId: string): void {
-  state.incomplete = true;
-  state.status = { kind: "escalated", summary: `${label}: ${message}. A person must review case ${caseId}.` };
+  state.status = { kind: "escalated", by: "system", summary: `${label}: ${message}. A person must review case ${caseId}.` };
 }
 
 export async function processCase(deps: RunDeps, dir: string, next: boolean, options: { step?: number; singleStep?: boolean } = {}): Promise<CaseState> {
@@ -106,11 +105,11 @@ export async function processCase(deps: RunDeps, dir: string, next: boolean, opt
 // instead of reporting the same "hold" as a case that is genuinely waiting.
 export async function processToEnd(deps: RunDeps, dir: string): Promise<CaseState> {
   let state = await processCase(deps, dir, false);
-  for (let stage = 1; stage < MAX_STAGES && state.status.kind === "hold" && !state.incomplete; stage++) {
+  for (let stage = 1; stage < MAX_STAGES && state.status.kind === "hold"; stage++) {
     if (nextSeen(loadCase(dir), state.seen) === null) break;
     state = await processCase(deps, dir, true);
   }
-  if (state.status.kind === "hold" && !state.incomplete && nextSeen(loadCase(dir), state.seen) !== null) {
+  if (state.status.kind === "hold" && nextSeen(loadCase(dir), state.seen) !== null) {
     const c = loadCase(dir);
     markSystemFailure(state, `Stopped at the ${MAX_STAGES}-stage resume limit`, "the case still has outside events", c.id);
     saveState(join(deps.out, "state", `${c.id}.json`), state);

@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Case, CaseEvent } from "./parse.ts";
-import { statusLabel, type CaseState, type Action } from "./state.ts";
+import { isIncomplete, statusLabel, type CaseState, type Action } from "./state.ts";
 
 function summarizeLine(s: string): string {
   return s.split("\n")[0].slice(0, 60);
@@ -19,9 +19,10 @@ function runEvents(s: CaseState, visible: CaseEvent[], run: number): CaseEvent[]
 function answerMd(c: Case, s: CaseState, visible: CaseEvent[]): string {
   // Summary
   const summary =
-    `**Final status:** ${statusLabel(s.status)}${s.incomplete ? " [incomplete]" : ""}\n**Runs:** ${s.runs} · **Events seen:** up to event ${s.seen} · **Loaded with:** ${c.layer}` +
-    (s.incomplete ? "\n\n**Incomplete:** the agent did not finish this run, so the system escalated the case to a person." : "") +
-    (c.layer === "raw" ? "\n\n**Raw mode loaded:** this case was reconstructed from unstructured files. Review for leaks." : "");
+    `**Final status:** ${statusLabel(s.status)}\n**Runs:** ${s.runs} · **Events seen:** up to event ${s.seen} · **Loaded with:** ${c.layer}` +
+    (isIncomplete(s) ? "\n\n**Incomplete:** the agent did not finish this run, so the system escalated the case to a person." : "") +
+    (c.layer === "raw" ? "\n\n**Raw mode loaded:** this case was reconstructed from unstructured files. Review for leaks." : "") +
+    (c.warnings?.length ? `\n\n**Loader warnings:** ${c.warnings.join("; ")}` : "");
 
   // Timeline: group actions by run
   const runs = new Map<number, Action[]>();
@@ -89,7 +90,7 @@ function answerMd(c: Case, s: CaseState, visible: CaseEvent[]): string {
   const st = s.status;
   const escalation =
     st.kind !== "escalated" ? "None."
-    : st.checked ? `- **Checked:** ${st.checked}\n- **Missing or in conflict:** ${st.missing_or_conflict}\n- **Decision needed:** ${st.decision_needed}`
+    : st.by === "agent" ? `- **Checked:** ${st.checked}\n- **Missing or in conflict:** ${st.missing_or_conflict}\n- **Decision needed:** ${st.decision_needed}`
     : st.summary;
 
   // Failed, refused or invalid actions

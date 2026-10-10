@@ -131,6 +131,7 @@ test("ANSWER.md shows the three escalation fields for an agent escalation, plain
   s.runs = 1;
   s.status = {
     kind: "escalated",
+    by: "agent",
     summary: "Checked: the events [event 001]\nMissing or in conflict: two reports conflict\nDecision needed: pick a side",
     checked: "the events [event 001]",
     missing_or_conflict: "two reports conflict",
@@ -141,7 +142,7 @@ test("ANSWER.md shows the three escalation fields for an agent escalation, plain
   const answer = readFileSync(join(out, "ANSWERS/027/ANSWER.md"), "utf8");
   assert.match(answer, /## Escalation\n\n- \*\*Checked:\*\* the events \[event 001\]\n- \*\*Missing or in conflict:\*\* two reports conflict\n- \*\*Decision needed:\*\* pick a side/);
 
-  s.status = { kind: "escalated", summary: "System error: API down. A person must review case 027." };
+  s.status = { kind: "escalated", by: "system", summary: "System error: API down. A person must review case 027." };
   writeAnswer(out, c, s, visibleEvents(c, 1, 1));
   const answer2 = readFileSync(join(out, "ANSWERS/027/ANSWER.md"), "utf8");
   assert.match(answer2, /## Escalation\n\nSystem error: API down/);

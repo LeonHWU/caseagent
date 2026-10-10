@@ -6,7 +6,7 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { createServer } from '../../src/mcp.ts';
 import { liveDeps, type RunDeps } from '../../src/run.ts';
-import type { CaseState } from '../../src/state.ts';
+import { isIncomplete, type CaseState } from '../../src/state.ts';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
 const repo = resolve(root, '../..');
@@ -41,7 +41,7 @@ function traceKinds(path: string): Set<string> {
 
 function classify(state: CaseState | null, kinds: Set<string>, error: string | null): RunOutcome {
   if (error || !state || kinds.has('error')) return 'runtime_failure';
-  if (state.incomplete) return kinds.has('auto_escalate') ? 'model_failure' : 'runtime_failure';
+  if (isIncomplete(state)) return kinds.has('auto_escalate') ? 'model_failure' : 'runtime_failure';
   return 'completed';
 }
 
@@ -97,7 +97,7 @@ export async function runSuite(opts: {
       const isMeasured = outcome !== 'runtime_failure';
       const result: SampleResult = {
         id: sample.id, case_id: sample.case_id, step: sample.step, trial, run_outcome: outcome,
-        incomplete: state?.incomplete ?? true, status: state?.status ?? null, actions: state?.actions ?? [],
+        incomplete: state ? isIncomplete(state) : true, status: state?.status ?? null, actions: state?.actions ?? [],
         structural_match: Boolean(branch),
         semantic_review: outcome === 'completed' ? 'pending' : outcome === 'model_failure' ? 'not_required' : 'not_run',
         score: outcome === 'model_failure' ? 0 : null,

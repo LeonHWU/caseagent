@@ -9,7 +9,7 @@ import { processCase, processToEnd } from "../src/run.ts";
 import { mkdtempSync, readdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { newState } from "../src/state.ts";
+import { isIncomplete, newState } from "../src/state.ts";
 
 const c = loadCase("data/public/Property Management/027");
 
@@ -82,7 +82,7 @@ test("a model that never ends the run is escalated to a person", async () => {
   const { calls, client } = fake([[text("Thinking about it.")]]);
   await runCase({ ...base, state: s, client });
   assert.equal(calls.length, MAX_TURNS);
-  assert.equal(s.incomplete, true);
+  assert.equal(isIncomplete(s), true);
   assert.equal(s.status.kind, "escalated");
   assert.match(String(calls[1].messages.at(-1)!.content), /End the run now/);
 });
@@ -153,21 +153,38 @@ test("a fresh run keeps the previous trace instead of overwriting it", async () 
   for (const f of files) assert.match(readFileSync(join(out, "traces", f), "utf8"), /"kind":"run_start"/);
 });
 
-test("the landlord answer is only on file once a landlord event follows the request", async () => {
+test("a landlord reply after the request is classified once, on the small model, with the reply as case data", async () => {
+  // Case 004 event 12: the landlord writes "Pls go ahead."
   const c4 = loadCase("data/public/Property Management/004");
   const s = newState("004", 4);
   s.runs = 1;
   s.seen = 12;
-  s.actions.push({ run: 1, afterEvent: 9, tool: "request_landlord_approval", input: {}, ok: true, result: "sent" });
-  const { client } = fake([[use("a", "hold", { waiting_for: "Waiting for Tenant", reason: "r" })]]);
-  await runCase({ c: c4, state: s, newFrom: 12, client, model: "fake", policy: "policy", trace: () => {} });
-  assert.equal(s.landlordReplied, true);
+  s.actions.push({ run: 1, afterEvent: 9, tool: "request_landlord_approval", input: { scope: "boiler repair", cost: "£120" }, ok: true, result: "sent" });
+  const { calls, client } = fake([
+    [use("c", "record_answer", { answer: "approved" })],
+    [use("a", "hold", { waiting_for: "Waiting for Tenant", reason: "r" })],
+  ]);
+  await runCase({ c: c4, state: s, newFrom: 12, client, model: "fake", policy: "policy", trace: () => {}, approvalModel: "small" });
+  assert.deepEqual(s.landlordAnswer, { answer: "approved", requestAfter: 9, throughEvent: 12 });
+  assert.equal(calls[0].model, "small");
+  assert.deepEqual(calls[0].tool_choice, { type: "tool", name: "record_answer" });
+  assert.match(String(calls[0].messages[0].content), /<case_data>[\s\S]*Pls go ahead[\s\S]*<\/case_data>/);
+  assert.match(String(calls[0].messages[0].content), /boiler repair \(cost: £120\)/);
+  assert.match(JSON.stringify(calls[1].messages[0].content), /Automatic check of the landlord's reply[^"]*: approved/);
 
+  // The next run with no new landlord event reuses the stored answer: no second classifier call.
+  const again = fake([[use("a", "hold", { waiting_for: "Waiting for Tenant", reason: "r" })]]);
+  await runCase({ c: c4, state: s, newFrom: 12, client: again.client, model: "fake", policy: "policy", trace: () => {}, approvalModel: "small" });
+  assert.equal(again.calls.length, 1);
+  assert.equal(again.calls[0].model, "fake");
+
+  // Before the landlord's reply there is nothing to classify.
   const s2 = newState("004", 4);
   s2.runs = 1;
   s2.seen = 11;
   s2.actions.push({ run: 1, afterEvent: 9, tool: "request_landlord_approval", input: {}, ok: true, result: "sent" });
-  const { client: client2 } = fake([[use("a", "hold", { waiting_for: "Waiting for Landlord", reason: "r" })]]);
+  const { calls: calls2, client: client2 } = fake([[use("a", "hold", { waiting_for: "Waiting for Landlord", reason: "r" })]]);
   await runCase({ c: c4, state: s2, newFrom: 11, client: client2, model: "fake", policy: "policy", trace: () => {} });
-  assert.equal(s2.landlordReplied, false);
+  assert.equal(s2.landlordAnswer, undefined);
+  assert.equal(calls2.length, 1);
 });

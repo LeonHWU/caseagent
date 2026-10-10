@@ -26,12 +26,16 @@ function tool<S extends z.ZodType>(d: {
 }
 
 // The landlord answers in a later run, so a request made in this run does not count yet. A request
-// from an earlier run counts only once the landlord has answered it, not just been asked.
+// from an earlier run counts only once the landlord's reply was read as a clear approval.
 function requireApproval(state: CaseState): void {
   if (state.approvalOnFile) return;
   const requested = state.actions.some((a) => a.tool === "request_landlord_approval" && a.ok && a.run < state.runs);
   if (!requested) throw new Refusal("landlord approval is not on file. Use request_landlord_approval first, and hold the case for the landlord's answer.");
-  if (!state.landlordReplied) throw new Refusal("the landlord has not answered the approval request yet. Hold the case for the landlord's answer.");
+  const answer = state.landlordAnswer?.answer;
+  if (answer === "approved") return;
+  if (answer === "refused") throw new Refusal("the landlord refused the work or will use their own contractor. Do not assign a contractor; tell the tenant or escalate.");
+  if (answer === "unclear") throw new Refusal("the landlord's reply is not a clear approval. Ask the landlord to confirm, or escalate.");
+  throw new Refusal("the landlord has not answered the approval request yet. Hold the case for the landlord's answer.");
 }
 
 const reason = z.string().min(1).describe("Why you take this action. Cite events as [event 007].");
@@ -90,7 +94,7 @@ const TOOLS: Record<string, Tool> = {
     end: true,
     apply: (i, s) => {
       const summary = `Checked: ${i.checked}\nMissing or in conflict: ${i.missing_or_conflict}\nDecision needed: ${i.decision_needed}`;
-      s.status = { kind: "escalated", summary, checked: i.checked, missing_or_conflict: i.missing_or_conflict, decision_needed: i.decision_needed };
+      s.status = { kind: "escalated", by: "agent", summary, checked: i.checked, missing_or_conflict: i.missing_or_conflict, decision_needed: i.decision_needed };
       return "case escalated to a person";
     },
   }),

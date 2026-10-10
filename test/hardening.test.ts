@@ -8,7 +8,7 @@ import type Anthropic from "@anthropic-ai/sdk";
 import { runCase, type ModelClient } from "../src/agent.ts";
 import { loadCase, isAgency, type Case, type CaseEvent } from "../src/parse.ts";
 import { processCase, processToEnd, type RunDeps } from "../src/run.ts";
-import { loadState, newState, saveState } from "../src/state.ts";
+import { isIncomplete, loadState, newState, saveState } from "../src/state.ts";
 import { gradeCase } from "../evals/edge-cases/run.ts";
 
 const use = (id: string, name: string, input: Record<string, unknown>) =>
@@ -172,13 +172,13 @@ test("processToEnd escalates instead of silently stopping at the stage cap", asy
   const state = await processToEnd(d, dir);
   assert.equal(state.status.kind, "escalated");
   assert.match(String((state.status as { summary: string }).summary), /stage resume limit/);
-  assert.equal(state.incomplete, true);
+  assert.equal(isIncomplete(state), true);
   void c;
 });
 
 test("gradeCase checks status, required, forbidden and message expectations", () => {
   const state = newState("e", 1);
-  state.status = { kind: "escalated", summary: "s" };
+  state.status = { kind: "escalated", by: "system", summary: "s" };
   state.actions.push(
     { run: 1, afterEvent: 1, tool: "send_message", input: { to: "tenant", channel: "email" }, ok: true, result: "queued" },
     { run: 1, afterEvent: 1, tool: "assign_contractor", input: { trade: "gas" }, ok: false, result: "refused" },
@@ -191,4 +191,65 @@ test("gradeCase checks status, required, forbidden and message expectations", ()
   assert.deepEqual(gradeCase(state, exp), ["forbidden tool assign_contractor was attempted"]);
   state.actions.pop();
   assert.deepEqual(gradeCase(state, exp), []);
+});
+
+test("a landlord refusal blocks assign_contractor end to end", async () => {
+  const c = mkCase([ev(1, "Tenant", "damp is spreading"), ev(2, "Landlord", "No. I refuse this work. Do not send anyone.")]);
+  const s = newState("x", 1);
+  s.runs = 1;
+  s.seen = 2;
+  s.actions.push({ run: 1, afterEvent: 1, tool: "request_landlord_approval", input: { scope: "damp survey", cost: "unknown" }, ok: true, result: "sent" });
+  const assign = use("a", "assign_contractor", { trade: "damp", notes: "", reason: "r" });
+  await runCase({
+    c, state: s, newFrom: 2, model: "f", policy: "p", trace: () => {}, singleStep: true,
+    client: fake([[use("c", "record_answer", { answer: "refused" })], [assign]]),
+  });
+  const a = s.actions.at(-1)!;
+  assert.equal(a.tool, "assign_contractor");
+  assert.equal(a.ok, false);
+  assert.match(a.result, /landlord refused/);
+});
+
+test("the approval classifier fails closed on an API error, a missing call or an unexpected value", async () => {
+  const errors: string[] = [];
+  const run = async (client: ModelClient) => {
+    const c = mkCase([ev(1, "Tenant"), ev(2, "Landlord", "Yes go ahead")]);
+    const s = newState("x", 1);
+    s.runs = 1;
+    s.seen = 2;
+    s.actions.push({ run: 1, afterEvent: 1, tool: "request_landlord_approval", input: {}, ok: true, result: "sent" });
+    const trace = (kind: string, data: Record<string, unknown>) => { if (kind === "approval_check_error") errors.push(String(data.error)); };
+    await runCase({ c, state: s, newFrom: 2, client, model: "f", policy: "p", trace, singleStep: true });
+    return s;
+  };
+  let n = 0;
+  const throwsFirst: ModelClient = { messages: { create: async () => { if (n++ === 0) throw new Error("529"); return { content: [hold()], stop_reason: "tool_use", usage: {} } as unknown as Anthropic.Message; } } };
+  assert.equal((await run(throwsFirst)).landlordAnswer?.answer, "unclear");
+  assert.equal((await run(fake([[hold()]]))).landlordAnswer?.answer, "unclear");
+  assert.equal((await run(fake([[use("c", "record_answer", { answer: "yes!!" })], [hold()]]))).landlordAnswer?.answer, "unclear");
+  assert.deepEqual(errors, ["529", "the model did not call record_answer", 'unexpected answer "yes!!"']);
+});
+
+test("an unclear landlord answer blocks assignment and names the next step", async () => {
+  const c = mkCase([ev(1, "Tenant"), ev(2, "Landlord", "How much will it cost?")]);
+  const s = newState("x", 1);
+  s.runs = 1;
+  s.seen = 2;
+  s.actions.push({ run: 1, afterEvent: 1, tool: "request_landlord_approval", input: {}, ok: true, result: "sent" });
+  await runCase({
+    c, state: s, newFrom: 2, model: "f", policy: "p", trace: () => {}, singleStep: true,
+    client: fake([[use("c", "record_answer", { answer: "unclear" })], [use("a", "assign_contractor", { trade: "x", notes: "", reason: "r" })]]),
+  });
+  assert.match(s.actions.at(-1)!.result, /not a clear approval/);
+});
+
+test("old state files with the incomplete flag migrate to escalations with by", () => {
+  const dir = mkdtempSync(join(tmpdir(), "hd-"));
+  const p = join(dir, "x.json");
+  writeFileSync(p, JSON.stringify({ caseId: "x", seen: 1, incomplete: true, status: { kind: "escalated", summary: "System error" } }));
+  assert.equal(isIncomplete(loadState(p)!), true);
+  writeFileSync(p, JSON.stringify({ caseId: "x", seen: 1, incomplete: false, status: { kind: "escalated", summary: "s", checked: "c", missing_or_conflict: "m", decision_needed: "d" } }));
+  const s = loadState(p)!;
+  assert.equal(isIncomplete(s), false);
+  assert.equal(s.status.kind === "escalated" && s.status.by, "agent");
 });
