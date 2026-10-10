@@ -2,7 +2,7 @@
 
 Build a small bank of reusable property-management playbooks. Historical tickets are offline evidence for synthesis; only playbooks are searchable and supplied to the agent. New experience updates a playbook rather than creating one searchable record per ticket.
 
-The initial corpus contains 50 synthetic public cases and 1,505 events. Manual grouping by execution route and purpose yields eight scenario playbooks, plus four reusable decision modules. Definitions and counts are in `../playbooks/property-management-playbooks.md`; structured definitions are in `../playbooks/property-management-playbooks.json`.
+The initial corpus contains 50 synthetic public cases and 1,505 events. Manual grouping by execution route and purpose yields eight scenario playbooks, plus four reusable decision modules. Structured definitions are in `../playbooks/property-management-playbooks.json`; assignments and counts are in `../playbooks/clustering-audit.json`.
 
 ## Knowledge scope
 
@@ -97,4 +97,4 @@ Include regression cases for a failed simple check, limited approval, landlord o
 
 First review the twelve candidate definitions and evidence, then implement typed playbook contracts and code validation. Add database storage if needed, implement retrieval of playbooks only, add the relevance and usefulness assessor, and connect the context hook. Implement reviewed feedback updates after the initial bank can be evaluated.
 
-The current deliverables are the candidate playbook bank, the clustering report and audit, and this revised plan. Database provisioning, embeddings, retrieval integration, operational branch approval and a live evaluation remain future implementation work.
+The current deliverables are the candidate playbook JSON bank, the clustering audit JSON, and this revised plan. Database provisioning, embeddings, retrieval integration, operational branch approval and a live evaluation remain future implementation work.
