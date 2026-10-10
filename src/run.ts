@@ -7,7 +7,7 @@ import { initialSeen, nextSeen, visibleEvents } from "./cut.ts";
 import { loadCase } from "./parse.ts";
 import { loadState, newState, saveState, statusLabel, type CaseState } from "./state.ts";
 
-const MAX_STAGES = 10;
+const MAX_STAGES = 50;
 
 // A fresh run keeps the previous trace under a timestamped name instead of overwriting it.
 function startTrace(tracePath: string): void {

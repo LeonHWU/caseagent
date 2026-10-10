@@ -47,12 +47,15 @@ cp .env.example .env                                   # add ANTHROPIC_API_KEY
 npm run case -- run <case-dir>                         # first run
 npm run case -- run <case-dir> --next                  # resume on the next outside reply
 npm run case -- run <case-dir> --to-end                # resume through holds until an end state
-npm run case -- run-all <cases-dir> --concurrency 4    # every case in a folder
+npm run case -- run-all <cases-dir> --concurrency 4    # every case in a folder, one stage each
+npm run case -- run-all <cases-dir> --to-end --concurrency 4  # every case, run to its end state
 npm run mcp                                            # stdio MCP server (CASES_DIR, OUT_DIR overridable)
 npm test
 npm run typecheck
 npm run extract                                        # Docling pre-extract of attachments (optional)
 ```
+
+Two run modes. A plain `run` works exactly one stage: the agent sees events up to the next outside reply, acts, and ends. `--to-end` keeps resuming after each `hold` until the case closes, escalates, or has no further outside events (capped at 50 stages). Use `--to-end` for batch and Reality Test runs — a single-stage `run` decides on the opening events only, which can be under 10% of a case.
 
 The tests read the public cases from `data/public/Property Management` (gitignored). Link them once:
 
