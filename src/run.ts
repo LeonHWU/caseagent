@@ -70,7 +70,7 @@ export async function processCase(deps: RunDeps, dir: string, next: boolean): Pr
     appendFileSync(tracePath, JSON.stringify({ t: new Date().toISOString(), kind, ...data }) + "\n");
   let thoughts: string[] = [];
   try {
-    thoughts = await runCase({ c, state: state!, newFrom, client, model, policy, trace });
+    thoughts = await runCase({ c, state: state!, newFrom, client, model, policy, trace, caseDir: dir, cacheDir: join(out, "state", `${c.id}.attachments`) });
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
     state!.incomplete = true;

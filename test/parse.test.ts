@@ -80,3 +80,15 @@ test("unreadable folder fails with error message", () => {
     (e) => String(e).includes("could not load case")
   );
 });
+
+test("case 003: extracts attachment links from events", () => {
+  const c = loadCase(`${PM}/003`);
+  // Event 4 should have attachment-01
+  const e4 = c.events.find((e) => e.n === 4);
+  assert.ok(e4);
+  assert.deepEqual(e4.attachments, ["attachment-01-checkout-inspection-report.pdf"]);
+  // Event 20 should have attachment-02
+  const e20 = c.events.find((e) => e.n === 20);
+  assert.ok(e20);
+  assert.deepEqual(e20.attachments, ["attachment-02-cleaning-invoice.pdf"]);
+});

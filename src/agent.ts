@@ -1,6 +1,7 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { visibleEvents } from "./cut.ts";
 import type { Case } from "./parse.ts";
+import type { CasePrompt } from "./prompt.ts";
 import { renderCase } from "./prompt.ts";
 import type { CaseState } from "./state.ts";
 import { runTool, TOOL_SPECS } from "./tools.ts";
@@ -22,12 +23,29 @@ export async function runCase(opts: {
   model: string;
   policy: string;
   trace: Trace;
+  caseDir?: string;
+  cacheDir?: string;
 }): Promise<string[]> {
-  const { c, state, client, model, policy, trace } = opts;
+  const { c, state, client, model, policy, trace, caseDir, cacheDir } = opts;
   state.runs += 1;
   state.status = { kind: "open" };
   const visible = visibleEvents(c, state.initialSeen, state.seen);
-  const messages: Anthropic.MessageParam[] = [{ role: "user", content: renderCase(c, state, visible, opts.newFrom) }];
+  const prompt = await renderCase(c, state, visible, opts.newFrom, caseDir, cacheDir);
+
+  // Build message content with text and images
+  const content: Anthropic.ContentBlockParam[] = [
+    { type: "text", text: prompt.text },
+    ...prompt.images.map((img) => ({
+      type: "image" as const,
+      source: {
+        type: "base64" as const,
+        media_type: img.format === "png" ? ("image/png" as const) : ("image/jpeg" as const),
+        data: img.data,
+      },
+    })),
+  ];
+
+  const messages: Anthropic.MessageParam[] = [{ role: "user", content }];
   const thoughts: string[] = [];
   trace("run_start", { case: c.id, run: state.runs, seen: state.seen, model });
 

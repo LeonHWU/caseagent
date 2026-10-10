@@ -1,7 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, join } from "node:path";
 
-export type CaseEvent = { n: number; at: string; channel: string; from: string; to: string; body: string };
+export type CaseEvent = { n: number; at: string; channel: string; from: string; to: string; body: string; attachments: string[] };
 
 export type Case = {
   id: string;
@@ -31,6 +31,17 @@ function sections(md: string): Map<string, string> {
   return out;
 }
 
+function extractAttachmentLinks(text: string): string[] {
+  const links: string[] = [];
+  // Match markdown links in the format [filename](attachments/filename)
+  const linkPattern = /\[([^\]]+)\]\(attachments\/([^)]+)\)/g;
+  let match;
+  while ((match = linkPattern.exec(text)) !== null) {
+    links.push(match[2]);
+  }
+  return links;
+}
+
 export function parseHistory(md: string): CaseEvent[] {
   return md
     .split(/^<a id="event-\d+"><\/a>\n/m)
@@ -46,13 +57,15 @@ export function parseHistory(md: string): CaseEvent[] {
         if (m) fields[m[1]] = m[2].trim();
         else if (lines[i].trim() !== "") break;
       }
+      const body = lines.slice(i).join("\n").trim();
       return {
         n: Number(head[2]),
         at: head[1],
         channel: fields.Channel ?? "",
         from: fields.From ?? "",
         to: fields.To ?? "",
-        body: lines.slice(i).join("\n").trim(),
+        body,
+        attachments: extractAttachmentLinks(body),
       };
     });
 }
@@ -87,6 +100,7 @@ function parseHistoryLenient(md: string): CaseEvent[] {
         from: fields.from ?? "",
         to: fields.to ?? "",
         body: lines.slice(i).join("\n").trim(),
+        attachments: extractAttachmentLinks(lines.slice(i).join("\n")),
       };
     });
 }
@@ -161,6 +175,7 @@ function tryLoose(dir: string): Case | null {
         from: "",
         to: "",
         body: content,
+        attachments: extractAttachmentLinks(content),
       };
     });
     const attachDir = join(dir, "attachments");
@@ -206,7 +221,7 @@ function tryRaw(dir: string): Case | null {
       title: basename(dir),
       details: content.trim(),
       request: "",
-      events: [{ n: 1, at: new Date().toISOString().slice(0, 19) + " UTC", channel: "Email", from: "", to: "", body: content.trim() }],
+      events: [{ n: 1, at: new Date().toISOString().slice(0, 19) + " UTC", channel: "Email", from: "", to: "", body: content.trim(), attachments: [] }],
       attachments: existsSync(attachDir) ? readdirSync(attachDir).filter((f) => !f.startsWith(".")).sort() : [],
       layer: "raw",
     };

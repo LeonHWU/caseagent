@@ -7,17 +7,17 @@ import { newState } from "../src/state.ts";
 
 const c = loadCase("data/public/Property Management/027");
 
-test("prompt shows the current date as 'Now'", () => {
+test("prompt shows the current date as 'Now'", async () => {
   const s = newState("027", 1);
   const visible = visibleEvents(c, 1, 7);
-  const p = renderCase(c, s, visible, 1);
+  const p = (await renderCase(c, s, visible, 1)).text;
   assert.match(p, /Now: 2026-04-28 01:36:58 UTC/);
 });
 
-test("prompt shows days since last contact for each party", () => {
+test("prompt shows days since last contact for each party", async () => {
   const s = newState("027", 1);
   const visible = visibleEvents(c, 1, 7);
-  const p = renderCase(c, s, visible, 1);
+  const p = (await renderCase(c, s, visible, 1)).text;
   // Event 7 is the latest visible event at 2026-04-28 01:36:58 UTC
   // Tenant's last message is event 7 (same time), so 0 days
   assert.match(p, /Days since last contact: Tenant: 0 days/);

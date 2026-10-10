@@ -1,6 +1,10 @@
+import type Anthropic from "@anthropic-ai/sdk";
+import { join } from "node:path";
 import type { Case, CaseEvent } from "./parse.ts";
 import type { CaseState } from "./state.ts";
 import { isAgency } from "./parse.ts";
+import type { AttachmentContent } from "./attachments.ts";
+import { readAttachment } from "./attachments.ts";
 
 function renderEvent(e: CaseEvent): string {
   return `[event ${String(e.n).padStart(3, "0")}] ${e.at} | ${e.channel} | from ${e.from} | to ${e.to}\n${e.body}`;
@@ -55,27 +59,78 @@ function getLastContactDays(visible: CaseEvent[]): string {
   return lines.length > 0 ? lines.join(", ") : "";
 }
 
-export function renderCase(c: Case, state: CaseState, visible: CaseEvent[], newFrom: number): string {
+export type CasePrompt = {
+  text: string;
+  images: Array<{ filename: string; format: "png" | "jpeg"; data: string }>;
+};
+
+export async function renderCase(c: Case, state: CaseState, visible: CaseEvent[], newFrom: number, caseDir?: string, cacheDir = join(caseDir ?? ".", ".attachments-cache")): Promise<CasePrompt> {
   const earlier = visible.filter((e) => e.n < newFrom).map(renderEvent);
   const fresh = visible.filter((e) => e.n >= newFrom).map(renderEvent);
   const actions = state.actions.map(
     (a) => `- run ${a.run}, after event ${a.afterEvent}: ${a.tool} ${JSON.stringify(a.input)} -> ${a.ok ? "ok" : "failed"}: ${a.result}`,
   );
-  const attachments = c.attachments.map((a) => `- ${a} (PDF, not read by this version)`);
+
+  // Determine visible attachments
+  const visibleAttachmentNames = new Set<string>();
+
+  // Collect all attachments linked by ANY event in the case (to determine which are unlinked)
+  const allLinkedAttachments = new Set<string>();
+  for (const event of c.events) {
+    for (const att of event.attachments) {
+      allLinkedAttachments.add(att);
+    }
+  }
+
+  // Attachments visible: (1) those linked by visible events, (2) unlinked files (visible from start)
+  for (const event of visible) {
+    for (const att of event.attachments) {
+      visibleAttachmentNames.add(att);
+    }
+  }
+
+  // Add unlinked attachments (visible from start)
+  for (const att of c.attachments) {
+    if (!allLinkedAttachments.has(att)) {
+      visibleAttachmentNames.add(att);
+    }
+  }
+
+  // Build attachment section and collect images
+  const attachmentLines: string[] = [];
+  const images: Array<{ filename: string; format: "png" | "jpeg"; data: string }> = [];
+
+  if (visibleAttachmentNames.size > 0 && caseDir) {
+    for (const filename of Array.from(visibleAttachmentNames).sort()) {
+      const content = await readAttachment(caseDir, filename, cacheDir);
+      if (content.type === "text") {
+        attachmentLines.push(`### ${filename}\n\n${content.text}`);
+      } else if (content.type === "image") {
+        images.push({ filename, format: content.format, data: content.data });
+        attachmentLines.push(`### ${filename}\n\n(Image file: ${filename})`);
+      } else {
+        attachmentLines.push(`### ${filename}\n\nCould not read: ${content.error}`);
+      }
+    }
+  }
 
   const nowLine = visible.length > 0 ? `Now: ${visible[visible.length - 1].at}` : "";
-  const daysSinceLines = visible.length > 0 ? getLastContactDays(visible) : "";
+  const daysSinceLines = getLastContactDays(visible);
 
-  return [
+  const text = [
     `# Case ${c.id}: ${c.title}`,
     ...(nowLine ? [nowLine] : []),
     ...(daysSinceLines ? [`Days since last contact: ${daysSinceLines}`] : []),
     `## Case details\n${c.details}`,
     `## Initial request\n${c.request}`,
-    `## Attachments\n${attachments.join("\n") || "None."}`,
+    visibleAttachmentNames.size > 0
+      ? `## Attachments\n${attachmentLines.join("\n\n") || "None."}`
+      : `## Attachments\nNone.`,
     `## Earlier events\n${list(earlier, "None.")}`,
     `## Your earlier actions\n${actions.join("\n") || "None. This is the first run on this case."}`,
     `## New events since your last run\n${list(fresh, "None.")}`,
     "Decide the next step as Northbridge Lettings. Act with the tools, then end the run with exactly one of hold, escalate or close_case.",
   ].join("\n\n");
+
+  return { text, images };
 }

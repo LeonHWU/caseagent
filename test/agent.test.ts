@@ -33,13 +33,13 @@ function fake(turns: Anthropic.ContentBlock[][]) {
 
 const base = { c, newFrom: 1, model: "fake", policy: "policy", trace: () => {} };
 
-test("prompt for run 1 shows the request and event 001 only", () => {
+test("prompt for run 1 shows the request and event 001 only", async () => {
   const s = newState("027", 1);
-  const p = renderCase(c, s, visibleEvents(c, 1, 1), 1);
-  assert.match(p, /water keep take hours/);
-  assert.match(p, /\[event 001\]/);
-  assert.doesNotMatch(p, /\[event 002\]/);
-  assert.match(p, /None\. This is the first run on this case\./);
+  const p = await renderCase(c, s, visibleEvents(c, 1, 1), 1);
+  assert.match(p.text, /water keep take hours/);
+  assert.match(p.text, /\[event 001\]/);
+  assert.doesNotMatch(p.text, /\[event 002\]/);
+  assert.match(p.text, /None\. This is the first run on this case\./);
 });
 
 test("the run stops at the first end tool", async () => {
