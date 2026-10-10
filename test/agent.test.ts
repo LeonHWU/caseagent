@@ -5,8 +5,8 @@ import { MAX_TURNS, runCase, type ModelClient } from "../src/agent.ts";
 import { loadCase } from "../src/parse.ts";
 import { renderCase } from "../src/prompt.ts";
 import { visibleEvents } from "../src/cut.ts";
-import { processToEnd } from "../src/run.ts";
-import { mkdtempSync, readFileSync } from "node:fs";
+import { processCase, processToEnd } from "../src/run.ts";
+import { mkdtempSync, readdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { newState } from "../src/state.ts";
@@ -141,4 +141,14 @@ test("a tool that fails twice is escalated by the model, and both failures are r
   assert.deepEqual(s.actions.map((a) => a.ok), [false, false, true]);
   assert.ok(s.status.kind === "escalated");
   assert.match(s.status.summary, /send_message failed twice/);
+});
+
+test("a fresh run keeps the previous trace instead of overwriting it", async () => {
+  const out = mkdtempSync(join(tmpdir(), "trace-"));
+  const hold = () => fake([[use("a", "hold", { waiting_for: "Waiting for Tenant", reason: "Waiting." })]]).client;
+  for (let i = 0; i < 2; i++) await processCase({ out, client: hold(), model: "fake", policy: "policy" }, "data/public/Property Management/027", false);
+  const files = readdirSync(join(out, "traces")).sort();
+  assert.equal(files.length, 2);
+  assert.ok(files.includes("027.jsonl"));
+  for (const f of files) assert.match(readFileSync(join(out, "traces", f), "utf8"), /"kind":"run_start"/);
 });
