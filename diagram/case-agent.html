@@ -1,0 +1,66 @@
+<!doctype html><html><head><meta charset="utf-8"><title>case-agent</title>
+<style>
+@font-face{font-family:Exca;src:url("file:///Users/hridyaagrawal/.agents/skills/archscribe/assets/fonts/Excalifont-Regular.woff2")}
+:root{--ink:#2f2b26;--mut:#6f6a61;--blue:#4f7fd0;--bf:#eef3fb;--green:#3f9e7d;--gf:#e9f2ec;--pink:#d96a92;--amber:#e08a3c;--af:#fdf1e3}
+*{box-sizing:border-box;margin:0}
+body{width:1100px;background:#fdfcf8;color:var(--ink);font:18px/1.35 -apple-system,"Helvetica Neue",Arial,sans-serif;padding:40px 44px 44px}
+h1{font:400 44px Exca;text-align:center}
+.lede{text-align:center;color:var(--mut);margin:8px 0 26px;font-size:20px}
+.band{border:3px solid;border-radius:16px 12px 18px 11px/12px 18px 11px 16px;padding:14px 18px 18px;margin-bottom:20px}
+.tag{font:400 26px Exca;margin-bottom:10px}.tag small{font:400 17px Exca;color:var(--mut)}
+.row{display:flex;gap:14px;align-items:stretch}
+.card{flex:1;background:#fff;border:2.5px solid;border-radius:11px 8px 12px 7px/8px 12px 7px 11px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+code{font:700 17px ui-monospace,Menlo,monospace}
+.card code,.card span{padding-left:0}.card span{color:var(--mut);font-size:16px}
+.loop{background:#edf1fb;border-color:#6b7cc9}.loop .card{flex-direction:column;gap:4px;border-color:#6b7cc9;align-items:center;justify-content:center;text-align:center;font:400 22px Exca}
+.ar{align-self:center;font:400 28px Exca;color:#6b7cc9}
+.act{background:var(--bf);border-color:var(--blue)}.act .card{border-color:var(--blue)}
+.end{background:var(--gf);border-color:var(--green)}.end .card{border-color:var(--green)}.end .esc{border-color:var(--pink)}
+.ex{background:var(--af);border-color:var(--amber)}
+.chain{display:flex;flex-wrap:wrap;gap:8px 6px;align-items:center;font-size:16px}
+.chip{font:700 15px ui-monospace,Menlo,monospace;padding:2px 8px;border-radius:6px;border:1.5px solid;background:#fff}
+.chain .arr{font:400 22px Exca;color:var(--mut)}.chip.a{border-color:var(--blue);color:#2d55a0}.chip.e{border-color:var(--green);color:#1f6e53}
+.ic{width:36px;height:36px;flex:none}.down{display:flex;align-items:center;justify-content:center;gap:10px;margin:-6px 0 6px;color:var(--mut);font:400 18px Exca}
+.dim{color:var(--mut)}
+</style></head><body>
+<h1>case-agent</h1>
+<p class="lede">Reads a repair case. Acts through 7 tools. Each run ends by waiting, escalating or closing.</p>
+
+<div class="band loop"><div class="row">
+<div class="card"><svg class="ic" style="color:#3f9e7d" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2" /></svg>Case</div><div class="ar">→</div>
+<div class="card"><svg class="ic" style="color:#6b7cc9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 13a3.5 3.5 0 0 0 -3.5 3.5v1a3.5 3.5 0 0 0 7 0v-1.8" />
+  <path d="M8.5 13a3.5 3.5 0 0 1 3.5 3.5v1a3.5 3.5 0 0 1 -7 0v-1.8" />
+  <path d="M17.5 16a3.5 3.5 0 0 0 0 -7h-.5" />
+  <path d="M19 9.3v-2.8a3.5 3.5 0 0 0 -7 0" />
+  <path d="M6.5 16a3.5 3.5 0 0 1 0 -7h.5" />
+  <path d="M5 9.3v-2.8a3.5 3.5 0 0 1 7 0v10" /></svg>Claude<br><span style="font:16px sans-serif">15 turns max</span></div><div class="ar">→</div>
+<div class="card"><svg class="ic" style="color:#3f9e7d" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21v-16"/><path d="M5 5h13l-3 4 3 4h-13"/></svg>One end tool</div><div class="ar">→</div>
+<div class="card"><svg class="ic" style="color:#6b7cc9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6a8 3 0 1 0 16 0a8 3 0 1 0 -16 0" />
+  <path d="M4 6v6a8 3 0 0 0 16 0v-6" />
+  <path d="M4 12v6a8 3 0 0 0 16 0v-6" /></svg>Saved record</div></div>
+<svg viewBox="0 0 970 50" width="100%" height="50" fill="none" stroke="#6b7cc9" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-top:6px"><path d="M870 0V14q0 12 -12 12H112q-12 0 -12 -12V6"/><path d="M92 14l8 -9l8 9"/></svg><div class="dim" style="text-align:center;margin-top:-4px">next reply starts a new run</div></div>
+
+<div class="down"><svg viewBox="0 0 24 40" width="24" height="40" fill="none" stroke="#6f6a61" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-2 12 2 20 0 32"/><path d="M5 27l7 9 7-9"/></svg><span>Claude calls tools</span></div><div class="band act"><div class="tag">Act <small>· any number per run</small></div><div class="row">
+<div class="card"><svg class="ic" style="color:#4f7fd0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9h8" />
+  <path d="M8 13h6" />
+  <path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12" /></svg><code>send_message</code><span>email or SMS to tenant, landlord, contractor</span></div>
+<div class="card"><svg class="ic" style="color:#4f7fd0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.46 20.846a12 12 0 0 1 -7.96 -14.846a12 12 0 0 0 8.5 -3a12 12 0 0 0 8.5 3a12 12 0 0 1 -.09 7.06" />
+  <path d="M15 19l2 2l4 -4" /></svg><code>request_landlord_approval</code><span>ask the landlord to OK a cost</span></div>
+<div class="card"><svg class="ic" style="color:#4f7fd0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5"/></svg><code>assign_contractor</code><span>book the tradesperson</span></div>
+<div class="card"><svg class="ic" style="color:#4f7fd0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+  <path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2" />
+  <path d="M9 12h6" />
+  <path d="M9 16h6" /></svg><code>add_note</code><span>internal note</span></div></div></div>
+
+<div class="down"><svg viewBox="0 0 24 40" width="24" height="40" fill="none" stroke="#6f6a61" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-2 12 2 20 0 32"/><path d="M5 27l7 9 7-9"/></svg><span>then ends with exactly one</span></div><div class="band end"><div class="tag">End <small>· exactly one per run</small></div><div class="row">
+<div class="card"><svg class="ic" style="color:#3f9e7d" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+  <path d="M12 7v5l3 3" /></svg><code>hold</code><span>wait for a reply</span></div>
+<div class="card esc"><svg class="ic" style="color:#d96a92" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg><code>escalate</code><span>hand to a human</span></div>
+<div class="card"><svg class="ic" style="color:#3f9e7d" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10" /></svg><code>close_case</code><span>all final checks done</span></div></div></div>
+
+<div class="band ex"><div class="tag">Example <small>· dripping tap</small></div><div class="chain">
+<span class="chip a">send_message</span><span class="chip e">hold</span><span class="arr">→</span>
+<span class="chip a">request_landlord_approval</span><span class="chip e">hold</span><span class="arr">→</span>
+<span class="chip a">assign_contractor</span><span class="chip e">hold</span><span class="arr">→</span>
+<span class="chip e">close_case</span></div></div>
+</body></html>
