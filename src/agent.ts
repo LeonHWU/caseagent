@@ -22,6 +22,7 @@ export async function runCase(opts: {
   model: string;
   policy: string;
   trace: Trace;
+  singleStep?: boolean;
 }): Promise<string[]> {
   const { c, state, client, model, policy, trace } = opts;
   state.runs += 1;
@@ -32,7 +33,7 @@ export async function runCase(opts: {
   trace("run_start", { case: c.id, run: state.runs, seen: state.seen, model });
 
   for (let turn = 1; turn <= MAX_TURNS; turn++) {
-    const resp = await client.messages.create({ model, max_tokens: 4096, system: policy, tools: TOOL_SPECS, messages });
+    const resp = await client.messages.create({ model, max_tokens: 4096, system: opts.singleStep ? `${policy}\nExecute exactly one tool action for this invocation. Do not chain actions.` : policy, tools: TOOL_SPECS, messages });
     trace("model", { turn, stop: resp.stop_reason, usage: resp.usage, content: resp.content });
     messages.push({ role: "assistant", content: resp.content });
     for (const b of resp.content) if (b.type === "text" && b.text.trim()) thoughts.push(b.text.trim());
@@ -47,7 +48,7 @@ export async function runCase(opts: {
       const out = runTool(u.name, u.input, state);
       state.actions.push({ run: state.runs, afterEvent: state.seen, tool: u.name, input: u.input as Record<string, unknown>, ok: out.ok, result: out.result });
       trace("tool", { name: u.name, input: u.input, ...out });
-      if (out.ends) return thoughts;
+      if (out.ends || opts.singleStep) return thoughts;
       results.push({ type: "tool_result", tool_use_id: u.id, content: out.result, is_error: !out.ok });
     }
     messages.push({ role: "user", content: results });

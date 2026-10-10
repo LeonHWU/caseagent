@@ -37,7 +37,9 @@ npm test
 
 ### As an MCP server
 
-`src/mcp.ts` serves the same agent over stdio, with four tools: `list_cases`, `run_case`, `resume_case` and `get_case`. Each tool takes a case id such as `027`. The server reads cases from `CASES_DIR` (default `data/public/Property Management`) and writes to `OUT_DIR` (default `runs/mcp`). Both paths are relative to the repo.
+`src/mcp.ts` serves the same agent over stdio, with four tools: `list_cases`, `run_case`, `resume_case` and `get_case`. `run_case`, `resume_case` and `get_case` take a case id such as `027`; `list_cases` takes no arguments. `run_case` and `resume_case` execute at most one business tool action per call (including a failed/refused action), even if the model requests multiple tools. The CLI retains its full-run behavior.
+
+Both execution tools accept optional `step`, an inclusive history event number, for example `{ "case_id": "027", "step": 7 }`. `run_case` starts fresh with history through that event and replaces saved state. `resume_case` keeps previous actions and accepts the current or a later event; backward jumps are rejected. Without `step`, `run_case` uses the initial decision point; `resume_case` keeps the current event while status is `open`, or exposes the next external reply after a hold. Later events remain hidden. Calls return the status plus `ANSWER.md`; use `get_case` for `REASONING.md`. The server reads cases from `CASES_DIR` (default `data/public/Property Management`) and writes to `OUT_DIR` (default `runs/mcp`). Both paths are relative to the repo.
 
 Add this entry to the MCP config of the client, for example `claude_desktop_config.json`:
 
