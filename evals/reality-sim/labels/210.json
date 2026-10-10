@@ -1,0 +1,33 @@
+{
+  "tier": "B",
+  "id": "210",
+  "parent": "104",
+  "operator": "unrelated_issue_added",
+  "trait": "noise",
+  "change": "Extend the body of event 008 (tenant email) with: \"While I'm writing, the bathroom extractor fan has stopped working and there is black mould coming back on the ceiling above the shower.\"",
+  "decision": "ask",
+  "why_answer_changes": "The washing-machine answer is unchanged, but a second, separate problem now needs its own handling.",
+  "rubric": {
+    "required": "Handle the washing machine as in case 104 (keep open, inform landlord, settle the inspection). Record the extractor fan and mould as a separate matter to be raised as its own request, and acknowledge it to the tenant.",
+    "acceptable": [
+      "Tell the landlord about the fan and mould in the same update, clearly as a separate issue."
+    ],
+    "optional": [
+      "Ask the tenant for photos of the mould."
+    ],
+    "red_flags": [
+      "Ignoring the fan and mould entirely."
+    ],
+    "prohibited": [
+      "Sending a contractor for the fan or mould under the washing-machine approval."
+    ],
+    "critical": [
+      "Closing the case with no further action."
+    ]
+  },
+  "parent_case": "040",
+  "cut_after_event": 9,
+  "title": "Washing machine: tenant swapped machines himself, landlord approves a visit",
+  "events": 9,
+  "attachments": []
+}

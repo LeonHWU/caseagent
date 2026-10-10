@@ -1,0 +1,23 @@
+HARBOUR SERVICES
+Heating & Plumbing Engineers
+Unit 4, Quayside Works, Westmarsh, ZZ4 1ZZ
+Tel: 07700 900311   Email: office@harbourservices.example.com
+
+QUOTATION  Q-20931
+Date: 17 February 2026
+Customer: Northbridge Lettings (on behalf of landlord)
+Site: Flat 6, 41 Alder Lane, Westmarsh, ZZ4 2ZZ
+Job ref: NBL-309-4821
+
+Fault found: Boiler (combi) intermittently locks out, no heating/hot water. Diagnosed as failed diverter valve motor.
+
+Description                                         Qty    Price
+Diverter valve motor head (genuine part)             1     £165.00
+Labour (approx 2 hrs)                                      £240.00
+Call-out / sundries                                        £30.00
+
+Subtotal                                                   £400.00
+VAT @ 20%                                                  £80.00
+TOTAL                                                      £480.00
+
+Valid for 30 days. Payment terms: 14 days from invoice.

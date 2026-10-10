@@ -1,0 +1,38 @@
+{
+  "tier": "A",
+  "id": "102",
+  "parent_case": "008",
+  "cut_after_event": 9,
+  "title": "Check-out works: landlord asks for a comparison quote",
+  "decision": "ask",
+  "traits": [
+    "unusual_exception"
+  ],
+  "depends_on_events": [
+    6,
+    9
+  ],
+  "rubric": {
+    "required": "Arrange a second quote from a different provider for the same scope, do not instruct the first contractor, and hold until the second quote arrives.",
+    "acceptable": [
+      "Reply to the landlord confirming a second quote is being obtained."
+    ],
+    "optional": [
+      "Say both quotes will be presented with prices and VAT status for the landlord to choose."
+    ],
+    "red_flags": [
+      "Choosing between quotes on the landlord's behalf."
+    ],
+    "prohibited": [
+      "Contacting a tenant: the property is vacant."
+    ],
+    "critical": [
+      "Telling the first contractor to proceed with the estimate."
+    ]
+  },
+  "events": 9,
+  "attachments": [
+    "attachments/attachment-01-check-out-inspection-report.pdf",
+    "attachments/attachment-03-check-out-inspection-report.pdf"
+  ]
+}

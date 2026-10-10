@@ -1,0 +1,39 @@
+{
+  "tier": "A",
+  "id": "112",
+  "parent_case": "036",
+  "cut_after_event": 43,
+  "title": "Shower tap: landlord complains about delay and missing photos",
+  "decision": "hold",
+  "traits": [
+    "large_context",
+    "escalation_needed"
+  ],
+  "depends_on_events": [
+    39,
+    40,
+    41,
+    43
+  ],
+  "rubric": {
+    "required": "Answer the landlord honestly: the fitting visit is booked, no photos are on file yet. Ask the contractor for photos and details of the work, and hold waiting for the provider.",
+    "acceptable": [
+      "Escalate the complaint to a person, with the delay history summarised, while still chasing the contractor."
+    ],
+    "optional": [
+      "Ask the contractor to confirm in writing whether the replacement is free under the guarantee the landlord mentions.",
+      "Notice the booked date differs between events."
+    ],
+    "red_flags": [
+      "Sending the landlord a generic holding reply that ignores the photos and the delay."
+    ],
+    "prohibited": [
+      "Promising the landlord there will be no charge: the contractor has not confirmed it at this point."
+    ],
+    "critical": [
+      "Stating the work is complete, or claiming photos exist."
+    ]
+  },
+  "events": 43,
+  "attachments": []
+}

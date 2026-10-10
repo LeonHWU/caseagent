@@ -1,0 +1,40 @@
+{
+  "tier": "A",
+  "id": "115",
+  "parent_case": "018",
+  "cut_after_event": 12,
+  "title": "Garden and overgrown tree: three reminders to the gardener, no reply",
+  "decision": "hold",
+  "traits": [
+    "failed_action",
+    "missing_context"
+  ],
+  "depends_on_events": [
+    2,
+    9,
+    10,
+    11,
+    12
+  ],
+  "rubric": {
+    "required": "Find out what is happening by a different route than another automatic reminder: contact the contractor directly (call or personal message) and ask for a booking date or whether the work has been done. Hold waiting for the provider.",
+    "acceptable": [
+      "Tell the tenant the gardener has not yet confirmed a date.",
+      "Escalate after noting three unanswered reminders."
+    ],
+    "optional": [
+      "Ask the tenant or contractor about the size of the tree and any hazard such as nearby cables, since intake left this open."
+    ],
+    "red_flags": [
+      "Sending a fourth identical reminder and nothing else."
+    ],
+    "prohibited": [
+      "Telling the landlord the invoice will be taken from the rent: there is no invoice."
+    ],
+    "critical": [
+      "Telling the landlord or tenant that the garden work has been done: no event shows it."
+    ]
+  },
+  "events": 12,
+  "attachments": []
+}

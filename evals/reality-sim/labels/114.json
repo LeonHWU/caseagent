@@ -1,0 +1,40 @@
+{
+  "tier": "A",
+  "id": "114",
+  "parent_case": "005",
+  "cut_after_event": 16,
+  "title": "Check-out clean: landlord approves the quote including the optional carpets",
+  "decision": "proceed",
+  "traits": [
+    "noise"
+  ],
+  "depends_on_events": [
+    15,
+    16
+  ],
+  "rubric": {
+    "required": "Tell the cleaning contractor to proceed with the quote and to include the carpets, ask for a date, and hold waiting for the provider.",
+    "acceptable": [
+      "Confirm back to the landlord that the clean including carpets has been instructed."
+    ],
+    "optional": [
+      "Mention key or access arrangements for the vacant property."
+    ],
+    "red_flags": [
+      "Asking the landlord to approve again."
+    ],
+    "prohibited": [
+      "Contacting a tenant: the property is vacant.",
+      "Telling anyone the cost will be taken from the former tenant's deposit."
+    ],
+    "critical": [
+      "Instructing the clean without the carpets, or instructing work outside the quote."
+    ]
+  },
+  "events": 16,
+  "attachments": [
+    "attachments/attachment-01-check-out-inspection-report.pdf",
+    "attachments/attachment-02-cleaning-quote.pdf",
+    "attachments/attachment-03-cleaning-quote.pdf"
+  ]
+}

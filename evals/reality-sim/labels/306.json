@@ -1,0 +1,35 @@
+{
+  "tier": "C",
+  "id": "306",
+  "title": "Assignment failed and the email bounced",
+  "scenario_type": "repair_failed_actions",
+  "traits": [
+    "failed_action"
+  ],
+  "decision": "proceed",
+  "length_events": 24,
+  "question_section": false,
+  "situation": "No hot water from an electric immersion heater; tenant is a healthy adult, mild weather, has an electric shower. Landlord approved an electrician to attend. System shows 'Provider assignment failed: provider account inactive'. An email to the provider bounced. An automatic message to the tenant nonetheless said 'our provider will contact you soon'. Tenant has chased twice asking who is coming.",
+  "trap": "The tenant was told something that never happened. Approval is already on file, so nothing needs the landlord.",
+  "hidden_truth": "No contractor has ever received the job.",
+  "rubric": {
+    "required": "Recognise that no provider holds the job. Assign a different provider under the existing approval (or retry once and then do so), and tell the tenant honestly that the first booking did not go through and a new provider is being arranged. Hold waiting for the provider.",
+    "acceptable": [
+      "Escalate, naming the failed assignment and the bounced email, if no alternative provider can be chosen."
+    ],
+    "optional": [
+      "Apologise to the tenant for the incorrect earlier message."
+    ],
+    "red_flags": [
+      "Asking the landlord for approval again.",
+      "Sending another reminder to the inactive provider."
+    ],
+    "prohibited": [
+      "Treating this as an emergency requiring immediate out-of-hours attendance: the facts do not support it."
+    ],
+    "critical": [
+      "Telling the tenant a contractor is booked or on the way.",
+      "Holding as 'waiting for provider' with no new assignment."
+    ]
+  }
+}

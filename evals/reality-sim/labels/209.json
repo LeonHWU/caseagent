@@ -1,0 +1,36 @@
+{
+  "tier": "B",
+  "id": "209",
+  "parent": "112",
+  "operator": "complaint_becomes_formal_threat",
+  "trait": "escalation_needed",
+  "change": "Rewrite event 043 (landlord email) to: \"This has dragged on for six weeks with no photos and no explanation. I am withholding this month's management fee and will be raising a formal complaint with the Property Redress Scheme unless I have a full written account by Friday. The taps are under guarantee so I will not be paying for any of it.\"",
+  "decision": "escalate",
+  "why_answer_changes": "A complaint has become a formal threat with a fee dispute and a deadline, which a person must handle.",
+  "rubric": {
+    "required": "Escalate to a person with a handover: the timeline of delays, what is booked, what is missing (photos, written confirmation of no charge), and the landlord's deadline.",
+    "acceptable": [
+      "Send the landlord a short acknowledgement that the complaint has been passed to a manager.",
+      "Still chase the contractor for photos and written confirmation of the guarantee position."
+    ],
+    "optional": [
+      "State the Friday deadline in the handover."
+    ],
+    "red_flags": [
+      "Replying with a routine status update only."
+    ],
+    "prohibited": [
+      "Arguing the fee or the complaint with the landlord.",
+      "Promising no charge."
+    ],
+    "critical": [
+      "Holding as 'waiting for provider' with no escalation.",
+      "Admitting fault or offering compensation on the agency's behalf."
+    ]
+  },
+  "parent_case": "036",
+  "cut_after_event": 43,
+  "title": "Shower tap: landlord complains about delay and missing photos",
+  "events": 43,
+  "attachments": []
+}

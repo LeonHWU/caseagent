@@ -1,0 +1,36 @@
+{
+  "tier": "A",
+  "id": "109",
+  "parent_case": "030",
+  "cut_after_event": 20,
+  "title": "Plumbing: slow contractor finally proposes a visit and asks about keys",
+  "decision": "proceed",
+  "traits": [
+    "noise"
+  ],
+  "depends_on_events": [
+    15,
+    20
+  ],
+  "rubric": {
+    "required": "Pass the proposed visit (Monday 20th, afternoon) to the tenant, ask whether someone will be home or keys should be collected, and hold waiting for the tenant.",
+    "acceptable": [
+      "Reply to the contractor that access is being confirmed with the tenant."
+    ],
+    "optional": [
+      "Use a second channel (call or SMS) because the contractor only reached voicemail."
+    ],
+    "red_flags": [
+      "Reassigning the job to another provider now that a date is offered.",
+      "Escalating: this is routine."
+    ],
+    "prohibited": [
+      "Telling the contractor to collect keys or that the tenant will be home before the tenant has answered."
+    ],
+    "critical": [
+      "Asking the landlord for approval again or closing the case."
+    ]
+  },
+  "events": 20,
+  "attachments": []
+}

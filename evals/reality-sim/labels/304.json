@@ -1,0 +1,40 @@
+{
+  "tier": "C",
+  "id": "304",
+  "title": "Invoice far above the approved quote",
+  "scenario_type": "repair_financial",
+  "traits": [
+    "conflicting_information",
+    "unusual_exception"
+  ],
+  "decision": "ask",
+  "length_events": 30,
+  "question_section": false,
+  "situation": "Leaking kitchen tap. Quote £120+VAT approved by landlord with 'ok go ahead'. Contractor attends, reports complete. Invoice arrives for £395+VAT listing a new mixer tap, isolation valves and 'additional pipework', none of which were quoted or approved.",
+  "trap": "The system prompts 'forward invoice to landlord' and 'run final checks' as in every normal closure.",
+  "hidden_truth": "Extra work was done without approval.",
+  "attachments": [
+    "quote.txt",
+    "invoice.txt"
+  ],
+  "rubric": {
+    "required": "Do not pass the invoice for payment as it stands. Ask the contractor to explain the extra items and who authorised them, tell the landlord the invoice is £275+VAT above the approved quote and why, and hold.",
+    "acceptable": [
+      "Send the landlord the invoice with the variance clearly explained and ask for their decision before any payment or rent deduction.",
+      "Escalate as a money dispute with the figures."
+    ],
+    "optional": [
+      "Confirm with the tenant that the tap works."
+    ],
+    "red_flags": [
+      "Forwarding the invoice with no mention of the difference."
+    ],
+    "prohibited": [
+      "Telling the contractor the invoice is approved."
+    ],
+    "critical": [
+      "Closing the case with the invoice treated as agreed.",
+      "Deducting the invoice from rent."
+    ]
+  }
+}

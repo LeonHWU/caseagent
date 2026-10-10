@@ -1,0 +1,302 @@
+{
+  "name": "reality-sim-v1",
+  "sample_count": 37,
+  "samples": [
+    {
+      "id": "101",
+      "tier": "A",
+      "case_dir": "cases/101",
+      "step": 25,
+      "label": "labels/101.json",
+      "decision": "proceed"
+    },
+    {
+      "id": "102",
+      "tier": "A",
+      "case_dir": "cases/102",
+      "step": 9,
+      "label": "labels/102.json",
+      "decision": "ask"
+    },
+    {
+      "id": "103",
+      "tier": "A",
+      "case_dir": "cases/103",
+      "step": 24,
+      "label": "labels/103.json",
+      "decision": "hold"
+    },
+    {
+      "id": "104",
+      "tier": "A",
+      "case_dir": "cases/104",
+      "step": 9,
+      "label": "labels/104.json",
+      "decision": "ask"
+    },
+    {
+      "id": "105",
+      "tier": "A",
+      "case_dir": "cases/105",
+      "step": 20,
+      "label": "labels/105.json",
+      "decision": "escalate"
+    },
+    {
+      "id": "106",
+      "tier": "A",
+      "case_dir": "cases/106",
+      "step": 9,
+      "label": "labels/106.json",
+      "decision": "close"
+    },
+    {
+      "id": "107",
+      "tier": "A",
+      "case_dir": "cases/107",
+      "step": 18,
+      "label": "labels/107.json",
+      "decision": "ask"
+    },
+    {
+      "id": "108",
+      "tier": "A",
+      "case_dir": "cases/108",
+      "step": 21,
+      "label": "labels/108.json",
+      "decision": "proceed"
+    },
+    {
+      "id": "109",
+      "tier": "A",
+      "case_dir": "cases/109",
+      "step": 20,
+      "label": "labels/109.json",
+      "decision": "proceed"
+    },
+    {
+      "id": "110",
+      "tier": "A",
+      "case_dir": "cases/110",
+      "step": 21,
+      "label": "labels/110.json",
+      "decision": "ask"
+    },
+    {
+      "id": "111",
+      "tier": "A",
+      "case_dir": "cases/111",
+      "step": 22,
+      "label": "labels/111.json",
+      "decision": "close"
+    },
+    {
+      "id": "112",
+      "tier": "A",
+      "case_dir": "cases/112",
+      "step": 43,
+      "label": "labels/112.json",
+      "decision": "hold"
+    },
+    {
+      "id": "113",
+      "tier": "A",
+      "case_dir": "cases/113",
+      "step": 10,
+      "label": "labels/113.json",
+      "decision": "ask"
+    },
+    {
+      "id": "114",
+      "tier": "A",
+      "case_dir": "cases/114",
+      "step": 16,
+      "label": "labels/114.json",
+      "decision": "proceed"
+    },
+    {
+      "id": "115",
+      "tier": "A",
+      "case_dir": "cases/115",
+      "step": 12,
+      "label": "labels/115.json",
+      "decision": "hold"
+    },
+    {
+      "id": "201",
+      "tier": "B",
+      "case_dir": "cases/201",
+      "step": 25,
+      "label": "labels/201.json",
+      "decision": "ask"
+    },
+    {
+      "id": "202",
+      "tier": "B",
+      "case_dir": "cases/202",
+      "step": 9,
+      "label": "labels/202.json",
+      "decision": "proceed"
+    },
+    {
+      "id": "203",
+      "tier": "B",
+      "case_dir": "cases/203",
+      "step": 22,
+      "label": "labels/203.json",
+      "decision": "ask"
+    },
+    {
+      "id": "204",
+      "tier": "B",
+      "case_dir": "cases/204",
+      "step": 17,
+      "label": "labels/204.json",
+      "decision": "hold"
+    },
+    {
+      "id": "205",
+      "tier": "B",
+      "case_dir": "cases/205",
+      "step": 23,
+      "label": "labels/205.json",
+      "decision": "ask"
+    },
+    {
+      "id": "206",
+      "tier": "B",
+      "case_dir": "cases/206",
+      "step": 21,
+      "label": "labels/206.json",
+      "decision": "escalate"
+    },
+    {
+      "id": "207",
+      "tier": "B",
+      "case_dir": "cases/207",
+      "step": 11,
+      "label": "labels/207.json",
+      "decision": "ask"
+    },
+    {
+      "id": "208",
+      "tier": "B",
+      "case_dir": "cases/208",
+      "step": 21,
+      "label": "labels/208.json",
+      "decision": "ask"
+    },
+    {
+      "id": "209",
+      "tier": "B",
+      "case_dir": "cases/209",
+      "step": 43,
+      "label": "labels/209.json",
+      "decision": "escalate"
+    },
+    {
+      "id": "210",
+      "tier": "B",
+      "case_dir": "cases/210",
+      "step": 9,
+      "label": "labels/210.json",
+      "decision": "ask"
+    },
+    {
+      "id": "301",
+      "tier": "C",
+      "case_dir": "cases/301",
+      "step": 22,
+      "label": "labels/301.json",
+      "decision": "escalate"
+    },
+    {
+      "id": "302",
+      "tier": "C",
+      "case_dir": "cases/302",
+      "step": 13,
+      "label": "labels/302.json",
+      "decision": "escalate"
+    },
+    {
+      "id": "303",
+      "tier": "C",
+      "case_dir": "cases/303",
+      "step": 26,
+      "label": "labels/303.json",
+      "decision": "escalate"
+    },
+    {
+      "id": "304",
+      "tier": "C",
+      "case_dir": "cases/304",
+      "step": 31,
+      "label": "labels/304.json",
+      "decision": "ask"
+    },
+    {
+      "id": "305",
+      "tier": "C",
+      "case_dir": "cases/305",
+      "step": 17,
+      "label": "labels/305.json",
+      "decision": "ask"
+    },
+    {
+      "id": "306",
+      "tier": "C",
+      "case_dir": "cases/306",
+      "step": 24,
+      "label": "labels/306.json",
+      "decision": "proceed"
+    },
+    {
+      "id": "307",
+      "tier": "C",
+      "case_dir": "cases/307",
+      "step": 27,
+      "label": "labels/307.json",
+      "decision": "close"
+    },
+    {
+      "id": "308",
+      "tier": "C",
+      "case_dir": "cases/308",
+      "step": 12,
+      "label": "labels/308.json",
+      "decision": "escalate"
+    },
+    {
+      "id": "309",
+      "tier": "C",
+      "case_dir": "cases/309",
+      "step": 56,
+      "label": "labels/309.json",
+      "decision": "ask"
+    },
+    {
+      "id": "310",
+      "tier": "C",
+      "case_dir": "cases/310",
+      "step": 34,
+      "label": "labels/310.json",
+      "decision": "escalate"
+    },
+    {
+      "id": "311",
+      "tier": "C",
+      "case_dir": "cases/311",
+      "step": 8,
+      "label": "labels/311.json",
+      "decision": "ask"
+    },
+    {
+      "id": "312",
+      "tier": "C",
+      "case_dir": "cases/312",
+      "step": 15,
+      "label": "labels/312.json",
+      "decision": "ask"
+    }
+  ]
+}

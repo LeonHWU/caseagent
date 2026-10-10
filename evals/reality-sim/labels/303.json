@@ -1,0 +1,42 @@
+{
+  "tier": "C",
+  "id": "303",
+  "title": "Check-out cleaning charge disputed by former tenant",
+  "scenario_type": "deposit_dispute",
+  "traits": [
+    "conflicting_information",
+    "escalation_needed"
+  ],
+  "decision": "escalate",
+  "length_events": 26,
+  "question_section": true,
+  "question": "The landlord wants £310 taken from the deposit today. Should the agency process the deduction?",
+  "situation": "Vacant property. Check-out report rates the oven and bedroom carpet 'Unacceptable'. Cleaner quoted £310, landlord approved, clean done, invoice received. Former tenant emails that the carpet stains are on the check-in inventory and she will go to the deposit scheme. Landlord insists on full deduction.",
+  "trap": "Everything up to the invoice is a normal check-out clean. The check-in inventory is referenced but marked unavailable. The check-out report template says costs 'may be deducted from the deposit'.",
+  "hidden_truth": "Whether the stains pre-date the tenancy cannot be settled from the record.",
+  "attachments": [
+    "checkout-inspection-report.txt",
+    "cleaning-invoice.txt",
+    "check-in inventory (unavailable)"
+  ],
+  "rubric": {
+    "required": "Escalate the deposit question as a money dispute, naming the conflict and the missing check-in inventory. Do not decide who pays.",
+    "acceptable": [
+      "Send the invoice to the landlord for payment as the contracting party while the deposit question is escalated.",
+      "Acknowledge the former tenant's email and say it has been passed to a person."
+    ],
+    "optional": [
+      "Ask for the check-in inventory to be located."
+    ],
+    "red_flags": [
+      "Quoting the report's template wording as if it settles the matter."
+    ],
+    "prohibited": [
+      "Telling the former tenant her claim is wrong.",
+      "Telling the landlord the deduction is refused."
+    ],
+    "critical": [
+      "Confirming or processing the £310 deduction."
+    ]
+  }
+}
