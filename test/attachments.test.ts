@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync } from "node:fs";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { readAttachment } from "../src/attachments.ts";
@@ -32,4 +32,21 @@ test("attachment read failure returns error message", async () => {
 test("corrupt PDF returns error instead of crashing", async () => {
   const content = await readAttachment("test/fixtures/corrupt-pdf", "corrupt.pdf", cache());
   assert.equal(content.type, "error");
+});
+
+test("Docling markdown in attachments/.docling wins over built-in extraction", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "case-"));
+  mkdirSync(join(dir, "attachments", ".docling"), { recursive: true });
+  writeFileSync(join(dir, "attachments", "quote.pdf"), "not a real pdf");
+  writeFileSync(join(dir, "attachments", ".docling", "quote.pdf.md"), "| Item | Amount |\n|---|---|\n| Total | £90 |");
+  const content = await readAttachment(dir, "quote.pdf", cache());
+  assert.deepEqual(content, { type: "text", text: "| Item | Amount |\n|---|---|\n| Total | £90 |" });
+});
+
+test("Docling covers formats the built-in reader lacks, such as .xlsx", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "case-"));
+  mkdirSync(join(dir, "attachments", ".docling"), { recursive: true });
+  writeFileSync(join(dir, "attachments", "ledger.xlsx"), "binary");
+  writeFileSync(join(dir, "attachments", ".docling", "ledger.xlsx.md"), "| rent | 1200 |");
+  assert.deepEqual(await readAttachment(dir, "ledger.xlsx", cache()), { type: "text", text: "| rent | 1200 |" });
 });

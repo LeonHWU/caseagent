@@ -35,6 +35,19 @@ npm run case -- run-all <cases-dir> --concurrency 4    # every case in a folder
 npm test
 ```
 
+### Attachments (optional Docling step)
+
+The agent reads attachments itself: PDF text through pdf.js, CSV and text files as they are, and images as image input to Claude. For better structure, run [Docling](https://github.com/docling-project/docling) once before the agent. It needs [uv](https://docs.astral.sh/uv/).
+
+```bash
+npm run extract -- <cases-dir>    # writes <case>/attachments/.docling/<file>.md
+```
+
+Docling keeps tables and headings as markdown and also reads `.docx`, `.xlsx`, `.pptx` and `.html`. The agent uses a `.docling` file when one exists and its built-in reader when one does not. Re-runs skip files that are already converted.
+
+- The first run installs Docling 2.132.0 and its models, about 4 GB in the uv cache.
+- On the public data, all 28 PDF and CSV files convert in about 1 minute.
+
 ### As an MCP server
 
 `src/mcp.ts` serves the same agent over stdio, with four tools: `list_cases`, `run_case`, `resume_case` and `get_case`. Each tool takes a case id such as `027`. The server reads cases from `CASES_DIR` (default `data/public/Property Management`) and writes to `OUT_DIR` (default `runs/mcp`). Both paths are relative to the repo.
@@ -57,6 +70,7 @@ Keep `--silent`. Without it, npm prints a banner to stdout and breaks the MCP pr
 ## Models, APIs and services
 
 - Anthropic Claude (`claude-sonnet-5-5` by default; set `MODEL` to change it) through `@anthropic-ai/sdk`.
+- Docling 2.132.0 (local, optional) converts attachments to markdown. pdf.js (`pdfjs-dist`) is the built-in fallback.
 - No other external service. Messages and assignments go to the outbox in the case state.
 
 ## Assumptions
@@ -66,11 +80,11 @@ Keep `--silent`. Without it, npm prints a banner to stdout and breaks the MCP pr
 
 ## Known limitations
 
-- PDF attachments are listed but not read.
+- Attachment text is capped at 8,000 characters per file, so long inspection reports are cut.
+- The Docling run reports "No OCR engine found". The public PDFs contain real text, so this does not matter for them. A scanned PDF would come out empty.
 - The agent sees time only through event timestamps, so "3 days without reply" works only when a later event shows the gap.
 
 ## Next steps
 
 - An evaluation bench that replays the public cases event by event and grades each decision against the real history.
-- PDF text extraction for quotes and invoices.
 - Real adapters for email, SMS and the agency's job system.

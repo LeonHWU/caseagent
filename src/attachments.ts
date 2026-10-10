@@ -45,6 +45,10 @@ export async function readAttachment(caseDir: string, filename: string, cacheDir
   const filepath = join(caseDir, "attachments", filename);
 
   try {
+    // `npm run extract` (Docling) writes structured markdown here; it beats the built-in readers when present.
+    const docling = join(caseDir, "attachments", ".docling", `${filename}.md`);
+    if (existsSync(docling)) return { type: "text", text: truncateText(readFileSync(docling, "utf8")) };
+
     const ext = filename.split(".").pop()?.toLowerCase();
 
     // Check if it's already cached (for PDFs)
