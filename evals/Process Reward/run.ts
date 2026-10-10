@@ -17,12 +17,20 @@ type Expected = { acceptable_actions: { tool: string; exact_arguments: Record<st
 // runtime_failure: the API, the loader or the MCP call failed; no score, because the model was not judged.
 export type RunOutcome = 'completed' | 'model_failure' | 'runtime_failure';
 export type SampleResult = {
-  id: string; case_id: string; step: number; run_outcome: RunOutcome; incomplete: boolean;
+  id: string; case_id: string; step: number; trial: number; run_outcome: RunOutcome; incomplete: boolean;
   status: CaseState['status'] | null; actions: CaseState['actions']; structural_match: boolean;
   semantic_review: 'pending' | 'not_required' | 'not_run'; score: 0 | null; error: string | null;
-  expected: Expected; trace: string; mcp_error: boolean;
+  expected: Expected; trace: string; mcp_error: boolean; measured: boolean;
 };
-export type Report = { model: string; code_revision: string; started_at: string; results: SampleResult[] };
+export type Report = {
+  model: string; code_revision: string; started_at: string; trials: number;
+  // pass_1: mean pass rate over measured trials. pass_k: share of measured samples where every
+  // measured trial passed. A runtime_failure trial is not measured: it fails our infrastructure,
+  // not the model.
+  pass_1: number | null; pass_k: number | null; results: SampleResult[];
+};
+
+const passed = (r: Pick<SampleResult, 'run_outcome' | 'structural_match'>) => r.run_outcome === 'completed' && r.structural_match;
 
 // The trace says why a run is incomplete: `error` from src/run.ts, `auto_escalate` from src/agent.ts.
 function traceKinds(path: string): Set<string> {
@@ -37,69 +45,104 @@ function classify(state: CaseState | null, kinds: Set<string>, error: string | n
 }
 
 export async function runSuite(opts: {
-  out: string; makeDeps: (out: string) => RunDeps; model: string; revision: string; timeoutMs?: number;
+  out: string; makeDeps: (out: string) => RunDeps; model: string; revision: string; timeoutMs?: number; trials?: number;
 }): Promise<Report> {
-  const { out, makeDeps, timeoutMs = 600_000 } = opts;
+  const { out, makeDeps, timeoutMs = 600_000, trials = 1 } = opts;
   mkdirSync(out, { recursive: true });
   const manifest = JSON.parse(readFileSync(join(root, 'manifest.json'), 'utf8'));
-  const report: Report = { model: opts.model, code_revision: opts.revision, started_at: new Date().toISOString(), results: [] };
+  const report: Report = {
+    model: opts.model, code_revision: opts.revision, started_at: new Date().toISOString(),
+    trials, pass_1: null, pass_k: null, results: [],
+  };
 
   for (const entry of manifest.samples) {
     const sample = JSON.parse(readFileSync(join(root, entry.sample), 'utf8'));
-    const sampleOut = join(out, sample.id);
-    const trace = join(sample.id, 'traces', `${sample.case_id}.jsonl`);
-    const server = createServer({ casesDir: join(root, sample.input.cases_dir), deps: makeDeps(sampleOut) });
-    const client = new Client({ name: 'process-eval-live', version: '1' });
-    const [a, b] = InMemoryTransport.createLinkedPair();
+    let won = 0;
+    let measured = 0;
+    for (let trial = 1; trial <= trials; trial++) {
+      const sampleOut = trials > 1 ? join(out, sample.id, `trial-${trial}`) : join(out, sample.id);
+      const trace = trials > 1 ? join(sample.id, `trial-${trial}`, 'traces', `${sample.case_id}.jsonl`) : join(sample.id, 'traces', `${sample.case_id}.jsonl`);
+      const server = createServer({ casesDir: join(root, sample.input.cases_dir), deps: makeDeps(sampleOut) });
+      const client = new Client({ name: 'process-eval-live', version: '1' });
+      const [a, b] = InMemoryTransport.createLinkedPair();
 
-    let error: string | null = null;
-    let mcpError = false;
-    try {
-      await Promise.all([server.connect(a), client.connect(b)]);
-      const response = await client.callTool(sample.input.mcp_call, undefined, { timeout: timeoutMs });
-      if (response.isError) {
-        mcpError = true;
-        error = (response.content as { text?: string }[]).map((c) => c.text ?? '').join('\n') || 'MCP tool error';
+      let error: string | null = null;
+      let mcpError = false;
+      try {
+        await Promise.all([server.connect(a), client.connect(b)]);
+        const response = await client.callTool(sample.input.mcp_call, undefined, { timeout: timeoutMs });
+        if (response.isError) {
+          mcpError = true;
+          error = (response.content as { text?: string }[]).map((c) => c.text ?? '').join('\n') || 'MCP tool error';
+        }
+      } catch (e) {
+        error = e instanceof Error ? e.message : String(e);
+      } finally {
+        await client.close();
+        await server.close();
       }
-    } catch (e) {
-      error = e instanceof Error ? e.message : String(e);
-    } finally {
-      await client.close();
-      await server.close();
+
+      const statePath = join(sampleOut, 'state', `${sample.case_id}.json`);
+      // A timed-out call may still be running in the background, so its state file is not this sample's result.
+      const state = !error && existsSync(statePath) ? (JSON.parse(readFileSync(statePath, 'utf8')) as CaseState) : null;
+      const outcome = classify(state, traceKinds(join(out, trace)), error);
+      const action = state?.actions[0];
+      const branch = outcome === 'completed' && state!.actions.length === 1 && action?.ok
+        ? (sample.expected as Expected).acceptable_actions.find((e) =>
+          action.tool === e.tool && Object.entries(e.exact_arguments).every(([k, v]) => action.input[k] === v))
+        : undefined;
+
+      // A runtime_failure is a failure of our infrastructure, so the trial is not measured.
+      const isMeasured = outcome !== 'runtime_failure';
+      const result: SampleResult = {
+        id: sample.id, case_id: sample.case_id, step: sample.step, trial, run_outcome: outcome,
+        incomplete: state?.incomplete ?? true, status: state?.status ?? null, actions: state?.actions ?? [],
+        structural_match: Boolean(branch),
+        semantic_review: outcome === 'completed' ? 'pending' : outcome === 'model_failure' ? 'not_required' : 'not_run',
+        score: outcome === 'model_failure' ? 0 : null,
+        error, expected: sample.expected, trace, mcp_error: mcpError, measured: isMeasured,
+      };
+      report.results.push(result);
+      if (isMeasured) {
+        measured++;
+        if (passed(result)) won++;
+      }
+      writeFileSync(join(out, 'results.json'), JSON.stringify(report, null, 2) + '\n');
+      console.log(JSON.stringify({ id: sample.id, trial, outcome, tool: action?.tool ?? null, structural_match: Boolean(branch), error }));
     }
-
-    const statePath = join(sampleOut, 'state', `${sample.case_id}.json`);
-    // A timed-out call may still be running in the background, so its state file is not this sample's result.
-    const state = !error && existsSync(statePath) ? (JSON.parse(readFileSync(statePath, 'utf8')) as CaseState) : null;
-    const outcome = classify(state, traceKinds(join(out, trace)), error);
-    const action = state?.actions[0];
-    const branch = outcome === 'completed' && state!.actions.length === 1 && action?.ok
-      ? (sample.expected as Expected).acceptable_actions.find((e) =>
-        action.tool === e.tool && Object.entries(e.exact_arguments).every(([k, v]) => action.input[k] === v))
-      : undefined;
-
-    report.results.push({
-      id: sample.id, case_id: sample.case_id, step: sample.step, run_outcome: outcome,
-      incomplete: state?.incomplete ?? true, status: state?.status ?? null, actions: state?.actions ?? [],
-      structural_match: Boolean(branch),
-      semantic_review: outcome === 'completed' ? 'pending' : outcome === 'model_failure' ? 'not_required' : 'not_run',
-      score: outcome === 'model_failure' ? 0 : null,
-      error, expected: sample.expected, trace, mcp_error: mcpError,
-    });
-    writeFileSync(join(out, 'results.json'), JSON.stringify(report, null, 2) + '\n');
-    console.log(JSON.stringify({ id: sample.id, outcome, tool: action?.tool ?? null, structural_match: Boolean(branch), error }));
+    console.log(`${sample.id}: ${won}/${measured} trials passed${measured < trials ? ` (${trials - measured} unmeasured)` : ''}`);
   }
+
+  const measuredTrials = report.results.filter((r) => r.measured);
+  report.pass_1 = measuredTrials.length ? measuredTrials.filter(passed).length / measuredTrials.length : null;
+  const bySample = new Map<string, SampleResult[]>();
+  for (const r of report.results) {
+    const list = bySample.get(r.id) ?? [];
+    list.push(r);
+    bySample.set(r.id, list);
+  }
+  const measuredSamples = [...bySample.values()].filter((rs) => rs.some((r) => r.measured));
+  report.pass_k = measuredSamples.length
+    ? measuredSamples.filter((rs) => rs.filter((r) => r.measured).every(passed)).length / measuredSamples.length
+    : null;
+  writeFileSync(join(out, 'results.json'), JSON.stringify(report, null, 2) + '\n');
   return report;
 }
 
 if (import.meta.main) {
   if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY is required');
-  const out = resolve(process.argv[2] ?? join(repo, 'runs/process-eval', new Date().toISOString().replaceAll(':', '-')));
+  const args = process.argv.slice(2);
+  const ti = args.indexOf('--trials');
+  const trials = ti > -1 ? Number(args[ti + 1]) : 1;
+  if (!Number.isInteger(trials) || trials < 1) throw new Error('--trials must be a positive integer');
+  const positional = args.filter((a, i) => i !== ti && i !== ti + 1 && !a.startsWith('--'));
+  const out = resolve(positional[0] ?? join(repo, 'runs/process-eval', new Date().toISOString().replaceAll(':', '-')));
   await runSuite({
     out,
     makeDeps: liveDeps,
     model: process.env.MODEL ?? 'claude-sonnet-5-5',
     revision: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repo, encoding: 'utf8' }).trim(),
+    trials,
   });
   console.log(`Results: ${join(out, 'results.json')}`);
 }

@@ -2,7 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import type Anthropic from "@anthropic-ai/sdk";
 import type { ModelClient } from "../src/agent.ts";
 import { runSuite } from "../evals/Process Reward/run.ts";
@@ -11,6 +12,37 @@ const reply = (content: unknown[]) =>
   ({ content, stop_reason: "tool_use", usage: { input_tokens: 1, output_tokens: 1 } }) as unknown as Anthropic.Message;
 const hold = reply([{ type: "tool_use", id: "h", name: "hold", input: { waiting_for: "Waiting for Tenant", reason: "test" } }]);
 const deps = (client: ModelClient) => (out: string) => ({ out, client, model: "fake", policy: "policy" });
+
+const evalRoot = join(dirname(fileURLToPath(import.meta.url)), "../evals/Process Reward");
+const manifest = JSON.parse(readFileSync(join(evalRoot, "manifest.json"), "utf8"));
+const sampleOf = (id: string) => JSON.parse(readFileSync(join(evalRoot, "samples", `${id}.json`), "utf8"));
+
+// A valid tool input for the sample's first acceptable action, so run_case (single-step) records it.
+const inputFor: Record<string, Record<string, unknown>> = {
+  hold: { waiting_for: "Waiting for Tenant" },
+  send_message: { to: "tenant", channel: "email", text: "Please try a plunger first." },
+  request_landlord_approval: { scope: "repair", cost: "unknown" },
+  assign_contractor: { trade: "plumber", notes: "attend and report" },
+  close_case: { outcome: "work_completed", work_confirmed_by: "tenant [event 001]", landlord_informed: true, keys: "returned", invoice: "on_file" },
+  escalate: { summary: "needs a person" },
+};
+const correctInput = (tool: string, exact: Record<string, unknown>): Record<string, unknown> => ({
+  ...inputFor[tool], ...exact, reason: "test",
+});
+
+// Calls are sequential: sample order from the manifest, trial order within each sample.
+const correctReplies = (trials: number, mutate?: (sampleIdx: number, trial: number) => Anthropic.Message | null) => {
+  const queue: Anthropic.Message[] = [];
+  manifest.samples.forEach((entry: { id: string }, sampleIdx: number) => {
+    for (let t = 1; t <= trials; t++) {
+      const custom = mutate?.(sampleIdx, t);
+      if (custom) { queue.push(custom); continue; }
+      const action = sampleOf(entry.id).expected.acceptable_actions[0];
+      queue.push(reply([{ type: "tool_use", id: `${sampleIdx}-${t}`, name: action.tool, input: correctInput(action.tool, action.exact_arguments) }]));
+    }
+  });
+  return queue;
+};
 
 test("a model that never calls a tool is a model failure with strict score 0, not a runtime failure", async () => {
   const textOnly: ModelClient = { messages: { create: async () => reply([{ type: "text", text: "thinking" }]) } };
@@ -47,4 +79,45 @@ test("an MCP failure on one sample is recorded and the remaining samples still r
 
   const saved = JSON.parse(readFileSync(join(out, "results.json"), "utf8"));
   assert.equal(saved.results.length, 10);
+});
+
+test("trials: a model that always matches gives pass_1 1 and pass_k 1", async () => {
+  const queue = correctReplies(3);
+  const correct: ModelClient = { messages: { create: async () => queue.shift()! } };
+  const out = mkdtempSync(join(tmpdir(), "eval-"));
+  const report = await runSuite({ out, makeDeps: deps(correct), model: "fake", revision: "test", trials: 3 });
+
+  assert.equal(report.results.length, 30);
+  assert.ok(report.results.every((r) => r.measured && r.run_outcome === "completed" && r.structural_match));
+  assert.equal(report.pass_1, 1);
+  assert.equal(report.pass_k, 1);
+});
+
+test("trials: alternating right and wrong gives pass_1 0.5 and pass_k 0", async () => {
+  const wrong = reply([{ type: "tool_use", id: "w", name: "hold", input: { waiting_for: "Waiting for Nobody", reason: "test" } }]);
+  const queue = correctReplies(2, (_s, t) => (t === 2 ? wrong : null));
+  const alternating: ModelClient = { messages: { create: async () => queue.shift()! } };
+  const out = mkdtempSync(join(tmpdir(), "eval-"));
+  const report = await runSuite({ out, makeDeps: deps(alternating), model: "fake", revision: "test", trials: 2 });
+
+  assert.equal(report.pass_1, 0.5);
+  assert.equal(report.pass_k, 0);
+});
+
+test("trials: a runtime_failure trial is not measured, and the rest still score", async () => {
+  const replies = correctReplies(2);
+  let calls = 0;
+  const flaky: ModelClient = {
+    messages: {
+      create: () => (++calls <= 2 ? Promise.reject(new Error("API down")) : Promise.resolve(replies[calls - 1])),
+    },
+  };
+  const out = mkdtempSync(join(tmpdir(), "eval-"));
+  const report = await runSuite({ out, makeDeps: deps(flaky), model: "fake", revision: "test", trials: 2 });
+
+  assert.equal(report.results.length, 20);
+  const first = report.results.filter((r) => r.id === manifest.samples[0].id);
+  assert.ok(first.every((r) => r.run_outcome === "runtime_failure" && !r.measured));
+  assert.equal(report.pass_1, 1);
+  assert.equal(report.pass_k, 1);
 });
