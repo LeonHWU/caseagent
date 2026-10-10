@@ -21,6 +21,8 @@ export type SampleResult = {
   status: CaseState['status'] | null; actions: CaseState['actions']; structural_match: boolean;
   semantic_review: 'pending' | 'not_required' | 'not_run'; score: 0 | null; error: string | null;
   expected: Expected; trace: string; mcp_error: boolean; measured: boolean;
+  // Index in actions of the action that matched an acceptable branch, and why the run failed the structural check.
+  matched_action: number | null; violations: string[];
 };
 export type Report = {
   model: string; code_revision: string; started_at: string; trials: number;
@@ -32,6 +34,28 @@ export type Report = {
 };
 
 const passed = (r: Pick<SampleResult, 'run_outcome' | 'structural_match'>) => r.run_outcome === 'completed' && r.structural_match;
+
+const END_TOOLS = new Set(['hold', 'escalate', 'close_case']);
+
+// A multi-action run passes the structural check when:
+// 1. a successful action matches an acceptable branch (tool and exact_arguments);
+// 2. the run ended on that action, or on hold or escalate after it; close_case
+//    is accepted only when it is the matched branch itself;
+// 3. no guard refused an action, because a refusal means the model tried something
+//    the rules forbid (an unapproved assignment, an event reference in a message).
+// Extra actions beside the match go to semantic review.
+export function gradeRun(actions: CaseState['actions'], expected: Expected): { matched: number | null; violations: string[] } {
+  const violations: string[] = [];
+  const matched = actions.findIndex((a) => a.ok && expected.acceptable_actions.some((e) =>
+    a.tool === e.tool && Object.entries(e.exact_arguments).every(([k, v]) => a.input[k] === v)));
+  if (matched === -1) violations.push('no successful action matches an acceptable branch');
+  const end = actions.findLast((a) => a.ok && END_TOOLS.has(a.tool));
+  if (!end) violations.push('the run did not end with hold, escalate or close_case');
+  else if (matched !== -1 && end !== actions[matched] && end.tool === 'close_case') violations.push('close_case ended a run whose expected action was not close_case');
+  if (matched !== -1 && end && actions.indexOf(end) < matched) violations.push('the run ended before the matched action');
+  for (const a of actions) if (!a.ok && a.result.startsWith('refused:')) violations.push(`${a.tool} was refused: ${a.result.slice('refused: '.length)}`);
+  return { matched: matched === -1 ? null : matched, violations };
+}
 
 // The trace says why a run is incomplete: `error` from src/run.ts, `auto_escalate` from src/agent.ts.
 function traceKinds(path: string): Set<string> {
@@ -71,9 +95,7 @@ export async function runSuite(opts: {
       let mcpError = false;
       try {
         await Promise.all([server.connect(a), client.connect(b)]);
-        // Each sample grades the next single business action, so the call runs in single-action mode.
-        const call = { ...sample.input.mcp_call, arguments: { ...sample.input.mcp_call.arguments, single_action: true } };
-        const response = await client.callTool(call, undefined, { timeout: timeoutMs });
+        const response = await client.callTool(sample.input.mcp_call, undefined, { timeout: timeoutMs });
         if (response.isError) {
           mcpError = true;
           error = (response.content as { text?: string }[]).map((c) => c.text ?? '').join('\n') || 'MCP tool error';
@@ -89,18 +111,16 @@ export async function runSuite(opts: {
       // A timed-out call may still be running in the background, so its state file is not this sample's result.
       const state = !error && existsSync(statePath) ? (JSON.parse(readFileSync(statePath, 'utf8')) as CaseState) : null;
       const outcome = classify(state, traceKinds(join(out, trace)), error);
-      const action = state?.actions[0];
-      const branch = outcome === 'completed' && state!.actions.length === 1 && action?.ok
-        ? (sample.expected as Expected).acceptable_actions.find((e) =>
-          action.tool === e.tool && Object.entries(e.exact_arguments).every(([k, v]) => action.input[k] === v))
-        : undefined;
+      const grade = outcome === 'completed' ? gradeRun(state!.actions, sample.expected as Expected) : { matched: null, violations: [] };
+      const action = grade.matched === null ? undefined : state!.actions[grade.matched];
 
       // A runtime_failure is a failure of our infrastructure, so the trial is not measured.
       const isMeasured = outcome !== 'runtime_failure';
       const result: SampleResult = {
         id: sample.id, case_id: sample.case_id, step: sample.step, trial, run_outcome: outcome,
         incomplete: state ? isIncomplete(state) : true, status: state?.status ?? null, actions: state?.actions ?? [],
-        structural_match: Boolean(branch),
+        structural_match: outcome === 'completed' && grade.violations.length === 0,
+        matched_action: grade.matched, violations: grade.violations,
         semantic_review: outcome === 'completed' ? 'pending' : outcome === 'model_failure' ? 'not_required' : 'not_run',
         score: outcome === 'model_failure' ? 0 : null,
         error, expected: sample.expected, trace, mcp_error: mcpError, measured: isMeasured,
@@ -111,7 +131,7 @@ export async function runSuite(opts: {
         if (passed(result)) won++;
       }
       writeFileSync(join(out, 'results.json'), JSON.stringify(report, null, 2) + '\n');
-      console.log(JSON.stringify({ id: sample.id, trial, outcome, tool: action?.tool ?? null, structural_match: Boolean(branch), error }));
+      console.log(JSON.stringify({ id: sample.id, trial, outcome, actions: result.actions.map((a) => a.tool), matched: action?.tool ?? null, structural_match: result.structural_match, violations: grade.violations, error }));
     }
     console.log(`${sample.id}: ${won}/${measured} trials passed${measured < trials ? ` (${trials - measured} unmeasured)` : ''}`);
   }
@@ -140,7 +160,7 @@ if (import.meta.main) {
   const ti = args.indexOf('--trials');
   const trials = ti > -1 ? Number(args[ti + 1]) : 1;
   if (!Number.isInteger(trials) || trials < 1) throw new Error('--trials must be a positive integer');
-  const positional = args.filter((a, i) => i !== ti && i !== ti + 1 && !a.startsWith('--'));
+  const positional = args.filter((a, i) => (ti === -1 || (i !== ti && i !== ti + 1)) && !a.startsWith('--'));
   const out = resolve(positional[0] ?? join(repo, 'runs/process-eval', new Date().toISOString().replaceAll(':', '-')));
   await runSuite({
     out,

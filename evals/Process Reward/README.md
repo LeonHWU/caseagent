@@ -1,8 +1,8 @@
 # Property Management Process Reward — 10 Historical Reference Samples
 
-This is a development Process Eval set. Each sample evaluates **the next actual business tool action at one historical decision point**, rather than the outcome of an entire case. The 10 samples come from 8 property management cases. They are not the organizer's official golden set and do not require verbatim reproduction of historical actions.
+This is a development Process Eval set. Each sample evaluates **the run the agent makes at one historical decision point**, rather than the outcome of an entire case. The run may take several actions, for example a message and then `hold`; the structural check needs one successful action matching an allowed branch, a run that ends on it or on `hold` or `escalate` after it (`close_case` only when it is the branch), and no action refused by a guard. Extra actions go to semantic review. The 10 samples come from 8 property management cases. They are not the organizer's official golden set and do not require verbatim reproduction of historical actions.
 
-Source: `DwellyOrg/HackatonPublicCases`, pinned to commit `9bcdca585955dfb930005ed742572606e68f5688`. The MCP interface is based on the merged single-step implementation at commit `1ff6e85`, supporting `run_case({case_id, step})`. The runner and `validate.ts` add `single_action: true` to each call, because MCP runs are multi-action by default.
+Source: `DwellyOrg/HackatonPublicCases`, pinned to commit `9bcdca585955dfb930005ed742572606e68f5688`. The MCP interface is based on the merged single-step implementation at commit `1ff6e85`, supporting `run_case({case_id, step})`. Calls run in the default multi-action mode. Each result records `matched_action` (the index of the matching action) and `violations` (why a run failed the structural check).
 
 ## Samples and Derivation Sources
 

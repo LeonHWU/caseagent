@@ -85,7 +85,7 @@ for (const item of manifest.samples) {
   const [a, b] = InMemoryTransport.createLinkedPair();
   try {
     await Promise.all([server.connect(a), client.connect(b)]);
-    const result = await client.callTool({ ...sample.input.mcp_call, arguments: { ...sample.input.mcp_call.arguments, single_action: true } });
+    const result = await client.callTool(sample.input.mcp_call);
     assert.ok(!result.isError);
     assert.equal(calls, 1);
     const state = JSON.parse(readFileSync(join(out, 'state', `${sample.case_id}.json`), 'utf8')) as CaseState;

@@ -6,18 +6,22 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import type Anthropic from "@anthropic-ai/sdk";
 import type { ModelClient } from "../src/agent.ts";
-import { runSuite } from "../evals/Process Reward/run.ts";
+import { gradeRun, runSuite } from "../evals/Process Reward/run.ts";
 
 const reply = (content: unknown[]) =>
   ({ content, stop_reason: "tool_use", usage: { input_tokens: 1, output_tokens: 1 } }) as unknown as Anthropic.Message;
 const hold = reply([{ type: "tool_use", id: "h", name: "hold", input: { waiting_for: "Waiting for Tenant", reason: "test" } }]);
+// No sample accepts escalate, so this is a wrong answer that still ends the run in one call.
+const wrong = reply([{ type: "tool_use", id: "w", name: "escalate", input: { checked: "c", missing_or_conflict: "m", decision_needed: "d", reason: "test" } }]);
 const deps = (client: ModelClient) => (out: string) => ({ out, client, model: "fake", policy: "policy" });
 
+const END = new Set(["hold", "escalate", "close_case"]);
 const evalRoot = join(dirname(fileURLToPath(import.meta.url)), "../evals/Process Reward");
 const manifest = JSON.parse(readFileSync(join(evalRoot, "manifest.json"), "utf8"));
 const sampleOf = (id: string) => JSON.parse(readFileSync(join(evalRoot, "samples", `${id}.json`), "utf8"));
 
-// A valid tool input for the sample's first acceptable action, so run_case (single_action) records it.
+// A valid tool input for the sample's first acceptable action. Runs are multi-action, so a reply is a
+// whole run: the action, then hold when the action does not end the run itself.
 const inputFor: Record<string, Record<string, unknown>> = {
   hold: { waiting_for: "Waiting for Tenant" },
   send_message: { to: "tenant", channel: "email", text: "Please try a plunger first." },
@@ -38,7 +42,9 @@ const correctReplies = (trials: number, mutate?: (sampleIdx: number, trial: numb
       const custom = mutate?.(sampleIdx, t);
       if (custom) { queue.push(custom); continue; }
       const action = sampleOf(entry.id).expected.acceptable_actions[0];
-      queue.push(reply([{ type: "tool_use", id: `${sampleIdx}-${t}`, name: action.tool, input: correctInput(action.tool, action.exact_arguments) }]));
+      const blocks = [{ type: "tool_use", id: `${sampleIdx}-${t}`, name: action.tool, input: correctInput(action.tool, action.exact_arguments) }];
+      if (!END.has(action.tool)) blocks.push({ type: "tool_use", id: `${sampleIdx}-${t}-end`, name: "hold", input: { waiting_for: "Waiting for Tenant", reason: "test" } });
+      queue.push(reply(blocks));
     }
   });
   return queue;
@@ -94,7 +100,6 @@ test("trials: a model that always matches gives pass_1 1 and pass_k 1", async ()
 });
 
 test("trials: alternating right and wrong gives pass_1 0.5 and pass_k 0", async () => {
-  const wrong = reply([{ type: "tool_use", id: "w", name: "hold", input: { waiting_for: "Waiting for Nobody", reason: "test" } }]);
   const queue = correctReplies(2, (_s, t) => (t === 2 ? wrong : null));
   const alternating: ModelClient = { messages: { create: async () => queue.shift()! } };
   const out = mkdtempSync(join(tmpdir(), "eval-"));
@@ -123,7 +128,6 @@ test("trials: a runtime_failure trial is not measured, and the rest still score"
 });
 
 test("trials: a partially measured sample does not count for or against pass_k", async () => {
-  const wrong = reply([{ type: "tool_use", id: "w", name: "hold", input: { waiting_for: "Waiting for Nobody", reason: "test" } }]);
   const replies = correctReplies(2);
   let calls = 0;
   // Sample 0: trial 1 unmeasured (API down), trial 2 completed but wrong. Under the old rule this
@@ -139,4 +143,32 @@ test("trials: a partially measured sample does not count for or against pass_k",
   assert.equal(first[1].measured, true);
   assert.equal(report.pass_k, 1);
   assert.equal(report.unmeasured, 1);
+});
+
+test("gradeRun: a message then hold passes; closing after a message, a refusal, or no match fails", () => {
+  const exp = { acceptable_actions: [{ tool: "send_message", exact_arguments: { to: "tenant", channel: "email" } }] };
+  const act = (tool: string, input: Record<string, unknown>, ok = true, result = "ok") => ({ run: 1, afterEvent: 1, tool, input, ok, result });
+  const msg = act("send_message", { to: "tenant", channel: "email" });
+  const hold = act("hold", { waiting_for: "Waiting for Tenant" });
+  assert.deepEqual(gradeRun([msg, hold], exp), { matched: 0, violations: [] });
+  assert.deepEqual(gradeRun([act("add_note", { text: "x" }), msg, hold], exp), { matched: 1, violations: [] });
+  assert.match(gradeRun([msg, act("close_case", { outcome: "withdrawn" })], exp).violations.join(), /close_case ended a run/);
+  assert.match(gradeRun([act("assign_contractor", {}, false, "refused: landlord approval is not on file."), msg, hold], exp).violations.join(), /assign_contractor was refused/);
+  assert.match(gradeRun([act("send_message", { to: "landlord", channel: "email" }), hold], exp).violations.join(), /no successful action matches/);
+  assert.match(gradeRun([msg], exp).violations.join(), /did not end/);
+  // A schema error the model then fixes is not a guard refusal.
+  assert.deepEqual(gradeRun([act("send_message", {}, false, "invalid input: to is required"), msg, hold], exp).violations, []);
+  const closeExp = { acceptable_actions: [{ tool: "close_case", exact_arguments: { outcome: "work_completed" } }] };
+  assert.deepEqual(gradeRun([act("send_message", { to: "landlord", channel: "email" }), act("close_case", { outcome: "work_completed" })], closeExp).violations, []);
+});
+
+test("multi-action runs: a correct run of message then hold scores as a structural match end to end", async () => {
+  const queue = correctReplies(1);
+  const correct: ModelClient = { messages: { create: async () => queue.shift()! } };
+  const report = await runSuite({ out: mkdtempSync(join(tmpdir(), "eval-")), makeDeps: deps(correct), model: "fake", revision: "test" });
+  const msg = report.results.find((r) => r.id === "pm-017-switch-troubleshooting")!;
+  assert.deepEqual(msg.actions.map((a) => a.tool), ["send_message", "hold"]);
+  assert.equal(msg.matched_action, 0);
+  assert.equal(msg.structural_match, true);
+  assert.equal(report.pass_1, 1);
 });
