@@ -1,0 +1,170 @@
+{
+  "purpose": "Engineering diagnostics, not a comparable benchmark or additional final trials. Rubric and bank versions changed between runs.",
+  "prior_run": {
+    "bank_version": 3,
+    "suite_version": 2,
+    "summary": {
+      "arms": {
+        "baseline": {
+          "attempted": 16,
+          "assessed": 16,
+          "unassessed": 0,
+          "passed": 12,
+          "pass_rate": 0.75,
+          "mean_score": 81.25,
+          "mean_duration_ms": 4073.9375,
+          "model_requests": 16,
+          "input_tokens": 48126,
+          "output_tokens": 5485,
+          "selector_errors": 0
+        },
+        "playbooks": {
+          "attempted": 16,
+          "assessed": 16,
+          "unassessed": 0,
+          "passed": 13,
+          "pass_rate": 0.8125,
+          "mean_score": 85.9375,
+          "mean_duration_ms": 6232.5,
+          "model_requests": 30,
+          "input_tokens": 118722,
+          "output_tokens": 7611,
+          "selector_errors": 0
+        }
+      },
+      "pairs": [
+        {
+          "id": "pb-tax-basis",
+          "trial": 1,
+          "baseline": true,
+          "playbooks": false,
+          "score_delta": -45
+        },
+        {
+          "id": "pb-tax-basis",
+          "trial": 2,
+          "baseline": false,
+          "playbooks": true,
+          "score_delta": 55
+        },
+        {
+          "id": "pb-quote-selection",
+          "trial": 2,
+          "baseline": true,
+          "playbooks": true,
+          "score_delta": 0
+        },
+        {
+          "id": "pb-quote-selection",
+          "trial": 1,
+          "baseline": true,
+          "playbooks": true,
+          "score_delta": 0
+        },
+        {
+          "id": "pb-owner",
+          "trial": 1,
+          "baseline": true,
+          "playbooks": true,
+          "score_delta": 0
+        },
+        {
+          "id": "pb-owner",
+          "trial": 2,
+          "baseline": true,
+          "playbooks": true,
+          "score_delta": 15
+        },
+        {
+          "id": "pb-keys",
+          "trial": 2,
+          "baseline": true,
+          "playbooks": true,
+          "score_delta": 0
+        },
+        {
+          "id": "pb-keys",
+          "trial": 1,
+          "baseline": true,
+          "playbooks": true,
+          "score_delta": 0
+        },
+        {
+          "id": "pb-invoice",
+          "trial": 1,
+          "baseline": true,
+          "playbooks": true,
+          "score_delta": 0
+        },
+        {
+          "id": "pb-invoice",
+          "trial": 2,
+          "baseline": true,
+          "playbooks": true,
+          "score_delta": 0
+        },
+        {
+          "id": "pb-replacement",
+          "trial": 2,
+          "baseline": false,
+          "playbooks": false,
+          "score_delta": -15
+        },
+        {
+          "id": "pb-replacement",
+          "trial": 1,
+          "baseline": false,
+          "playbooks": false,
+          "score_delta": -10
+        },
+        {
+          "id": "pb-emergency",
+          "trial": 1,
+          "baseline": false,
+          "playbooks": true,
+          "score_delta": 75
+        },
+        {
+          "id": "pb-emergency",
+          "trial": 2,
+          "baseline": true,
+          "playbooks": true,
+          "score_delta": 0
+        },
+        {
+          "id": "pb-unrelated",
+          "trial": 2,
+          "baseline": true,
+          "playbooks": true,
+          "score_delta": 0
+        },
+        {
+          "id": "pb-unrelated",
+          "trial": 1,
+          "baseline": true,
+          "playbooks": true,
+          "score_delta": 0
+        }
+      ],
+      "improved": 2,
+      "regressed": 1,
+      "both_passed": 11,
+      "both_failed": 2,
+      "paired_assessed": 16,
+      "retrieval_matches": 16
+    }
+  },
+  "final_run": {
+    "bank_version": 4,
+    "suite_version": 3,
+    "path": "results.json"
+  },
+  "rubric_changes": [
+    "Recognize policy-compatible vacant-property deferral and truthful pending owner updates instead of mandating redundant chases.",
+    "Recognize concrete human escalation for unresolved replacement terms while requiring both material terms."
+  ],
+  "bank_changes": [
+    "Separate budget from repair approval and prohibit unsupported direct-contact promises.",
+    "Put contractor quote clarification before landlord approval and route landlord-controlled terms to the landlord."
+  ]
+}

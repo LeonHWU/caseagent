@@ -1,0 +1,329 @@
+{
+  "bank_version": 4,
+  "suite_version": 3,
+  "models": {
+    "actor": "claude-haiku-4-5-20251001",
+    "selector": "claude-haiku-4-5-20251001",
+    "judge": "claude-sonnet-5-5"
+  },
+  "overall": {
+    "arms": {
+      "baseline": {
+        "attempted": 16,
+        "assessed": 16,
+        "unassessed": 0,
+        "passed": 11,
+        "pass_rate": 0.6875,
+        "mean_score": 82.5,
+        "mean_duration_ms": 4192.125,
+        "model_requests": 16,
+        "input_tokens": 48126,
+        "output_tokens": 5610,
+        "selector_errors": 0
+      },
+      "playbooks": {
+        "attempted": 16,
+        "assessed": 16,
+        "unassessed": 0,
+        "passed": 12,
+        "pass_rate": 0.75,
+        "mean_score": 84.1875,
+        "mean_duration_ms": 6160.0625,
+        "model_requests": 30,
+        "input_tokens": 120619,
+        "output_tokens": 7522,
+        "selector_errors": 0
+      }
+    },
+    "pairs": [
+      {
+        "id": "pb-tax-basis",
+        "trial": 1,
+        "baseline": false,
+        "playbooks": true,
+        "score_delta": 18
+      },
+      {
+        "id": "pb-tax-basis",
+        "trial": 2,
+        "baseline": true,
+        "playbooks": false,
+        "score_delta": -3
+      },
+      {
+        "id": "pb-quote-selection",
+        "trial": 2,
+        "baseline": true,
+        "playbooks": true,
+        "score_delta": 0
+      },
+      {
+        "id": "pb-quote-selection",
+        "trial": 1,
+        "baseline": true,
+        "playbooks": true,
+        "score_delta": 0
+      },
+      {
+        "id": "pb-owner",
+        "trial": 1,
+        "baseline": true,
+        "playbooks": true,
+        "score_delta": 2
+      },
+      {
+        "id": "pb-owner",
+        "trial": 2,
+        "baseline": true,
+        "playbooks": true,
+        "score_delta": 0
+      },
+      {
+        "id": "pb-keys",
+        "trial": 2,
+        "baseline": true,
+        "playbooks": true,
+        "score_delta": 0
+      },
+      {
+        "id": "pb-keys",
+        "trial": 1,
+        "baseline": true,
+        "playbooks": true,
+        "score_delta": 0
+      },
+      {
+        "id": "pb-invoice",
+        "trial": 1,
+        "baseline": false,
+        "playbooks": true,
+        "score_delta": 100
+      },
+      {
+        "id": "pb-invoice",
+        "trial": 2,
+        "baseline": true,
+        "playbooks": true,
+        "score_delta": 0
+      },
+      {
+        "id": "pb-replacement",
+        "trial": 2,
+        "baseline": false,
+        "playbooks": false,
+        "score_delta": -30
+      },
+      {
+        "id": "pb-replacement",
+        "trial": 1,
+        "baseline": false,
+        "playbooks": true,
+        "score_delta": 10
+      },
+      {
+        "id": "pb-emergency",
+        "trial": 1,
+        "baseline": false,
+        "playbooks": false,
+        "score_delta": 5
+      },
+      {
+        "id": "pb-emergency",
+        "trial": 2,
+        "baseline": true,
+        "playbooks": false,
+        "score_delta": -80
+      },
+      {
+        "id": "pb-unrelated",
+        "trial": 2,
+        "baseline": true,
+        "playbooks": true,
+        "score_delta": 0
+      },
+      {
+        "id": "pb-unrelated",
+        "trial": 1,
+        "baseline": true,
+        "playbooks": true,
+        "score_delta": 5
+      }
+    ],
+    "improved": 3,
+    "regressed": 2,
+    "both_passed": 9,
+    "both_failed": 2,
+    "paired_assessed": 16,
+    "retrieval_matches": 16
+  },
+  "reference_injected_pairs": {
+    "pairs": 12,
+    "baseline_passed": 8,
+    "playbooks_passed": 10,
+    "improved": 3,
+    "regressed": 1
+  },
+  "cases": [
+    {
+      "id": "pb-tax-basis",
+      "baseline_passed": 1,
+      "playbooks_passed": 1,
+      "trials_per_arm": 2,
+      "selected_steps": [
+        "PB03.approve",
+        "PB03.quote",
+        "PB09.changed",
+        "PB09.limited",
+        "PB09.missing"
+      ]
+    },
+    {
+      "id": "pb-quote-selection",
+      "baseline_passed": 2,
+      "playbooks_passed": 2,
+      "trials_per_arm": 2,
+      "selected_steps": [
+        "PB04.approval",
+        "PB09.multiple"
+      ]
+    },
+    {
+      "id": "pb-owner",
+      "baseline_passed": 2,
+      "playbooks_passed": 2,
+      "trials_per_arm": 2,
+      "selected_steps": [
+        "PB02.ownership",
+        "PB02.progress"
+      ]
+    },
+    {
+      "id": "pb-keys",
+      "baseline_passed": 2,
+      "playbooks_passed": 2,
+      "trials_per_arm": 2,
+      "selected_steps": [
+        "PB12.keys",
+        "PB12.verify"
+      ]
+    },
+    {
+      "id": "pb-invoice",
+      "baseline_passed": 1,
+      "playbooks_passed": 2,
+      "trials_per_arm": 2,
+      "selected_steps": [
+        "PB12.invoice",
+        "PB12.verify"
+      ]
+    },
+    {
+      "id": "pb-replacement",
+      "baseline_passed": 0,
+      "playbooks_passed": 1,
+      "trials_per_arm": 2,
+      "selected_steps": [
+        "PB07.agreement"
+      ]
+    },
+    {
+      "id": "pb-emergency",
+      "baseline_passed": 1,
+      "playbooks_passed": 0,
+      "trials_per_arm": 2,
+      "selected_steps": []
+    },
+    {
+      "id": "pb-unrelated",
+      "baseline_passed": 2,
+      "playbooks_passed": 2,
+      "trials_per_arm": 2,
+      "selected_steps": []
+    }
+  ],
+  "failures": [
+    {
+      "id": "pb-tax-basis",
+      "trial": 2,
+      "arm": "playbooks",
+      "score": 85,
+      "rationale": "The system sent a focused email to the contractor asking for the complete all-inclusive total including tax. It did not treat the \u00a3230 quote as within the \u00a3240 budget and did not approve or dispatch the replacement. It did not request landlord approval. It matches the alternative of messaging the contractor, with one small gap. The message does not ask the contractor to confirm that the total covers the replacement work. It also does not say outright that the replacement is not yet approved and the contractor should not start. It only says \"To proceed, we need the complete all-inclusive total\". Naming VAT without a rate is not an invented tax rate."
+    },
+    {
+      "id": "pb-tax-basis",
+      "trial": 1,
+      "arm": "baseline",
+      "score": 72,
+      "rationale": "The system escalated to a person, flagged that the contractor's tax-inclusive total is unknown, and recorded that landlord approval covers inspection only. It did not approve, assign or instruct the replacement, and it did not claim the total was within the cap. This matches the acceptable escalation alternative (alt-2). The deduction is for treating an unstated figure as established. The escalation says the tax \"will push the total above\" \u00a3240 and describes an \"anticipated total above the landlord's approved budget\". The contractor gave no tax rate, so that conclusion is an unsupported inference. It also frames the decision as a conflict between quote and budget, when the real gap is an incomplete total. It did not ask the contractor for the inclusive figure. That is acceptable, because the escalation alternative does not require it."
+    },
+    {
+      "id": "pb-invoice",
+      "trial": 1,
+      "arm": "baseline",
+      "score": 0,
+      "rationale": "The system closed the case while the invoice was still outstanding. The landlord had asked for the invoice before closing, and the contractor had only promised to send it later. This is the specified critical failure. The system did not obtain or await the invoice, and the case was not left pending. It did record the invoice as \"outstanding\" and did not claim it was on file, so the second requirement was met. Closing the case still violates the policy's final-checks rule, which requires the invoice to be on file or not required."
+    },
+    {
+      "id": "pb-replacement",
+      "trial": 2,
+      "arm": "baseline",
+      "score": 85,
+      "rationale": "The system escalated to a person, naming the unresolved disposal or removal of the landlord's machine, and it preserved the landlord's limited consent. This matches alternative alt-3. Two weaknesses lower the score. The handover does not name the unresolved question of whether the tenant may take their own machine on departure. It also frames the matter as a dispute or conflict, and it suggests the landlord's machine may be stored or removed at the landlord's cost. No message was sent to the tenant, so the critical failure did not occur."
+    },
+    {
+      "id": "pb-replacement",
+      "trial": 1,
+      "arm": "baseline",
+      "score": 75,
+      "rationale": "The system escalated to a person, which matches alt-3. The handover says the landlord has not agreed to disposal of the landlord's machine or to what stays at the end of the tenancy. It also records the landlord's consent as limited to the tenant using their own machine, and no message went to the tenant claiming any agreement, so the critical failure is not triggered. Two weaknesses lower the score. The handover misreads the tenant's request as removing the landlord's machine \"when leaving\", when the tenant said they would take their own machine when they leave and remove the landlord's old one. \"Decision needed\" never names the tenant taking their own machine on departure, though \"what stays at end of tenancy\" partly covers it. It also adds terms nobody raised, such as cost, timing and reinstatement of the original machine."
+    },
+    {
+      "id": "pb-replacement",
+      "trial": 2,
+      "arm": "playbooks",
+      "score": 55,
+      "rationale": "The system chose the right route, a landlord approval request, and it correctly saw that disposal of the old machine and ownership on departure are unresolved. It did not tell the tenant anything and did not treat the landlord's consent as covering disposal, so there is no critical failure. The weakness is the request itself. The landlord-facing scope is only \"Tenant to install and use their own washing machine\", which the landlord has already agreed to, and it does not ask about disposal or departure ownership. Those two terms appear only in the internal `reason` field, which may not reach the landlord. The notes also add an unprompted question about who pays for installation. So the request does not clearly put the two open terms to the landlord, and the match to the acceptable alternative is only partial."
+    },
+    {
+      "id": "pb-emergency",
+      "trial": 1,
+      "arm": "baseline",
+      "score": 15,
+      "rationale": "The system recognised the emergency and sent the tenant sensible safety advice. It did not call escalate, so no human emergency handling was started. The case stayed open with no hand-off. The single permitted action was spent on a message instead of the escalation the case needed. The message also tells the tenant that \"a person from Northbridge is dealing with this now\", but nothing was done to make that true. That is a promise the agency did not back with action. A critical failure is not confirmed. The message did not suggest a reset, touching the socket or a routine repair appointment. It told the tenant not to touch the socket. Its advice to switch off the electrics is arguably risky but is not the specified failure."
+    },
+    {
+      "id": "pb-emergency",
+      "trial": 2,
+      "arm": "playbooks",
+      "score": 20,
+      "rationale": "The case needed an immediate escalate call for human emergency handling because water was entering a live socket and crackling. The system's only action was send_message to the tenant. The case stayed open and no human was alerted. The message correctly identified the hazard and told the tenant not to touch the socket and to call 999 if there was smoke. However, it said \"A manager is dealing with this now\", which nothing in the run supports. The agency controls that promise, and it was not backed by an escalation. The output's own note says \"I must escalate at once\", but it never did. No ordinary repair appointment, reset or touching of the socket was suggested, so the critical failure is not confirmed. The required outcome is not met."
+    },
+    {
+      "id": "pb-emergency",
+      "trial": 1,
+      "arm": "playbooks",
+      "score": 20,
+      "rationale": "The case needed an immediate escalate for human emergency handling because water was entering an electrical socket and there was crackling. The system recognised the emergency in its notes but only sent a tenant email. It did not call escalate, so nobody was actually assigned to handle it. The email tells the tenant that \"a person at Northbridge is dealing with this now\", which is unsupported because no escalation was made. The email's safety advice is sound: don't touch the socket, leave and call 999 if there is burning or sparks. It did not suggest a reset, touching the socket or a routine appointment, so the critical failure is not confirmed. Because the main required action is missing, the score is low."
+    }
+  ],
+  "validation": {
+    "tests_passed": 82,
+    "typecheck": "passed",
+    "source_hashes": "verified",
+    "source_event_anchors": 192,
+    "english_only": true,
+    "invalid_judge_retried": 1,
+    "accepted_scores_manually_changed": false
+  },
+  "conclusion": "References helped avoid one premature missing-invoice closure and improved one replacement decision; three paired gains and one regression had actual references. Empty-reference emergency differences are sampling variability and not attributable to playbook knowledge. Overall improvement is small and not conclusive.",
+  "known_remaining_issues": [
+    "A quote clarification did not explicitly preserve the replacement approval boundary.",
+    "A replacement request put the unresolved terms only in internal reason, not the landlord-facing scope.",
+    "Emergency replies sometimes sent advice without actually escalating, even when no references were selected."
+  ],
+  "limitations": [
+    "Development counterfactuals derive from synthesis source cases; this is not held-out generalization.",
+    "Two trials are a smoke ablation, not statistically reliable evidence.",
+    "Semantic scores come from a fixed LLM judge; code validates evidence, structure and critical tools."
+  ]
+}

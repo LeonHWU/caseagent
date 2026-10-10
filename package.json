@@ -12,7 +12,8 @@
     "mcp": "node --env-file-if-exists=.env --import tsx src/mcp.ts",
     "extract": "uv run scripts/extract.py",
     "test": "node --import tsx --test test/*.test.ts",
-    "typecheck": "tsc -p ."
+    "typecheck": "tsc -p .",
+    "eval:playbooks": "node --env-file-if-exists=.env --import tsx evals/playbooks/run.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.131.0",

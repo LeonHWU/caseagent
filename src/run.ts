@@ -6,6 +6,7 @@ import { writeAnswer } from "./answers.ts";
 import { initialSeen, nextSeen, visibleEvents } from "./cut.ts";
 import { loadCase } from "./parse.ts";
 import { loadState, newState, saveState, statusLabel, type CaseState } from "./state.ts";
+import type { PlaybookOptions } from "./playbooks.ts";
 
 const MAX_STAGES = 50;
 
@@ -18,7 +19,7 @@ function startTrace(tracePath: string): void {
   writeFileSync(tracePath, "");
 }
 
-export type RunDeps = { out: string; client: ModelClient; model: string; policy: string };
+export type RunDeps = { out: string; client: ModelClient; model: string; policy: string; playbooks?: PlaybookOptions | false };
 
 export function liveDeps(out: string): RunDeps {
   return {
@@ -26,6 +27,7 @@ export function liveDeps(out: string): RunDeps {
     client: new Anthropic({ timeout: 120_000, maxRetries: 3 }),
     model: process.env.MODEL ?? "claude-sonnet-5-5",
     policy: readFileSync(new URL("../policy.md", import.meta.url), "utf8"),
+    playbooks: process.env.PLAYBOOKS === "off" ? false : { model: process.env.PLAYBOOK_MODEL ?? process.env.MODEL ?? "claude-sonnet-5-5" },
   };
 }
 
@@ -82,7 +84,7 @@ export async function processCase(deps: RunDeps, dir: string, next: boolean, opt
   const trace: Trace = (kind, data) =>
     appendFileSync(tracePath, JSON.stringify({ t: new Date().toISOString(), kind, ...data }) + "\n");
   try {
-    await runCase({ c, state: state!, newFrom, client, model, policy, trace, singleStep: options.singleStep, caseDir: dir });
+    await runCase({ c, state: state!, newFrom, client, model, policy, trace, singleStep: options.singleStep, caseDir: dir, playbooks: deps.playbooks });
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
     state!.incomplete = true;

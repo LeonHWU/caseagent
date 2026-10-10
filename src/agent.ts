@@ -4,6 +4,7 @@ import type { Case } from "./parse.ts";
 import { renderCase } from "./prompt.ts";
 import type { CaseState } from "./state.ts";
 import { runTool, TOOL_SPECS, type ToolAdapter } from "./tools.ts";
+import { playbookContext, type PlaybookOptions } from "./playbooks.ts";
 
 export const MAX_TURNS = 15;
 // The agency's own records of a landlord approval that came before the agent's first run.
@@ -16,6 +17,10 @@ export type ModelClient = {
 
 export type Trace = (kind: string, data: Record<string, unknown>) => void;
 
+export function casePolicy(policy: string, singleStep = false): string {
+  return singleStep ? `${policy}\nInvocation contract: execute exactly one business tool action. Do not chain actions. After a message, approval request, assignment or note, saved status may remain open; a later invocation can hold, escalate or close. The normal end-tool requirement applies to a complete stage, not to this single-action invocation.` : policy;
+}
+
 export async function runCase(opts: {
   c: Case;
   state: CaseState;
@@ -27,6 +32,7 @@ export async function runCase(opts: {
   caseDir?: string;
   adapters?: Record<string, ToolAdapter>;
   singleStep?: boolean;
+  playbooks?: PlaybookOptions | false;
 }): Promise<void> {
   const { c, state, client, model, policy, trace, caseDir, adapters } = opts;
   state.runs += 1;
@@ -59,7 +65,8 @@ export async function runCase(opts: {
   const messages: Anthropic.MessageParam[] = [{ role: "user", content }];
   trace("run_start", { case: c.id, run: state.runs, seen: state.seen, model });
 
-  const systemText = opts.singleStep ? `${policy}\nExecute exactly one tool action for this invocation. Do not chain actions.` : policy;
+  const systemText = casePolicy(policy, opts.singleStep);
+  const retrievalQuery = [c.title, c.request, ...visible.slice(-3).map((e) => e.body)].join("\n");
 
   // Add cache control to tools - last tool definition gets the breakpoint
   const toolsWithCache: Anthropic.Tool[] = TOOL_SPECS.map((t, i) => ({
@@ -68,9 +75,20 @@ export async function runCase(opts: {
   })) as Anthropic.Tool[];
 
   for (let turn = 1; turn <= MAX_TURNS; turn++) {
+    // Reassess after each tool result; a resumed run uses only its newly visible state.
+    const currentActions = state.actions.map((a) => ({ tool: a.tool, input: a.input, ok: a.ok, result: a.result }));
+    const references = opts.playbooks ? await playbookContext({
+      options: opts.playbooks, client, model, policy,
+      query: `${retrievalQuery}\n${JSON.stringify(currentActions)}`,
+      currentEvidence: [
+        { id: "title", text: c.title }, { id: "details", text: c.details }, { id: "request", text: c.request },
+        ...visible.map((e) => ({ id: `event:${e.n}`, text: `${e.at} | ${e.channel} | from ${e.from} | to ${e.to}\n${e.body}` })),
+        ...currentActions.map((a, i) => ({ id: `action:${i}`, text: JSON.stringify(a) })),
+      ].filter((e) => e.text.trim()), trace, turn,
+    }) : "";
     // Add cache_control to system and message content
     const systemParam: Anthropic.MessageCreateParamsNonStreaming["system"] = [
-      { type: "text", text: systemText, cache_control: { type: "ephemeral" } },
+      { type: "text", text: systemText + references, cache_control: { type: "ephemeral" } },
     ];
 
     const messagesForRequest: Anthropic.MessageParam[] = messages.map((msg, idx) => {
@@ -105,7 +123,7 @@ export async function runCase(opts: {
 
     const uses = resp.content.filter((b): b is Anthropic.ToolUseBlock => b.type === "tool_use");
     if (uses.length === 0) {
-      messages.push({ role: "user", content: NUDGE });
+      messages.push({ role: "user", content: opts.singleStep ? "Execute exactly one next business action through the available tools. Do not chain actions or claim an action occurred before its tool result." : NUDGE });
       continue;
     }
     const results: Anthropic.ToolResultBlockParam[] = [];

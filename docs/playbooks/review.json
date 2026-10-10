@@ -1,0 +1,85 @@
+{
+  "bank_version": 4,
+  "scope": "Review of all 12 definitions and their existing step-level evidence; concrete checks and transitions refined for reference use.",
+  "review_type": "Engineering and source review, not independent performance grading or operational approval.",
+  "findings": [
+    {
+      "id": "R1",
+      "problem": "Natural-language branch conditions omit the exact facts needed for the next action.",
+      "resolution": "Added decision_checks, communication_requirements, wait_for and possible_next_steps to every step."
+    },
+    {
+      "id": "R2",
+      "problem": "Ambiguous or tax-incomparable quotes can be mistaken for approved work.",
+      "resolution": "PB09 explicitly checks quote versions, selected items, total and tax basis; unknown totals require provider clarification."
+    },
+    {
+      "id": "R3",
+      "problem": "Historical examples and provenance could supply current facts if forwarded with a full playbook.",
+      "resolution": "Runtime projection excludes every example, source reference, cluster assignment and provenance entry."
+    },
+    {
+      "id": "R4",
+      "problem": "Clarifying and escalating a material conflict were interchangeable despite current policy rule 10.",
+      "resolution": "PB11.block and PB06.conflict now direct material conflicts to escalation under current policy."
+    },
+    {
+      "id": "R5",
+      "problem": "Replacement, parts orders and future key promises can be mistaken for closure.",
+      "resolution": "PB07, PB06 and PB12 name the unresolved obligation and the actual event required to advance."
+    },
+    {
+      "id": "R6",
+      "problem": "Candidate artifacts cannot safely become autonomous execution authority.",
+      "resolution": "Reviewed definitions are reference_only; existing policy and tool guards remain authoritative. Unsupported costs, time limits and technical repair procedures were not invented."
+    },
+    {
+      "id": "R7",
+      "problem": "A reference-assisted message conflated the repair budget ceiling with repair approval.",
+      "resolution": "PB09.changed now requires explicit separation of inspection permission, budget ceiling and repair permission."
+    },
+    {
+      "id": "R8",
+      "problem": "Reference-assisted owner updates promised direct landlord contact without current evidence.",
+      "resolution": "PB02 ownership and progress steps explicitly prohibit that unsupported promise."
+    },
+    {
+      "id": "R9",
+      "problem": "A stage-level judge policy penalized correct open status after a single MCP business action.",
+      "resolution": "The acting model and judge now share casePolicy and an explicit single-action invocation contract."
+    },
+    {
+      "id": "R10",
+      "problem": "Haiku judge sometimes contradicted acceptable alternatives; reference IDs were absent from the judge context.",
+      "resolution": "Use a fixed Sonnet judge for both arms and give both the same ID/title metadata, with no source histories or selected references."
+    },
+    {
+      "id": "R11",
+      "problem": "PB09.changed recommended quote clarification but listed only the approval tool and led with approval.",
+      "resolution": "The step now explicitly orders contractor quote clarification before landlord approval and permits the clarification tool."
+    },
+    {
+      "id": "R12",
+      "problem": "PB07.agreement could ask the tenant to settle landlord-controlled terms despite known tenant intentions.",
+      "resolution": "The step now routes ownership and landlord-property questions to the landlord or a concrete human handover, separating missing consent from missing tenant intent."
+    },
+    {
+      "id": "R13",
+      "problem": "The replacement sample excluded a concrete human escalation even though resolving missing consent can legitimately require human judgement.",
+      "resolution": "Suite version 3 recognizes that alternative for both arms. The missing terms still must be named, and no approval or completion may be inferred."
+    }
+  ],
+  "limits": [
+    "Historical cases are synthetic and incomplete.",
+    "The small paired suite is development ablation, not a held-out generalization benchmark.",
+    "Source evidence does not prove every proposed guard; current-policy rules and refinements remain identifiable as guidance."
+  ],
+  "runtime_contract": {
+    "max_candidates": 4,
+    "max_selected_playbooks": 2,
+    "max_selected_steps_per_playbook": 2,
+    "empty_reference_allowed": true,
+    "changes_ticket_facts": false,
+    "adds_business_tools": false
+  }
+}

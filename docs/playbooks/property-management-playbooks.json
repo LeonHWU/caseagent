@@ -1,24 +1,26 @@
 {
-  "schema_version": 1,
-  "bank_version": 1,
+  "schema_version": 2,
+  "bank_version": 4,
   "track": "Property Management",
   "retrieval_unit": "playbook",
   "source_revision": "9bcdca585955dfb930005ed742572606e68f5688",
   "source_type": "synthetic public examples",
   "retrieval_contract": {
     "allowed_content": [
-      "active reviewed playbook content",
-      "selected relevant conditional steps",
-      "at most two short representative examples per playbook"
+      "reference-reviewed playbook steps",
+      "selected relevant decision checks and missing-information handling"
     ],
     "excluded_content": [
       "whole case transcripts",
       "per-ticket solution records",
       "raw source event chunks",
-      "historical approval or completion copied into current-ticket facts"
+      "historical approval or completion copied into current-ticket facts",
+      "source references and provenance",
+      "representative examples in runtime context"
     ],
     "candidate_playbooks_enabled_by_default": false,
-    "empty_reference_set_allowed": true
+    "empty_reference_set_allowed": true,
+    "reference_reviewed_playbooks_enabled_by_default": true
   },
   "global_guards": [
     "Apply current operational emergency and authority rules before any playbook.",
@@ -30,11 +32,11 @@
   "playbooks": [
     {
       "id": "PB01",
-      "version": 1,
+      "version": 2,
       "title": "Supported tenant checks and confirmed resolution",
       "kind": "scenario",
-      "status": "candidate",
-      "execution_status": "design_only",
+      "status": "reference_reviewed",
+      "execution_status": "reference_only",
       "primary_cluster_case_ids": [
         "014",
         "017",
@@ -69,7 +71,19 @@
             "E01",
             "E03"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify the exact current instruction and its source; check whether it was already tried and whether the ticket reports a safety issue."
+          ],
+          "communication_requirements": [
+            "Ask only for the evidenced check and its result; do not invent an equipment location, technical procedure or liability."
+          ],
+          "wait_for": "A tenant result, not silence.",
+          "possible_next_steps": [
+            "wait",
+            "failed",
+            "resolved"
+          ]
         },
         {
           "id": "wait",
@@ -82,7 +96,18 @@
           "evidence_refs": [
             "E01"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Find the earlier successful request and check for a later tenant result."
+          ],
+          "communication_requirements": [
+            "If the current policy requires a chase, address the unanswered check; otherwise hold for the tenant."
+          ],
+          "wait_for": "The answer to the specific check.",
+          "possible_next_steps": [
+            "failed",
+            "resolved"
+          ]
         },
         {
           "id": "failed",
@@ -97,7 +122,18 @@
             "E02",
             "E04"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Find the failed attempt; separate a repeated identical check from a different currently supported one."
+          ],
+          "communication_requirements": [
+            "Request approval for professional assessment when needed; do not repeat a failed check or dispatch under historical approval."
+          ],
+          "wait_for": "Current scope approval or the active owner response.",
+          "possible_next_steps": [
+            "PB03.approve",
+            "PB02.ownership"
+          ]
         },
         {
           "id": "resolved",
@@ -112,7 +148,18 @@
             "E01",
             "E03"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Match the tenant confirmation to the original problem; identify any outstanding in-scope obligation."
+          ],
+          "communication_requirements": [
+            "Use the truthful no-work disposition only after applicable PB12 checks."
+          ],
+          "wait_for": "Any missing closure confirmation.",
+          "possible_next_steps": [
+            "PB12.verify",
+            "PB12.close"
+          ]
         }
       ],
       "representative_examples": [
@@ -250,15 +297,27 @@
           "history_sha256": "e42f3ea31ec4f31f60c6069eb55f3d0ff1dc8aa87ce75278c9ddb2fcb7105994",
           "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
         }
+      ],
+      "review_scope": "Source-linked workflow guidance and current-policy compatibility; not certification of historical decisions or tool authorization.",
+      "retrieval_terms": [
+        "switch",
+        "reset",
+        "plunger",
+        "quick check",
+        "troubleshoot",
+        "blocked",
+        "blockage",
+        "tried",
+        "settings"
       ]
     },
     {
       "id": "PB02",
-      "version": 1,
+      "version": 3,
       "title": "Landlord managed repair",
       "kind": "scenario",
-      "status": "candidate",
-      "execution_status": "design_only",
+      "status": "reference_reviewed",
+      "execution_status": "reference_only",
       "primary_cluster_case_ids": [
         "028",
         "035",
@@ -292,7 +351,20 @@
             "E05",
             "E06"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Find an explicit current landlord commitment to arrange the work; approval for agency attendance alone is not this commitment."
+          ],
+          "communication_requirements": [
+            "Ask the landlord for the arrangement or completion update without opening a second contractor instruction.",
+            "Do not promise that the landlord or their own provider will contact the tenant directly unless the current arrangement explicitly confirms that. State only that the landlord is checking the date, which remains unconfirmed; the agency can promise its own update only."
+          ],
+          "wait_for": "The landlord plan or completion report.",
+          "possible_next_steps": [
+            "progress",
+            "handoff",
+            "done"
+          ]
         },
         {
           "id": "progress",
@@ -306,7 +378,19 @@
           "evidence_refs": [
             "E05"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify the active owner, last response and any promised milestone; apply only the configured chase policy."
+          ],
+          "communication_requirements": [
+            "Ask the landlord about the pending milestone, not a provider the agency never instructed.",
+            "Do not promise that the landlord or their own provider will contact the tenant directly unless the current arrangement explicitly confirms that. State only that the landlord is checking the date, which remains unconfirmed; the agency can promise its own update only."
+          ],
+          "wait_for": "Owner progress or completion.",
+          "possible_next_steps": [
+            "handoff",
+            "done"
+          ]
         },
         {
           "id": "handoff",
@@ -321,7 +405,18 @@
             "E07",
             "E08"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify who now owns the remaining job; distinguish tenant coordination with the owner provider from a request for agency dispatch."
+          ],
+          "communication_requirements": [
+            "Confirm transfer of responsibility and any current approval before assigning a competing provider."
+          ],
+          "wait_for": "Explicit ownership and remaining-scope confirmation.",
+          "possible_next_steps": [
+            "progress",
+            "PB03.approve"
+          ]
         },
         {
           "id": "done",
@@ -336,7 +431,18 @@
             "E05",
             "E07"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Check who observed the result, which item was repaired and what remains; a landlord promise is not a result."
+          ],
+          "communication_requirements": [
+            "Ask only for outstanding PB12 checks; do not request approval again for completed work."
+          ],
+          "wait_for": "Missing completion evidence or final checks.",
+          "possible_next_steps": [
+            "PB12.verify",
+            "PB12.close"
+          ]
         }
       ],
       "representative_examples": [
@@ -458,15 +564,25 @@
           "history_sha256": "aff7f65cc7a966f30e7efd892060a8cb7c58aa0f6aa7999b26af9c6a148153f6",
           "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
         }
+      ],
+      "review_scope": "Source-linked workflow guidance and current-policy compatibility; not certification of historical decisions or tool authorization.",
+      "retrieval_terms": [
+        "own contractor",
+        "my contractor",
+        "my plumber",
+        "sort this",
+        "landlord arranged",
+        "landlord will",
+        "arrange myself"
       ]
     },
     {
       "id": "PB03",
-      "version": 1,
+      "version": 2,
       "title": "Agency arranged assessment and repair",
       "kind": "scenario",
-      "status": "candidate",
-      "execution_status": "design_only",
+      "status": "reference_reviewed",
+      "execution_status": "reference_only",
       "primary_cluster_case_ids": [
         "002",
         "011",
@@ -540,7 +656,18 @@
             "E09",
             "E10"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Check property identity, item, risk, active coordinator and the exact fact that would change the action."
+          ],
+          "communication_requirements": [
+            "Ask a focused question only when its answer changes trade, scope, authority or safety; do not ask for an already supplied location."
+          ],
+          "wait_for": "The material missing fact.",
+          "possible_next_steps": [
+            "approve",
+            "PB11.block"
+          ]
         },
         {
           "id": "approve",
@@ -554,7 +681,18 @@
             "E09",
             "E11"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify the proposed attendance and the actual current approval; a request, a reply or a vague positive response is not necessarily approval of this scope."
+          ],
+          "communication_requirements": [
+            "State the current scope and known cost, or explicitly state that the cost is unknown."
+          ],
+          "wait_for": "Approval for the specified proposal.",
+          "possible_next_steps": [
+            "dispatch",
+            "PB09.multiple"
+          ]
         },
         {
           "id": "dispatch",
@@ -567,7 +705,19 @@
           "evidence_refs": [
             "E09"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Match current permission to the attendance, trade, work, cost and conditions; verify the landlord is not managing it themselves."
+          ],
+          "communication_requirements": [
+            "Limit contractor notes to the authorized scope, known current contact details and quotation boundary."
+          ],
+          "wait_for": "Booking or the assessment result.",
+          "possible_next_steps": [
+            "schedule",
+            "quote",
+            "result"
+          ]
         },
         {
           "id": "schedule",
@@ -581,7 +731,18 @@
           "evidence_refs": [
             "E12"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Determine whether the provider has actually been instructed and which booking or access field is missing."
+          ],
+          "communication_requirements": [
+            "Ask the responsible party for that missing field using PB10."
+          ],
+          "wait_for": "A confirmed appointment or access arrangement.",
+          "possible_next_steps": [
+            "PB10.book",
+            "PB10.conflict"
+          ]
         },
         {
           "id": "quote",
@@ -596,7 +757,18 @@
             "E11",
             "E13"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Compare the new work and total charge with the approved version; separate assessment permission from repair permission."
+          ],
+          "communication_requirements": [
+            "Do not instruct additional work before the PB09 scope and cost checks are satisfied."
+          ],
+          "wait_for": "A complete quote and approval for the changed proposal.",
+          "possible_next_steps": [
+            "PB09.changed",
+            "dispatch"
+          ]
         },
         {
           "id": "result",
@@ -612,7 +784,18 @@
             "E14",
             "E15"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Match the report to the correct property and job; distinguish repair, no work required and unfinished work."
+          ],
+          "communication_requirements": [
+            "Verify remaining work and PB12 requirements instead of closing from a generic completion label."
+          ],
+          "wait_for": "Outstanding completion evidence.",
+          "possible_next_steps": [
+            "PB11.block",
+            "PB12.verify"
+          ]
         }
       ],
       "representative_examples": [
@@ -939,15 +1122,27 @@
           "history_sha256": "35780255fbee892c15bd24f06155c0256a6f034c16f148c0b2c924b653fdb1de",
           "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
         }
+      ],
+      "review_scope": "Source-linked workflow guidance and current-policy compatibility; not certification of historical decisions or tool authorization.",
+      "retrieval_terms": [
+        "repair",
+        "broken",
+        "fault",
+        "engineer",
+        "contractor",
+        "assessment",
+        "not working",
+        "leak",
+        "inspection"
       ]
     },
     {
       "id": "PB04",
-      "version": 1,
+      "version": 2,
       "title": "Checkout cleaning and coordinated works",
       "kind": "scenario",
-      "status": "candidate",
-      "execution_status": "design_only",
+      "status": "reference_reviewed",
+      "execution_status": "reference_only",
       "primary_cluster_case_ids": [
         "003",
         "004",
@@ -983,7 +1178,17 @@
             "E16",
             "E17"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Check which report contents are actually available and whether carpets or other items are included in the requested work."
+          ],
+          "communication_requirements": [
+            "Ask for the missing report or scope; do not reconstruct an unavailable attachment."
+          ],
+          "wait_for": "The report or explicit scope.",
+          "possible_next_steps": [
+            "approval"
+          ]
         },
         {
           "id": "approval",
@@ -997,7 +1202,18 @@
             "E17",
             "E18"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Match the selected quote, included items, price and tax basis to the landlord reply; check for a withdrawn or revised quote."
+          ],
+          "communication_requirements": [
+            "Name the competing quotes and ask which exact scope and total is approved when the reply cannot resolve it."
+          ],
+          "wait_for": "Unambiguous quote selection and approval.",
+          "possible_next_steps": [
+            "dependency",
+            "PB09.multiple"
+          ]
         },
         {
           "id": "dependency",
@@ -1011,7 +1227,18 @@
           "evidence_refs": [
             "E16"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify each predecessor and actual completion evidence; check whether proposed dates permit the required order."
+          ],
+          "communication_requirements": [
+            "Confirm the predecessor or reconcile dates before confirming dependent cleaning."
+          ],
+          "wait_for": "Predecessor completion and a consistent schedule.",
+          "possible_next_steps": [
+            "access",
+            "PB10.conflict"
+          ]
         },
         {
           "id": "access",
@@ -1025,7 +1252,18 @@
           "evidence_refs": [
             "E19"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Check current consent, vacancy policy and verified key or caretaker arrangements; key possession alone is not consent."
+          ],
+          "communication_requirements": [
+            "Request the missing access arrangement; apply the current vacant-property rule."
+          ],
+          "wait_for": "Current access permission and practical arrangements.",
+          "possible_next_steps": [
+            "finish",
+            "PB10.book"
+          ]
         },
         {
           "id": "finish",
@@ -1041,7 +1279,19 @@
             "E18",
             "E20"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Compare reported work with the approved items and total; check actual keys return and invoice availability."
+          ],
+          "communication_requirements": [
+            "Request outstanding evidence rather than inferring payment from an invoice or receipt from a request."
+          ],
+          "wait_for": "Remaining PB12 evidence.",
+          "possible_next_steps": [
+            "PB12.keys",
+            "PB12.invoice",
+            "PB12.close"
+          ]
         }
       ],
       "representative_examples": [
@@ -1188,15 +1438,25 @@
           "history_sha256": "1335074bf892e522d28c64baf19382c8d1ead851bca21ffd37e9509be85c3919",
           "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
         }
+      ],
+      "review_scope": "Source-linked workflow guidance and current-policy compatibility; not certification of historical decisions or tool authorization.",
+      "retrieval_terms": [
+        "checkout",
+        "check-out",
+        "cleaning",
+        "carpet",
+        "vacated",
+        "end of tenancy",
+        "cleaner"
       ]
     },
     {
       "id": "PB05",
-      "version": 1,
+      "version": 2,
       "title": "Garden scope responsibility and completion evidence",
       "kind": "scenario",
-      "status": "candidate",
-      "execution_status": "design_only",
+      "status": "reference_reviewed",
+      "execution_status": "reference_only",
       "primary_cluster_case_ids": [
         "001",
         "009",
@@ -1228,7 +1488,19 @@
             "E21",
             "E22"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify the affected garden area, requested task and current basis for responsibility; separate communal and tenant areas."
+          ],
+          "communication_requirements": [
+            "Ask only for the boundary or responsibility that changes routing; do not copy liability from another case."
+          ],
+          "wait_for": "A material scope or responsibility clarification.",
+          "possible_next_steps": [
+            "quote",
+            "PB02.ownership",
+            "PB03.approve"
+          ]
         },
         {
           "id": "quote",
@@ -1241,7 +1513,18 @@
           "evidence_refs": [
             "E23"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Compare approved clearance with new material, disposal or additional tasks and the revised total."
+          ],
+          "communication_requirements": [
+            "Ask for the revised itemized scope and quote, then current approval."
+          ],
+          "wait_for": "The changed proposal and approval.",
+          "possible_next_steps": [
+            "PB09.changed",
+            "progress"
+          ]
         },
         {
           "id": "progress",
@@ -1255,7 +1538,17 @@
           "evidence_refs": [
             "E22"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Distinguish a plan, a completion claim and supplied completion evidence."
+          ],
+          "communication_requirements": [
+            "Ask the responsible party for the outstanding result or evidence without claiming an unseen photo was checked."
+          ],
+          "wait_for": "Actual in-scope completion evidence.",
+          "possible_next_steps": [
+            "finish"
+          ]
         },
         {
           "id": "finish",
@@ -1269,7 +1562,18 @@
           "evidence_refs": [
             "E23"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Check whether reported clearance also establishes any separately promised gravel, levelling or disposal."
+          ],
+          "communication_requirements": [
+            "Keep unconfirmed in-scope items open and apply PB12 to the verified result."
+          ],
+          "wait_for": "Missing in-scope evidence.",
+          "possible_next_steps": [
+            "PB12.remaining",
+            "PB12.close"
+          ]
         }
       ],
       "representative_examples": [
@@ -1369,15 +1673,24 @@
           "history_sha256": "7529c886fb9b6a48c01388fba4db4bfba9d46460d7eeb3594f4f78cd10ee81cd",
           "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
         }
+      ],
+      "review_scope": "Source-linked workflow guidance and current-policy compatibility; not certification of historical decisions or tool authorization.",
+      "retrieval_terms": [
+        "garden",
+        "vegetation",
+        "clearance",
+        "communal",
+        "gravel",
+        "disposal"
       ]
     },
     {
       "id": "PB06",
-      "version": 1,
+      "version": 2,
       "title": "Warranty and remedial repair",
       "kind": "scenario",
-      "status": "candidate",
-      "execution_status": "design_only",
+      "status": "reference_reviewed",
+      "execution_status": "reference_only",
       "primary_cluster_case_ids": [
         "025",
         "036"
@@ -1404,21 +1717,41 @@
             "E24",
             "E25"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify the item, installer or supplier, claimed coverage and whether current coverage and charges have actually been confirmed."
+          ],
+          "communication_requirements": [
+            "Ask the responsible provider to confirm the applicable coverage route and any charge before promising a free repair."
+          ],
+          "wait_for": "Explicit coverage and charge confirmation.",
+          "possible_next_steps": [
+            "conflict",
+            "arrange"
+          ]
         },
         {
           "id": "conflict",
           "when": "Coverage reports disagree or attendance dates are inconsistent.",
-          "next_action": "Seek explicit clarification before promising a free visit or a confirmed appointment.",
+          "next_action": "Escalate a material conflict under the current policy, identifying the coverage or charge decision needed.",
           "compatible_tools": [
-            "send_message",
             "escalate"
           ],
           "if_required_information_is_missing": "Keep coverage and booking unknown until resolved.",
           "evidence_refs": [
             "E24"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "List the incompatible current coverage or charge statements; a later statement without a coverage basis does not automatically settle the contradiction."
+          ],
+          "communication_requirements": [
+            "Escalate a material conflict under the current policy, identifying the coverage or charge decision needed."
+          ],
+          "wait_for": "An authoritative resolution of coverage and charge.",
+          "possible_next_steps": [
+            "arrange"
+          ]
         },
         {
           "id": "arrange",
@@ -1434,7 +1767,19 @@
             "E24",
             "E25"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Verify the responsible provider and current charge status; distinguish warranty permission from permission for extra paid work."
+          ],
+          "communication_requirements": [
+            "Coordinate the confirmed route; request approval for any proposed charge outside current permission."
+          ],
+          "wait_for": "Attendance, parts delivery or revised charge approval.",
+          "possible_next_steps": [
+            "PB10.book",
+            "PB09.changed",
+            "result"
+          ]
         },
         {
           "id": "result",
@@ -1450,7 +1795,18 @@
             "E24",
             "E25"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Separate ordered parts and expected repair dates from an actual completed repair and final no-charge confirmation."
+          ],
+          "communication_requirements": [
+            "Request the missing result or charge evidence before PB12 closure."
+          ],
+          "wait_for": "The actual repair result and final charge status.",
+          "possible_next_steps": [
+            "PB12.verify",
+            "PB12.invoice"
+          ]
         }
       ],
       "representative_examples": [
@@ -1518,15 +1874,25 @@
           "history_sha256": "dab973ea0f326c23f045e655c87f3dba226ab497483f9be851809d02b0aa79a7",
           "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
         }
+      ],
+      "review_scope": "Source-linked workflow guidance and current-policy compatibility; not certification of historical decisions or tool authorization.",
+      "retrieval_terms": [
+        "warranty",
+        "manufacturer",
+        "supplier",
+        "installer",
+        "remedial",
+        "faulty part",
+        "free of charge"
       ]
     },
     {
       "id": "PB07",
-      "version": 1,
+      "version": 3,
       "title": "Tenant supplied replacement and property ownership",
       "kind": "scenario",
-      "status": "candidate",
-      "execution_status": "design_only",
+      "status": "reference_reviewed",
+      "execution_status": "reference_only",
       "primary_cluster_case_ids": [
         "038",
         "040"
@@ -1544,17 +1910,32 @@
         {
           "id": "agreement",
           "when": "Replacement is proposed but responsibilities are not settled.",
-          "next_action": "Clarify landlord consent, ownership on departure, old-appliance disposition, installation and any charges.",
+          "next_action": "Ask the landlord to settle the outstanding landlord-property disposition and departure ownership terms. Tenant intentions already stated need no repeat question; a tenant reply cannot establish landlord consent.",
           "compatible_tools": [
             "request_landlord_approval",
-            "send_message"
+            "send_message",
+            "escalate"
           ],
-          "if_required_information_is_missing": "Ask for the missing agreement rather than transferring another tenant's arrangement.",
+          "if_required_information_is_missing": "Route permission and ownership questions to the landlord. If material terms require human judgement, escalate naming each unresolved term; do not confirm the proposal.",
           "evidence_refs": [
             "E26",
             "E27"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify consent for replacement, who owns the new item on departure, old-item storage or disposal, installation and charges; consent to use an item does not answer all these questions.",
+            "Distinguish the tenant proposal from the landlord decision. A known tenant intention to remove an item or take their own item on departure leaves landlord consent unresolved, not the tenant intention."
+          ],
+          "communication_requirements": [
+            "Address the landlord when old landlord property disposition or departure agreement is unresolved. Specify both terms when both are open. Do not ask the tenant to approve, decide or reconfirm landlord-controlled terms.",
+            "Ask the tenant only for a genuinely missing tenant intention or factual detail; state that landlord agreement is still required.",
+            "Escalation is an alternative when a person must resolve the agreement; name the old-item disposition and departure arrangement without inventing a dispute."
+          ],
+          "wait_for": "Explicit agreement on the material unresolved terms.",
+          "possible_next_steps": [
+            "already_changed",
+            "finish"
+          ]
         },
         {
           "id": "already_changed",
@@ -1568,7 +1949,18 @@
           "evidence_refs": [
             "E27"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Separate the reported installation from recorded consent and any promised inspection or storage arrangement."
+          ],
+          "communication_requirements": [
+            "Address the current unresolved agreement or promised inspection; do not backdate consent or treat a working replacement as completing the old-item task."
+          ],
+          "wait_for": "Remaining agreement, inspection or storage confirmation.",
+          "possible_next_steps": [
+            "finish",
+            "PB12.remaining"
+          ]
         },
         {
           "id": "finish",
@@ -1583,7 +1975,18 @@
             "E26",
             "E27"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Check the current agreement and all in-scope follow-up; separate tenant-owned replacement from landlord asset disposition."
+          ],
+          "communication_requirements": [
+            "Use PB12 only when the remaining inspection or storage obligation is resolved or explicitly withdrawn."
+          ],
+          "wait_for": "Any outstanding in-scope obligation.",
+          "possible_next_steps": [
+            "PB12.remaining",
+            "PB12.close"
+          ]
         }
       ],
       "representative_examples": [
@@ -1654,15 +2057,26 @@
           "history_sha256": "958821c0d76daee0d855da158de7dcf1db9b7dad0bb74e4eef151abdbc1b1066",
           "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
         }
+      ],
+      "review_scope": "Source-linked workflow guidance and current-policy compatibility; not certification of historical decisions or tool authorization.",
+      "retrieval_terms": [
+        "own machine",
+        "own appliance",
+        "own replacement",
+        "take it",
+        "washing machine",
+        "stored",
+        "garage",
+        "replace myself"
       ]
     },
     {
       "id": "PB08",
-      "version": 1,
+      "version": 2,
       "title": "Reading requests and inspection reports",
       "kind": "scenario",
-      "status": "candidate",
-      "execution_status": "design_only",
+      "status": "reference_reviewed",
+      "execution_status": "reference_only",
       "primary_cluster_case_ids": [
         "010",
         "020"
@@ -1689,7 +2103,17 @@
           "evidence_refs": [
             "E28"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Check whether a readable reading or report is present rather than merely promised or mentioned."
+          ],
+          "communication_requirements": [
+            "Ask for the missing readable evidence; do not invent a value or unseen attachment contents."
+          ],
+          "wait_for": "The actual readable evidence.",
+          "possible_next_steps": [
+            "deliver"
+          ]
         },
         {
           "id": "visit",
@@ -1703,7 +2127,19 @@
           "evidence_refs": [
             "E29"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify the requested date, time window, access and pet arrangements; reconcile inconsistent dates."
+          ],
+          "communication_requirements": [
+            "Ask only for the missing booking field using PB10."
+          ],
+          "wait_for": "Consistent current booking and access.",
+          "possible_next_steps": [
+            "PB10.book",
+            "PB10.conflict",
+            "deliver"
+          ]
         },
         {
           "id": "deliver",
@@ -1717,7 +2153,18 @@
             "E28",
             "E29"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify the actually available reading or report and verified intended recipient."
+          ],
+          "communication_requirements": [
+            "Transmit only available content and request acknowledgement when current policy requires it."
+          ],
+          "wait_for": "Applicable delivery acknowledgement.",
+          "possible_next_steps": [
+            "followup",
+            "PB12.close"
+          ]
         },
         {
           "id": "followup",
@@ -1731,7 +2178,17 @@
           "evidence_refs": [
             "E29"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Determine whether the new request belongs to the inspection or constitutes a separate task."
+          ],
+          "communication_requirements": [
+            "Record the separate task without claiming the earlier report resolved it."
+          ],
+          "wait_for": "A separate scope decision if necessary.",
+          "possible_next_steps": [
+            "PB12.remaining"
+          ]
         }
       ],
       "representative_examples": [
@@ -1801,15 +2258,24 @@
           "history_sha256": "f124e50e11036aed13bbd4cf0463ae9cd7bcdb4d5399ae63a085a4c513ea80d4",
           "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
         }
+      ],
+      "review_scope": "Source-linked workflow guidance and current-policy compatibility; not certification of historical decisions or tool authorization.",
+      "retrieval_terms": [
+        "reading",
+        "meter",
+        "inspection report",
+        "solar",
+        "photograph",
+        "report delivery"
       ]
     },
     {
       "id": "PB09",
-      "version": 1,
+      "version": 4,
       "title": "Scope quote and approval boundaries",
       "kind": "decision_module",
-      "status": "candidate",
-      "execution_status": "design_only",
+      "status": "reference_reviewed",
+      "execution_status": "reference_only",
       "primary_cluster_case_ids": [],
       "supporting_case_ids": [
         "002",
@@ -1842,7 +2308,19 @@
             "E09",
             "E11"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Check the approval source, exact scope, amount and conditions; no reply or an approval request cannot establish consent."
+          ],
+          "communication_requirements": [
+            "Request approval for the actual proposal and known cost; request quote details first if the proposal cannot be specified."
+          ],
+          "wait_for": "Explicit proposal approval.",
+          "possible_next_steps": [
+            "limited",
+            "multiple",
+            "PB03.dispatch"
+          ]
         },
         {
           "id": "limited",
@@ -1856,21 +2334,49 @@
           "evidence_refs": [
             "E13"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Separate attendance, diagnosis, minor repair and replacement permissions; preserve any condition exactly as recorded."
+          ],
+          "communication_requirements": [
+            "Limit instructions to the approved activity. Obtain a quote and renewed approval for excluded parts or complexity; do not invent a numeric limit for words such as inexpensive."
+          ],
+          "wait_for": "A quote or clarification of the actual limit.",
+          "possible_next_steps": [
+            "changed",
+            "PB03.dispatch"
+          ]
         },
         {
           "id": "changed",
           "when": "A changed quote, risk or scope is reported.",
-          "next_action": "Obtain explicit approval for the changed proposal before proceeding.",
+          "next_action": "If the quote total, included work or tax basis is incomplete, first ask the contractor for a complete comparable quote. Only once those facts are known, request landlord approval for the changed scope and total.",
           "compatible_tools": [
-            "request_landlord_approval"
+            "send_message",
+            "request_landlord_approval",
+            "escalate"
           ],
-          "if_required_information_is_missing": "Resolve inconsistent scope, prices or taxes.",
+          "if_required_information_is_missing": "Send the missing-quote question to its source, the contractor. Do not substitute a landlord approval request with an unknown final total; escalate if human resolution is required.",
           "evidence_refs": [
             "E11",
             "E23"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Compare current and approved scope, quote version, amount and tax basis; an untaxed figure is not comparable to a tax-inclusive cap until its basis is known.",
+            "A budget ceiling is not repair approval. If only inspection is approved, repair remains unapproved even when the eventual quote falls below the budget.",
+            "Resolve the quote facts before requesting approval. The next action is a contractor clarification while the total is unknown; it is a landlord approval request only after a complete total is available."
+          ],
+          "communication_requirements": [
+            "For known excess, request approval of the complete changed proposal. If the total or included work is unknown, ask the contractor for the missing amount or scope before claiming the cap is met.",
+            "Describe the amount as the landlord budget ceiling, not approval for repair. Tell the contractor the inspection alone is approved and replacement needs separate permission; requesting the final total does not authorize starting.",
+            "Do not infer VAT, a tax rate or the final total from a generic tax reference. Ask the provider to confirm their actual all-inclusive total."
+          ],
+          "wait_for": "A comparable complete total and explicit approval when required.",
+          "possible_next_steps": [
+            "multiple",
+            "PB03.dispatch"
+          ]
         },
         {
           "id": "multiple",
@@ -1885,7 +2391,18 @@
             "E17",
             "E18"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify each live quote and included item; check whether the reply names a version and whether an earlier quote was withdrawn."
+          ],
+          "communication_requirements": [
+            "Ask the landlord which exact quote, items and total they approve; do not choose a cheaper or newer version from an ambiguous yes."
+          ],
+          "wait_for": "Unambiguous selected quote and scope.",
+          "possible_next_steps": [
+            "limited",
+            "PB03.dispatch"
+          ]
         }
       ],
       "representative_examples": [
@@ -2081,15 +2598,28 @@
           "history_sha256": "9c2ad1823e5f801afa3a2149cc2e63d6f9d9e10f614e0825d5f4ed61eb60853e",
           "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
         }
+      ],
+      "review_scope": "Source-linked workflow guidance and current-policy compatibility; not certification of historical decisions or tool authorization.",
+      "retrieval_terms": [
+        "approval",
+        "approved",
+        "quote",
+        "budget",
+        "vat",
+        "cost",
+        "estimate",
+        "scope",
+        "charge",
+        "cap"
       ]
     },
     {
       "id": "PB10",
-      "version": 1,
+      "version": 2,
       "title": "Booking access and disrupted attendance",
       "kind": "decision_module",
-      "status": "candidate",
-      "execution_status": "design_only",
+      "status": "reference_reviewed",
+      "execution_status": "reference_only",
       "primary_cluster_case_ids": [],
       "supporting_case_ids": [
         "004",
@@ -2121,7 +2651,18 @@
             "E19",
             "E29"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Check appointment, tenant availability, current consent for entry, key source and provider contact; distinguish key availability from permission to enter."
+          ],
+          "communication_requirements": [
+            "Ask the party who can resolve the missing field. Do not promise key entry when consent is missing or attendance when the windows do not overlap."
+          ],
+          "wait_for": "A viable appointment and current access permission.",
+          "possible_next_steps": [
+            "conflict",
+            "pending"
+          ]
         },
         {
           "id": "conflict",
@@ -2136,7 +2677,18 @@
             "E12",
             "E16"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Compare absolute dates, relative wording and time-window overlap without selecting an unsupported interpretation."
+          ],
+          "communication_requirements": [
+            "Escalate a material conflict under current policy or obtain authoritative clarification when policy allows; do not confirm an impossible appointment."
+          ],
+          "wait_for": "A consistent authoritative appointment.",
+          "possible_next_steps": [
+            "book",
+            "pending"
+          ]
         },
         {
           "id": "missed",
@@ -2151,7 +2703,18 @@
             "E24",
             "E30"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify the confirmed missed visit or parts delay; check for a revised date or actual later attendance."
+          ],
+          "communication_requirements": [
+            "Ask the provider for the missing revised plan; if the plan is already known, relay only that verified plan to the tenant."
+          ],
+          "wait_for": "Actual attendance or repair result.",
+          "possible_next_steps": [
+            "pending",
+            "PB12.verify"
+          ]
         },
         {
           "id": "pending",
@@ -2166,7 +2729,18 @@
           "evidence_refs": [
             "E30"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Use the current policy, observed time, prior successful chases and latest outside response; do not count duplicate historical templates as agent chases."
+          ],
+          "communication_requirements": [
+            "Hold or chase the responsible party when due; escalate at the configured boundary."
+          ],
+          "wait_for": "The outstanding answer or visit result.",
+          "possible_next_steps": [
+            "missed",
+            "PB12.verify"
+          ]
         }
       ],
       "representative_examples": [
@@ -2362,15 +2936,27 @@
           "history_sha256": "2529f1b9848674ac5a9f6efbaa0e74d5f6cb3406584494f7dd0622b36f6e067f",
           "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
         }
+      ],
+      "review_scope": "Source-linked workflow guidance and current-policy compatibility; not certification of historical decisions or tool authorization.",
+      "retrieval_terms": [
+        "appointment",
+        "access",
+        "management key",
+        "booked",
+        "booking",
+        "missed",
+        "slot",
+        "parts ordered",
+        "visit"
       ]
     },
     {
       "id": "PB11",
-      "version": 1,
+      "version": 2,
       "title": "Material identity and evidence conflicts",
       "kind": "decision_module",
-      "status": "candidate",
-      "execution_status": "design_only",
+      "status": "reference_reviewed",
+      "execution_status": "reference_only",
       "primary_cluster_case_ids": [],
       "supporting_case_ids": [
         "005",
@@ -2407,14 +2993,24 @@
             "E38",
             "E39"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify both conflicting values and the concrete next action they affect; cosmetic wording is not a material conflict."
+          ],
+          "communication_requirements": [
+            "State the conflict without choosing a canonical value; apply the block step when it affects dispatch, recipient or closure."
+          ],
+          "wait_for": "An authoritative resolution.",
+          "possible_next_steps": [
+            "block",
+            "resolve"
+          ]
         },
         {
           "id": "block",
           "when": "The mismatch affects recipient, dispatch, approval or completion.",
-          "next_action": "Block that action and clarify or escalate according to the current policy.",
+          "next_action": "Escalate under the current material-conflict policy, naming both values and the single affected decision. Keep the disputed action unexecuted.",
           "compatible_tools": [
-            "send_message",
             "escalate"
           ],
           "if_required_information_is_missing": "Do not send sensitive details or close a possibly different job.",
@@ -2422,7 +3018,17 @@
             "E31",
             "E32"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Check whether dispatch, recipient, approval, invoice ownership or completion would depend on choosing a disputed value."
+          ],
+          "communication_requirements": [
+            "Escalate under the current material-conflict policy, naming both values and the single affected decision. Keep the disputed action unexecuted."
+          ],
+          "wait_for": "Authoritative identity or evidence resolution.",
+          "possible_next_steps": [
+            "resolve"
+          ]
         },
         {
           "id": "resolve",
@@ -2436,7 +3042,18 @@
             "E31",
             "E32"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Find explicit current confirmation that resolves the named mismatch; frequency or recency alone is insufficient."
+          ],
+          "communication_requirements": [
+            "Record the authoritative resolution and reassess the affected step."
+          ],
+          "wait_for": "Any remaining prerequisite in the relevant scenario.",
+          "possible_next_steps": [
+            "PB03.dispatch",
+            "PB12.verify"
+          ]
         }
       ],
       "representative_examples": [
@@ -2627,15 +3244,25 @@
           "history_sha256": "35780255fbee892c15bd24f06155c0256a6f034c16f148c0b2c924b653fdb1de",
           "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
         }
+      ],
+      "review_scope": "Source-linked workflow guidance and current-policy compatibility; not certification of historical decisions or tool authorization.",
+      "retrieval_terms": [
+        "different address",
+        "mismatch",
+        "conflict",
+        "wrong property",
+        "different name",
+        "contact details",
+        "disagree"
       ]
     },
     {
       "id": "PB12",
-      "version": 1,
+      "version": 2,
       "title": "Completion evidence keys invoices and remaining work",
       "kind": "decision_module",
-      "status": "candidate",
-      "execution_status": "design_only",
+      "status": "reference_reviewed",
+      "execution_status": "reference_only",
       "primary_cluster_case_ids": [],
       "supporting_case_ids": [
         "004",
@@ -2674,7 +3301,20 @@
             "E15",
             "E34"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Check property and job identity, who observed the result, what was actually completed and remaining in-scope work."
+          ],
+          "communication_requirements": [
+            "Ask for the missing specific completion fact; use PB11 for a material identity conflict."
+          ],
+          "wait_for": "Specific current completion confirmation.",
+          "possible_next_steps": [
+            "keys",
+            "invoice",
+            "remaining",
+            "close"
+          ]
         },
         {
           "id": "keys",
@@ -2689,7 +3329,18 @@
             "E34",
             "E35"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify issued or newly owed keys and actual return evidence; tomorrow or will drop off describes a future promise."
+          ],
+          "communication_requirements": [
+            "If the return is still promised, hold for the provider or request confirmation when due. Do not mark keys returned or not issued."
+          ],
+          "wait_for": "Actual return or delivery confirmation.",
+          "possible_next_steps": [
+            "invoice",
+            "close"
+          ]
         },
         {
           "id": "invoice",
@@ -2704,7 +3355,18 @@
             "E14",
             "E20"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Distinguish invoice receipt, a request for it, expected future delivery and an explicit no-charge statement for the current job."
+          ],
+          "communication_requirements": [
+            "Ask the contractor for the missing invoice or charge confirmation; do not assume payment or waive the invoice because the work is reported done."
+          ],
+          "wait_for": "Invoice on file or an evidenced applicable no-charge exception.",
+          "possible_next_steps": [
+            "remaining",
+            "close"
+          ]
         },
         {
           "id": "remaining",
@@ -2720,7 +3382,18 @@
             "E29",
             "E36"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Identify unresolved items in the same agreed task, promised inspections and separate unrelated requests."
+          ],
+          "communication_requirements": [
+            "Obtain the remaining in-scope evidence; record unrelated work separately without inventing a completed inspection."
+          ],
+          "wait_for": "Outstanding in-scope work or an explicit withdrawal.",
+          "possible_next_steps": [
+            "verify",
+            "close"
+          ]
         },
         {
           "id": "close",
@@ -2734,7 +3407,15 @@
             "E34",
             "E35"
           ],
-          "guard_status": "proposed; requires operational review"
+          "guard_status": "reference guidance; current policy and tool guards remain authoritative",
+          "decision_checks": [
+            "Verify all current-policy closure fields: observed result, landlord awareness, actual key status and invoice or no-charge basis."
+          ],
+          "communication_requirements": [
+            "Populate close_case from current evidence only; unresolved required fields prevent closure."
+          ],
+          "wait_for": "Any missing final check.",
+          "possible_next_steps": []
         }
       ],
       "representative_examples": [
@@ -2992,6 +3673,18 @@
           "history_sha256": "8ca2d7d2815b1cf0689838f237496f99f6f448d0f7d19c3dabcd0acdfa2fa0fd",
           "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
         }
+      ],
+      "review_scope": "Source-linked workflow guidance and current-policy compatibility; not certification of historical decisions or tool authorization.",
+      "retrieval_terms": [
+        "completed",
+        "complete",
+        "finished",
+        "resolved",
+        "keys",
+        "invoice",
+        "close",
+        "remaining",
+        "return tomorrow"
       ]
     }
   ]

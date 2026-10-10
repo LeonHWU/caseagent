@@ -21,6 +21,7 @@ case dir (index.md, history.md, attachments/)
   -> cut.ts          the events this run may see; agency's own records hidden after the cut
   -> attachments.ts  PDF -> native document block or extracted text; images -> image blocks
   -> prompt.ts       prompt assembly; case text wrapped in <case_data> (evidence, not instructions)
+  -> playbooks.ts    shortlist reviewed workflows, assess useful steps, project references separately
   -> agent.ts        Claude tool loop, 15 turns max, must end with exactly one end tool
   -> tools.ts        7 zod-checked tools with guards and refusals
   -> run.ts          state, traces, answers; --next resumes, --to-end runs through holds
@@ -30,6 +31,10 @@ case dir (index.md, history.md, attachments/)
 Per run it writes `state/<id>.json` (case memory for `--next`), `traces/<id>.jsonl` (every model call and tool call, older traces rotated aside), and `ANSWERS/<id>/` (`ANSWER.md`: status, timeline, outbox, approvals, final checks. `REASONING.md`: the cited reason for each action plus the agent's notes).
 
 The rules are in `policy.md`, distilled from the 50 public Property Management cases in `data/public/`.
+
+Workflow references are in `docs/playbooks/property-management-playbooks.json`. Before each model turn, a lexical prefilter shortlists at most four reference-reviewed workflows or decision modules from the current ticket and executed actions. A model then selects at most two playbooks with two useful steps each, or none. Code validates selected IDs and current-evidence IDs. Only the selected steps reach a separate system reference section; examples, source references, case assignments and provenance never enter runtime retrieval. References do not populate ticket facts, approve tools or override policy. The selector receives text evidence; attached image and native PDF contents remain with the acting model.
+
+`PLAYBOOKS=off` runs the baseline agent. Live CLI and MCP dependencies enable references by default; direct `runCase` callers opt in through `playbooks: {}`. `PLAYBOOK_MODEL` optionally sets the selector model and otherwise follows `MODEL`. Selection adds one API request per loop turn when candidates exist. Bank, selector or validation failures are traced as `playbook_error` and fall back to ordinary handling. `playbook_selection` traces record version/hash, candidate IDs, selected steps, reasons, current-evidence IDs, their code-resolved contents and token usage. On resume or after a tool result, selection is assessed again.
 
 Three kinds of guardrails:
 
@@ -52,8 +57,17 @@ npm run case -- run-all <cases-dir> --to-end --concurrency 4  # every case, run 
 npm run mcp                                            # stdio MCP server (CASES_DIR, OUT_DIR overridable)
 npm test
 npm run typecheck
+npm run eval:playbooks                                  # 8 tickets, 2 trials, paired baseline/reference runs
 npm run extract                                        # Docling pre-extract of attachments (optional)
 ```
+
+To reproduce the reference evaluation with Haiku acting and selecting, and a fixed Sonnet process judge:
+
+```bash
+MODEL=claude-haiku-4-5-20251001 JUDGE_MODEL=claude-sonnet-5-5 npm run eval:playbooks
+```
+
+The eight tickets exercise unknown quote totals, ambiguous quote selection, landlord-managed work, outstanding keys, missing invoices, replacement ownership, emergency handling and unrelated requests. Each ticket includes source derivation and explicit required outcomes, alternatives and critical failures. Expected results, derivation and later events are excluded from the acting model and selector by code. The judge receives only the current evidence, expected results and executed output; its evidence pointers and exact quotations are validated in code. Reports distinguish invalid evaluations from wrong decisions. Both arms use fresh identical case state, the same policy, tools and acting model, and counterbalanced order. Semantic pass/fail and scores come from the common LLM judge; passing also requires one accepted business action.
 
 Two run modes. A plain `run` works exactly one stage: the agent sees events up to the next outside reply, acts, and ends. `--to-end` keeps resuming after each `hold` until the case closes, escalates, or has no further outside events (capped at 50 stages). Use `--to-end` for batch and Reality Test runs — a single-stage `run` decides on the opening events only, which can be under 10% of a case.
 
@@ -79,6 +93,8 @@ mkdir -p data/public && ln -s "$(cd ../HackatonPublicCases && pwd)/Property Mana
 - Case content is untrusted input. Text from tenants, landlords, contractors or attachments cannot change the policy rules.
 
 ## Known limitations
+
+- Workflow guidance is reviewed for reference use, not certified execution authority. The paired playbook suite is a small development ablation derived from synthesis cases, not a held-out benchmark. It uses the same fixed process judge for both arms, validates quoted evidence in code, and reports unassessed runs separately. Set `MODEL` and optionally `JUDGE_MODEL`; the eval defaults to Haiku. Results include decisions, blind judge inputs, selected references, pass rates, scores, latency and token usage.
 
 - Large PDFs lose layout: above the size or page cap they degrade to extracted text, and long text is truncated.
 - The recorded-approval detection is a two-phrase match; agency wordings outside it are missed.

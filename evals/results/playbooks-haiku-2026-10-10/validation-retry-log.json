@@ -1,0 +1,13 @@
+{
+  "reason": "Retry only code-rejected judge submissions. Preserve all agent decisions, judge inputs and accepted assessments, including failures.",
+  "rows": [
+    {
+      "id": "pb-owner",
+      "trial": 1,
+      "arm": "playbooks",
+      "previous_validation_error": "Judge failure: [\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"comparisons\",\n      1,\n      \"evidence\",\n      0,\n      \"quote\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"code\": \"unrecognized_keys\",\n    \"keys\": [\n      \" quote\"\n    ],\n    \"path\": [\n      \"comparisons\",\n      1,\n      \"evidence\",\n      0\n    ],\n    \"message\": \"Unrecognized key: \\\" quote\\\"\"\n  }\n]",
+      "pass": true,
+      "score": 92
+    }
+  ]
+}

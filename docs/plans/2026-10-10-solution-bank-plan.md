@@ -6,7 +6,7 @@ The initial corpus contains 50 synthetic public cases and 1,505 events. Manual g
 
 ## Knowledge scope
 
-The initial bank has twelve candidate playbooks. Each scenario has conditional steps and can compose decision modules.
+The bank has twelve playbooks reviewed for reference use. Each scenario has conditional steps and can compose decision modules. Schema version 2 adds explicit decision checks, communication requirements, expected events and possible next steps. Bank version 4 additionally makes quote clarification precede approval and routes missing ownership consent to the decision owner.
 
 | ID | Scenario | Primary cases |
 | --- | --- | ---: |
@@ -23,7 +23,7 @@ The four decision modules are PB09 scope, quote and approval boundaries; PB10 bo
 
 Each playbook retains at most two short representative examples. Original files, case and event IDs, revision and hashes provide audit evidence. Original tickets, event bodies and attachment chunks do not enter the searchable bank. The offline clustering audit contains case assignments and hashes without ticket text and is excluded from agent retrieval.
 
-All definitions currently have candidate status. Classification describes the recorded handling; it does not certify that historical actions were correct. Corrections inferred from contradictory records are explicitly proposed guards. Current operational policy determines permission and required closure checks.
+All definitions now have reference_reviewed status and reference_only execution status. Engineering review does not certify historical decisions or authorize actions. Current operational policy and existing tool guards remain authoritative. The review findings are in `../playbooks/review.json`.
 
 ## Architecture
 
@@ -75,7 +75,7 @@ The initial semantic grouping is manual, with deterministic counts. It is not an
 
 Build a query from the current ticket's purpose, issue, stage, known permissions, active owner, constraints and material unknowns. Retrieve candidate playbooks, assess relevance and usefulness, and supply only steps that help the present decision. A scenario and a relevant decision module may be combined. Do not concatenate all twelve playbooks.
 
-An unknown prerequisite can make a clarification step useful, but it cannot authorize the dependent action. Preserve unknown facts as unknown in code. Keep playbook guidance in a separate typed context section; prohibit it from populating current-ticket fields. Rejected candidates, candidate-status definitions and offline audit records do not enter the context. No useful match returns an empty reference set.
+An unknown prerequisite can make a clarification step useful, but it cannot authorize the dependent action. Preserve unknown facts as unknown in code. Keep playbook guidance in a separate typed context section; prohibit it from populating current-ticket fields. Rejected candidates, unreviewed definitions and offline audit records do not enter the context. Source references, provenance, cluster membership and representative examples are stripped by the runtime schema before retrieval. No useful match returns an empty reference set.
 
 Preserve existing `run_case` and `resume_case` behavior: each invocation advances at most one business action. Retrieval selects guidance and does not execute or approve the action. A search or assessment failure leaves normal ticket processing available.
 
@@ -97,4 +97,4 @@ Include regression cases for a failed simple check, limited approval, landlord o
 
 First review the twelve candidate definitions and evidence, then implement typed playbook contracts and code validation. Add database storage if needed, implement retrieval of playbooks only, add the relevance and usefulness assessor, and connect the context hook. Implement reviewed feedback updates after the initial bank can be evaluated.
 
-The current deliverables are the candidate playbook JSON bank, the clustering audit JSON, and this revised plan. Database provisioning, embeddings, retrieval integration, operational branch approval and a live evaluation remain future implementation work.
+The current implementation adds `src/playbooks.ts` to the existing loop. Every model turn shortlists at most four workflows, assesses helpfulness against current text and policy, and supplies at most two workflows with two steps each. Selection requires valid IDs and visible current-evidence IDs; failures fall back to ordinary handling. CLI and MCP use the same integration, with `PLAYBOOKS=off` for baseline runs. A paired eight-ticket, two-trial development evaluation uses Haiku and a fixed blind process judge. Full transcripts and examples never enter retrieval; database storage, embeddings and operational approval remain future work.

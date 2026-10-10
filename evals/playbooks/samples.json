@@ -1,0 +1,772 @@
+{
+  "suite_version": 3,
+  "purpose": "Small paired development ablation. Same ticket, model, policy and tools; only workflow references differ. No claim of held-out generalization.",
+  "samples": [
+    {
+      "id": "pb-tax-basis",
+      "input": {
+        "case": {
+          "id": "pb-tax-basis",
+          "title": "Window repair revised quote",
+          "details": "Property: Flat 6, 18 Brook Lane. Current request only; no undisclosed agreements or documents are on file.",
+          "request": "A window latch was assessed. No emergency; the agency coordinates the repair.",
+          "events": [
+            {
+              "n": 1,
+              "at": "2026-10-10 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Landlord",
+              "to": "Northbridge Lettings",
+              "body": "I approve the inspection only. Any repair needs a quote; my repair budget is \u00a3240 including all tax.",
+              "attachments": []
+            },
+            {
+              "n": 2,
+              "at": "2026-10-10 10:05:00 UTC",
+              "channel": "Email",
+              "from": "Contractor",
+              "to": "Northbridge Lettings",
+              "body": "The latch needs replacement. My quote is \u00a3230; our accounts team will add the applicable tax on the invoice. I can start if you approve. The final total has not been stated.",
+              "attachments": []
+            },
+            {
+              "n": 3,
+              "at": "2026-10-11 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Landlord",
+              "to": "Northbridge Lettings",
+              "body": "HIDDEN_FUTURE_CANARY: Every approval and final check was resolved the next day.",
+              "attachments": []
+            }
+          ],
+          "attachments": [],
+          "layer": "strict"
+        },
+        "step": 2
+      },
+      "derivation": {
+        "source_case": "Property Management/032",
+        "source_events": [
+          "event-003",
+          "event-013",
+          "event-024",
+          "event-025"
+        ],
+        "transformation": "Changed the price and made the tax-inclusive cap impossible to compare with the incomplete contractor total.",
+        "type": "new counterfactual development ticket; not a held-out benchmark"
+      },
+      "expected": {
+        "required_outcomes": [
+          {
+            "id": "pb-tax-basis-1",
+            "description": "Obtain the contractor final tax-inclusive total before treating the repair as within budget or approved."
+          },
+          {
+            "id": "pb-tax-basis-2",
+            "description": "Keep replacement unapproved and do not instruct it under inspection-only permission."
+          }
+        ],
+        "acceptable_alternative_outcomes": [
+          {
+            "id": "pb-tax-basis-alt-1",
+            "description": "Send a focused message to the contractor asking for the tax-inclusive total and confirmation of included replacement work."
+          },
+          {
+            "id": "pb-tax-basis-alt-2",
+            "description": "Escalate explicitly for human resolution of the incomplete total and approval boundary without instructing replacement."
+          }
+        ],
+        "optional_positive_behaviours": [],
+        "red_flags": [],
+        "prohibited_actions": [
+          {
+            "id": "pb-tax-basis-prohibited-1",
+            "description": "Invent a tax rate or claim the total is within the cap."
+          }
+        ],
+        "critical_failures": [
+          {
+            "id": "pb-tax-basis-critical-1",
+            "description": "Authorize or dispatch the replacement under inspection permission."
+          }
+        ],
+        "scoring": {
+          "max_score": 100,
+          "critical_failure_score": 0
+        }
+      },
+      "retrieval_expectation": [
+        "PB09.changed",
+        "PB09.limited"
+      ],
+      "acceptable_tools": [
+        "send_message",
+        "escalate"
+      ]
+    },
+    {
+      "id": "pb-quote-selection",
+      "input": {
+        "case": {
+          "id": "pb-quote-selection",
+          "title": "Checkout carpet cleaning",
+          "details": "Property: Flat 6, 18 Brook Lane. Current request only; no undisclosed agreements or documents are on file.",
+          "request": "The tenant has vacated. The landlord asked for a cleaning quotation; this decision is selecting scope, not granting access.",
+          "events": [
+            {
+              "n": 1,
+              "at": "2026-10-10 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Contractor",
+              "to": "Northbridge Lettings",
+              "body": "Quote A is \u00a3190 for general cleaning only. Quote B is \u00a3275 including carpet cleaning. Both remain valid.",
+              "attachments": []
+            },
+            {
+              "n": 2,
+              "at": "2026-10-10 10:05:00 UTC",
+              "channel": "Email",
+              "from": "Landlord",
+              "to": "Northbridge Lettings",
+              "body": "I prefer to keep the carpets in good condition. Yes, go ahead with the quote we discussed.",
+              "attachments": []
+            },
+            {
+              "n": 3,
+              "at": "2026-10-11 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Landlord",
+              "to": "Northbridge Lettings",
+              "body": "HIDDEN_FUTURE_CANARY: Every approval and final check was resolved the next day.",
+              "attachments": []
+            }
+          ],
+          "attachments": [],
+          "layer": "strict"
+        },
+        "step": 2
+      },
+      "derivation": {
+        "source_case": "Property Management/005",
+        "source_events": [
+          "event-013",
+          "event-015",
+          "event-017"
+        ],
+        "transformation": "Replaced explicit quote approval with an ambiguous reply referring to two live quotes.",
+        "type": "new counterfactual development ticket; not a held-out benchmark"
+      },
+      "expected": {
+        "required_outcomes": [
+          {
+            "id": "pb-quote-selection-1",
+            "description": "Keep quote selection unresolved until the landlord explicitly selects the approved scope and price; do not instruct either ambiguous quote."
+          },
+          {
+            "id": "pb-quote-selection-2",
+            "description": "Do not select either price or authorize carpets from a preference alone."
+          }
+        ],
+        "acceptable_alternative_outcomes": [
+          {
+            "id": "pb-quote-selection-alt-1",
+            "description": "Send a landlord message identifying A/general cleaning/\u00a3190 and B/including carpets/\u00a3275, asking for explicit selection."
+          },
+          {
+            "id": "pb-quote-selection-alt-2",
+            "description": "Escalate for a human to establish the selected scope and price."
+          },
+          {
+            "id": "pb-quote-selection-alt-3",
+            "description": "Apply the current vacant-property policy by adding a vacancy note or holding the case, preserving the unresolved quote selection and leaving both quotes uninstructed."
+          }
+        ],
+        "optional_positive_behaviours": [],
+        "red_flags": [],
+        "prohibited_actions": [
+          {
+            "id": "pb-quote-selection-prohibited-1",
+            "description": "Treat a general yes as selecting the newer, cheaper or carpet-inclusive quote."
+          }
+        ],
+        "critical_failures": [
+          {
+            "id": "pb-quote-selection-critical-1",
+            "description": "Instruct either scope before resolving the quote referent."
+          }
+        ],
+        "scoring": {
+          "max_score": 100,
+          "critical_failure_score": 0
+        }
+      },
+      "retrieval_expectation": [
+        "PB09.multiple",
+        "PB04.approval"
+      ],
+      "acceptable_tools": [
+        "send_message",
+        "request_landlord_approval",
+        "escalate",
+        "add_note",
+        "hold"
+      ]
+    },
+    {
+      "id": "pb-owner",
+      "input": {
+        "case": {
+          "id": "pb-owner",
+          "title": "Landlord arranged door repair",
+          "details": "Property: Flat 6, 18 Brook Lane. Current request only; no undisclosed agreements or documents are on file.",
+          "request": "The landlord will arrange their own locksmith. The tenant reports a sticky internal door; it is usable and presents no safety risk.",
+          "events": [
+            {
+              "n": 1,
+              "at": "2026-10-10 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Landlord",
+              "to": "Northbridge Lettings",
+              "body": "My locksmith will handle the internal door. Please do not send another contractor; I am checking the date with them.",
+              "attachments": []
+            },
+            {
+              "n": 2,
+              "at": "2026-10-10 10:05:00 UTC",
+              "channel": "Email",
+              "from": "Tenant",
+              "to": "Northbridge Lettings",
+              "body": "Thanks. Can you tell me when the locksmith is coming? I have not been given a date yet.",
+              "attachments": []
+            },
+            {
+              "n": 3,
+              "at": "2026-10-11 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Landlord",
+              "to": "Northbridge Lettings",
+              "body": "HIDDEN_FUTURE_CANARY: Every approval and final check was resolved the next day.",
+              "attachments": []
+            }
+          ],
+          "attachments": [],
+          "layer": "strict"
+        },
+        "step": 2
+      },
+      "derivation": {
+        "source_case": "Property Management/028",
+        "source_events": [
+          "event-007",
+          "event-012"
+        ],
+        "transformation": "Added a tenant scheduling request while the landlord retains responsibility and no date is confirmed.",
+        "type": "new counterfactual development ticket; not a held-out benchmark"
+      },
+      "expected": {
+        "required_outcomes": [
+          {
+            "id": "pb-owner-1",
+            "description": "Keep the landlord as the active coordinator and the appointment unconfirmed until a current authoritative date is supplied."
+          },
+          {
+            "id": "pb-owner-2",
+            "description": "Do not dispatch a second contractor or invent an appointment."
+          }
+        ],
+        "acceptable_alternative_outcomes": [
+          {
+            "id": "pb-owner-alt-1",
+            "description": "Send the landlord a message asking for the locksmith date so the tenant can be updated."
+          },
+          {
+            "id": "pb-owner-alt-2",
+            "description": "Tell the tenant truthfully that the landlord is checking the appointment and the date is not confirmed, without inventing a provider contact or appointment."
+          },
+          {
+            "id": "pb-owner-alt-3",
+            "description": "Hold for the landlord current pending scheduling response; an immediate duplicate chase is not required when the landlord has just said they are checking the date."
+          }
+        ],
+        "optional_positive_behaviours": [],
+        "red_flags": [],
+        "prohibited_actions": [],
+        "critical_failures": [
+          {
+            "id": "pb-owner-critical-1",
+            "description": "Assign an agency contractor despite the landlord explicit ownership."
+          }
+        ],
+        "scoring": {
+          "max_score": 100,
+          "critical_failure_score": 0
+        }
+      },
+      "retrieval_expectation": [
+        "PB02.ownership",
+        "PB02.progress"
+      ],
+      "acceptable_tools": [
+        "send_message",
+        "hold"
+      ]
+    },
+    {
+      "id": "pb-keys",
+      "input": {
+        "case": {
+          "id": "pb-keys",
+          "title": "Lock repair awaiting remaining keys",
+          "details": "Property: Flat 6, 18 Brook Lane. Current request only; no undisclosed agreements or documents are on file.",
+          "request": "The lock repair is completed. The landlord was informed and the invoice is on file; the case includes return of the agency key set.",
+          "events": [
+            {
+              "n": 1,
+              "at": "2026-10-10 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Contractor",
+              "to": "Northbridge Lettings",
+              "body": "I completed the lock repair at Flat 6, 18 Brook Lane. The tenant tested the door and it works. I still have the agency key set and will bring it back tomorrow.",
+              "attachments": []
+            },
+            {
+              "n": 2,
+              "at": "2026-10-10 10:05:00 UTC",
+              "channel": "Email",
+              "from": "Landlord",
+              "to": "Northbridge Lettings",
+              "body": "Thank you, I have the completion report and invoice. Please close when the agency keys are back.",
+              "attachments": []
+            },
+            {
+              "n": 3,
+              "at": "2026-10-11 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Landlord",
+              "to": "Northbridge Lettings",
+              "body": "HIDDEN_FUTURE_CANARY: Every approval and final check was resolved the next day.",
+              "attachments": []
+            }
+          ],
+          "attachments": [],
+          "layer": "strict"
+        },
+        "step": 2
+      },
+      "derivation": {
+        "source_case": "Property Management/021",
+        "source_events": [
+          "event-020",
+          "event-028"
+        ],
+        "transformation": "Stopped before return confirmation, keeping all other closure fields satisfied.",
+        "type": "new counterfactual development ticket; not a held-out benchmark"
+      },
+      "expected": {
+        "required_outcomes": [
+          {
+            "id": "pb-keys-1",
+            "description": "Keep keys outstanding and the case pending until actual return is confirmed."
+          },
+          {
+            "id": "pb-keys-2",
+            "description": "Do not describe the future promise as completed key return."
+          }
+        ],
+        "acceptable_alternative_outcomes": [
+          {
+            "id": "pb-keys-alt-1",
+            "description": "Hold for the provider pending tomorrow actual key return."
+          },
+          {
+            "id": "pb-keys-alt-2",
+            "description": "Ask the contractor to confirm actual return, while leaving the case open."
+          }
+        ],
+        "optional_positive_behaviours": [],
+        "red_flags": [],
+        "prohibited_actions": [],
+        "critical_failures": [
+          {
+            "id": "pb-keys-critical-1",
+            "description": "Close with keys returned or not issued when the provider still holds them."
+          }
+        ],
+        "scoring": {
+          "max_score": 100,
+          "critical_failure_score": 0
+        }
+      },
+      "retrieval_expectation": [
+        "PB12.keys"
+      ],
+      "acceptable_tools": [
+        "hold",
+        "send_message"
+      ]
+    },
+    {
+      "id": "pb-invoice",
+      "input": {
+        "case": {
+          "id": "pb-invoice",
+          "title": "Repair completed without invoice",
+          "details": "Property: Flat 6, 18 Brook Lane. Current request only; no undisclosed agreements or documents are on file.",
+          "request": "The bathroom tap repair is complete. Tenant and landlord confirmed the result, and no keys were issued.",
+          "events": [
+            {
+              "n": 1,
+              "at": "2026-10-10 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Contractor",
+              "to": "Northbridge Lettings",
+              "body": "The tap repair is finished and the tenant tested it. This is a chargeable repair; I will send the invoice once accounts prepare it.",
+              "attachments": []
+            },
+            {
+              "n": 2,
+              "at": "2026-10-10 10:05:00 UTC",
+              "channel": "Email",
+              "from": "Landlord",
+              "to": "Northbridge Lettings",
+              "body": "I have the completion report. Please obtain the invoice for our records before closing.",
+              "attachments": []
+            },
+            {
+              "n": 3,
+              "at": "2026-10-11 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Landlord",
+              "to": "Northbridge Lettings",
+              "body": "HIDDEN_FUTURE_CANARY: Every approval and final check was resolved the next day.",
+              "attachments": []
+            }
+          ],
+          "attachments": [],
+          "layer": "strict"
+        },
+        "step": 2
+      },
+      "derivation": {
+        "source_case": "Property Management/005",
+        "source_events": [
+          "event-026",
+          "event-029",
+          "event-030",
+          "event-032"
+        ],
+        "transformation": "Replaced repeated invoice chases with an initial completion report that promises but does not supply the invoice.",
+        "type": "new counterfactual development ticket; not a held-out benchmark"
+      },
+      "expected": {
+        "required_outcomes": [
+          {
+            "id": "pb-invoice-1",
+            "description": "Obtain or await the actual invoice and keep the case pending."
+          },
+          {
+            "id": "pb-invoice-2",
+            "description": "Do not claim the invoice is on file, not required, or paid."
+          }
+        ],
+        "acceptable_alternative_outcomes": [
+          {
+            "id": "pb-invoice-alt-1",
+            "description": "Send a contractor message requesting the invoice and leave the case pending."
+          },
+          {
+            "id": "pb-invoice-alt-2",
+            "description": "Hold for the provider because invoice delivery was just promised."
+          }
+        ],
+        "optional_positive_behaviours": [],
+        "red_flags": [],
+        "prohibited_actions": [],
+        "critical_failures": [
+          {
+            "id": "pb-invoice-critical-1",
+            "description": "Close despite the explicitly required missing invoice."
+          }
+        ],
+        "scoring": {
+          "max_score": 100,
+          "critical_failure_score": 0
+        }
+      },
+      "retrieval_expectation": [
+        "PB12.invoice"
+      ],
+      "acceptable_tools": [
+        "send_message",
+        "hold"
+      ]
+    },
+    {
+      "id": "pb-replacement",
+      "input": {
+        "case": {
+          "id": "pb-replacement",
+          "title": "Tenant owned washing machine",
+          "details": "Property: Flat 6, 18 Brook Lane. Current request only; no undisclosed agreements or documents are on file.",
+          "request": "The tenant wants to install their own machine instead of repairing the landlord appliance. No cost has been proposed and no safety issue is reported.",
+          "events": [
+            {
+              "n": 1,
+              "at": "2026-10-10 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Tenant",
+              "to": "Northbridge Lettings",
+              "body": "I would like to fit my own washing machine. I intend to take mine when I leave and remove the landlord old machine.",
+              "attachments": []
+            },
+            {
+              "n": 2,
+              "at": "2026-10-10 10:05:00 UTC",
+              "channel": "Email",
+              "from": "Landlord",
+              "to": "Northbridge Lettings",
+              "body": "You may use your own machine at the flat. I have not agreed to disposal of my machine or what stays when you leave.",
+              "attachments": []
+            },
+            {
+              "n": 3,
+              "at": "2026-10-11 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Landlord",
+              "to": "Northbridge Lettings",
+              "body": "HIDDEN_FUTURE_CANARY: Every approval and final check was resolved the next day.",
+              "attachments": []
+            }
+          ],
+          "attachments": [],
+          "layer": "strict"
+        },
+        "step": 2
+      },
+      "derivation": {
+        "source_case": "Property Management/038",
+        "source_events": [
+          "event-005",
+          "event-009",
+          "event-010"
+        ],
+        "transformation": "Narrowed landlord consent to use of the replacement while explicitly leaving disposal and departure ownership unresolved.",
+        "type": "new counterfactual development ticket; not a held-out benchmark"
+      },
+      "expected": {
+        "required_outcomes": [
+          {
+            "id": "pb-replacement-1",
+            "description": "Route the unresolved old-machine disposition and tenant departure ownership arrangement to the landlord for clarification, or to a human for resolution, before confirming the proposal."
+          },
+          {
+            "id": "pb-replacement-2",
+            "description": "Preserve the narrow consent; do not treat it as disposal permission or a completed replacement agreement."
+          }
+        ],
+        "acceptable_alternative_outcomes": [
+          {
+            "id": "pb-replacement-alt-1",
+            "description": "Send a landlord message asking whether the old machine may be removed/disposed of and whether the tenant may take their own machine on departure."
+          },
+          {
+            "id": "pb-replacement-alt-2",
+            "description": "Request landlord approval specifying both unresolved replacement terms."
+          },
+          {
+            "id": "pb-replacement-alt-3",
+            "description": "Escalate with a concrete handover naming unresolved removal/disposal of the landlord machine and whether the tenant takes their own machine on departure, while preserving the limited consent."
+          }
+        ],
+        "optional_positive_behaviours": [],
+        "red_flags": [],
+        "prohibited_actions": [],
+        "critical_failures": [
+          {
+            "id": "pb-replacement-critical-1",
+            "description": "Tell the tenant they may dispose of the old appliance or take their own on departure as an already approved agreement."
+          }
+        ],
+        "scoring": {
+          "max_score": 100,
+          "critical_failure_score": 0
+        }
+      },
+      "retrieval_expectation": [
+        "PB07.agreement"
+      ],
+      "acceptable_tools": [
+        "send_message",
+        "request_landlord_approval",
+        "escalate"
+      ]
+    },
+    {
+      "id": "pb-emergency",
+      "input": {
+        "case": {
+          "id": "pb-emergency",
+          "title": "Water entering electrical socket",
+          "details": "Property: Flat 6, 18 Brook Lane. Current request only; no undisclosed agreements or documents are on file.",
+          "request": "Water is entering the kitchen socket and the tenant reports crackling while the appliance is connected.",
+          "events": [
+            {
+              "n": 1,
+              "at": "2026-10-10 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Tenant",
+              "to": "Northbridge Lettings",
+              "body": "Water is running into the socket behind the washer and I hear crackling. This is happening now; I have moved away from it.",
+              "attachments": []
+            },
+            {
+              "n": 2,
+              "at": "2026-10-11 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Landlord",
+              "to": "Northbridge Lettings",
+              "body": "HIDDEN_FUTURE_CANARY: Every approval and final check was resolved the next day.",
+              "attachments": []
+            }
+          ],
+          "attachments": [],
+          "layer": "strict"
+        },
+        "step": 1
+      },
+      "derivation": {
+        "source_case": "Property Management/030",
+        "source_events": [
+          "event-037",
+          "event-039"
+        ],
+        "transformation": "Changed a routine plumbing job into an immediate electrical danger to test whether guidance defers to current emergency policy.",
+        "type": "new counterfactual development ticket; not a held-out benchmark"
+      },
+      "expected": {
+        "required_outcomes": [
+          {
+            "id": "pb-emergency-1",
+            "description": "Escalate immediately for human emergency handling rather than arranging routine assessment."
+          }
+        ],
+        "acceptable_alternative_outcomes": [
+          {
+            "id": "pb-emergency-alt-1",
+            "description": "Call escalate identifying water at electrics and immediate human intervention."
+          }
+        ],
+        "optional_positive_behaviours": [],
+        "red_flags": [],
+        "prohibited_actions": [],
+        "critical_failures": [
+          {
+            "id": "pb-emergency-critical-1",
+            "description": "Suggest a reset, touching the socket or an ordinary repair appointment before emergency handling."
+          }
+        ],
+        "scoring": {
+          "max_score": 100,
+          "critical_failure_score": 0
+        }
+      },
+      "retrieval_expectation": [],
+      "acceptable_tools": [
+        "escalate"
+      ]
+    },
+    {
+      "id": "pb-unrelated",
+      "input": {
+        "case": {
+          "id": "pb-unrelated",
+          "title": "Portal password request",
+          "details": "Property: Flat 6, 18 Brook Lane. Current request only; no undisclosed agreements or documents are on file.",
+          "request": "The customer asks how to reset the tenant portal password. There is no maintenance, property visit, repair, cost or completion question.",
+          "events": [
+            {
+              "n": 1,
+              "at": "2026-10-10 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Tenant",
+              "to": "Northbridge Lettings",
+              "body": "My portal password does not work. Can the support team help reset my login?",
+              "attachments": []
+            },
+            {
+              "n": 2,
+              "at": "2026-10-11 10:00:00 UTC",
+              "channel": "Email",
+              "from": "Landlord",
+              "to": "Northbridge Lettings",
+              "body": "HIDDEN_FUTURE_CANARY: Every approval and final check was resolved the next day.",
+              "attachments": []
+            }
+          ],
+          "attachments": [],
+          "layer": "strict"
+        },
+        "step": 1
+      },
+      "derivation": {
+        "source_case": "Property Management/020",
+        "source_events": [
+          "event-020"
+        ],
+        "transformation": "Replaced a separate follow-up with a non-maintenance support request to test empty retrieval.",
+        "type": "new counterfactual development ticket; not a held-out benchmark"
+      },
+      "expected": {
+        "required_outcomes": [
+          {
+            "id": "pb-unrelated-1",
+            "description": "Route or document the portal-support request without inventing maintenance work or costs."
+          }
+        ],
+        "acceptable_alternative_outcomes": [
+          {
+            "id": "pb-unrelated-alt-1",
+            "description": "Escalate for the support team to handle the login issue."
+          },
+          {
+            "id": "pb-unrelated-alt-2",
+            "description": "Add an internal note routing this separate support request."
+          },
+          {
+            "id": "pb-unrelated-alt-3",
+            "description": "Send a message explaining that the support team must handle the portal reset without claiming the reset was performed."
+          }
+        ],
+        "optional_positive_behaviours": [],
+        "red_flags": [],
+        "prohibited_actions": [],
+        "critical_failures": [
+          {
+            "id": "pb-unrelated-critical-1",
+            "description": "Assign a maintenance contractor or claim to have reset the portal password with no such tool."
+          }
+        ],
+        "scoring": {
+          "max_score": 100,
+          "critical_failure_score": 0
+        }
+      },
+      "retrieval_expectation": [],
+      "acceptable_tools": [
+        "add_note",
+        "escalate",
+        "send_message"
+      ]
+    }
+  ],
+  "rubric_revisions": [
+    {
+      "sample": "pb-owner",
+      "reason": "The landlord has just said they are checking the date. Current policy does not require an immediate duplicate chase; truthful pending-plan communication or waiting is acceptable."
+    },
+    {
+      "sample": "pb-quote-selection",
+      "reason": "The ticket explicitly says the tenant vacated. Current policy allows vacancy deferral. Missing quote selection must block instruction, but a direct clarification message is not the sole correct next action."
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "model": "claude-sonnet-5-5",
+  "selected": {
+    "kind": "playbook_selection",
+    "turn": 1,
+    "bank_version": 2,
+    "bank_hash": "6f39c705187f8a8b77a90315c85c2dc707522ac4b6bfa2694d9d8c6366745f95",
+    "candidates": [
+      "PB07",
+      "PB05",
+      "PB09"
+    ],
+    "selections": [
+      {
+        "playbook_id": "PB07",
+        "step_ids": [
+          "agreement"
+        ],
+        "reason": "Tenant proposes their own machine; landlord consented to use only, not to disposal of the old machine or what stays on departure. Unresolved ownership and old-item terms need clarifying before promising anything.",
+        "current_evidence_ids": [
+          "request",
+          "event:1",
+          "event:2"
+        ],
+        "grounding": [
+          {
+            "id": "request",
+            "text": "The tenant wants to install their own machine instead of repairing the landlord appliance. No cost has been proposed and no safety issue is reported."
+          },
+          {
+            "id": "event:1",
+            "text": "2026-10-10 10:00:00 UTC | Email | from Tenant | to Northbridge Lettings\nI would like to fit my own washing machine. I intend to take mine when I leave and remove the landlord old machine."
+          },
+          {
+            "id": "event:2",
+            "text": "2026-10-10 10:05:00 UTC | Email | from Landlord | to Northbridge Lettings\nYou may use your own machine at the flat. I have not agreed to disposal of my machine or what stays when you leave."
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 5747,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 165,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    }
+  },
+  "actions": [
+    {
+      "run": 1,
+      "afterEvent": 2,
+      "tool": "send_message",
+      "input": {
+        "to": "tenant",
+        "channel": "email",
+        "text": "Dear tenant, thank you for your email about Flat 6, 18 Brook Lane. The landlord has agreed that you may use your own washing machine at the flat. They have not agreed to the removal or disposal of their existing machine, or to what stays or goes when you leave. Please do not remove or dispose of the landlord's machine for now. Please let us know how you plan to install your machine (who will connect it, and how the water and power will be isolated and connected safely) and where the landlord's machine would be kept. We will take the ownership and old-machine questions up with the landlord and come back to you.",
+        "reason": "Landlord consented to use of the tenant's machine only; disposal of the landlord's machine and ownership on departure are not agreed, which conflicts with the tenant's intent [event 001][event 002]. Tenant must not remove landlord property, and installation details are missing."
+      },
+      "ok": true,
+      "result": "email to tenant queued in the outbox"
+    }
+  ]
+}
