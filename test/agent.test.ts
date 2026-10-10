@@ -53,11 +53,11 @@ test("the run stops at the first end tool", async () => {
     use("a", "send_message", { to: "tenant", channel: "email", text: "Please try a plunger.", reason: "[event 001]" }),
     use("b", "hold", { waiting_for: "Waiting for Tenant", reason: "Awaiting the tenant's answer." }),
   ]]);
-  const thoughts = await runCase({ ...base, state: s, client });
+  await runCase({ ...base, state: s, client });
   assert.equal(calls.length, 1);
   assert.deepEqual(s.status, { kind: "hold", reason: "Waiting for Tenant" });
   assert.deepEqual(s.actions.map((a) => a.tool), ["send_message", "hold"]);
-  assert.deepEqual(thoughts, ["Everyday blockage, tenant first."]);
+  assert.deepEqual(s.notes.map((n) => n.text), ["Everyday blockage, tenant first."]);
   assert.equal(s.runs, 1);
 });
 

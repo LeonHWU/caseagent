@@ -25,7 +25,7 @@ test("full message text appears in outbox", () => {
   s.notes = [{ run: 1, afterEvent: 1, text: "Tenant first." }];
   s.status = { kind: "hold", reason: "Waiting for Tenant" };
   const out = mkdtempSync(join(tmpdir(), "answers-"));
-  writeAnswer(out, c, s, visibleEvents(c, 1, 1), []);
+  writeAnswer(out, c, s, visibleEvents(c, 1, 1));
 
   const answer = readFileSync(join(out, "ANSWERS/027/ANSWER.md"), "utf8");
   assert.match(answer, /## Outbox/);
@@ -65,7 +65,7 @@ test("final checks appear only for closed cases", () => {
     },
   };
   const out = mkdtempSync(join(tmpdir(), "answers-"));
-  writeAnswer(out, c, s, visibleEvents(c, 1, 1), []);
+  writeAnswer(out, c, s, visibleEvents(c, 1, 1));
 
   const answer = readFileSync(join(out, "ANSWERS/027/ANSWER.md"), "utf8");
   assert.match(answer, /## Final checks/);
@@ -80,7 +80,7 @@ test("final checks do not appear for open cases", () => {
   s.actions = [];
   s.status = { kind: "open" };
   const out = mkdtempSync(join(tmpdir(), "answers-"));
-  writeAnswer(out, c, s, visibleEvents(c, 1, 1), []);
+  writeAnswer(out, c, s, visibleEvents(c, 1, 1));
 
   const answer = readFileSync(join(out, "ANSWERS/027/ANSWER.md"), "utf8");
   assert.doesNotMatch(answer, /## Final checks/);
@@ -96,7 +96,7 @@ test("each run has its own timeline block", () => {
   ];
   s.status = { kind: "hold", reason: "Waiting for Tenant" };
   const out = mkdtempSync(join(tmpdir(), "answers-"));
-  writeAnswer(out, c, s, visibleEvents(c, 1, 2), []);
+  writeAnswer(out, c, s, visibleEvents(c, 1, 2));
 
   const answer = readFileSync(join(out, "ANSWERS/027/ANSWER.md"), "utf8");
   assert.match(answer, /### Run 1/);
@@ -119,7 +119,7 @@ test("REASONING.md groups notes by run: two runs give two note blocks", () => {
   ];
   s.status = { kind: "hold", reason: "Waiting for Landlord" };
   const out = mkdtempSync(join(tmpdir(), "answers-"));
-  writeAnswer(out, c, s, visibleEvents(c, 1, 2), []);
+  writeAnswer(out, c, s, visibleEvents(c, 1, 2));
   const reasoning = readFileSync(join(out, "ANSWERS/027/REASONING.md"), "utf8");
   assert.match(reasoning, /## Run 1\n[\s\S]*Tenant contacted for information[\s\S]*## Run 2\n[\s\S]*Tenant provided details/);
   assert.doesNotMatch(reasoning.split("## Run 2")[0], /Tenant provided details/);
