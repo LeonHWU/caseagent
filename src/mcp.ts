@@ -8,9 +8,13 @@ import { liveDeps, processCase, processToEnd, summary, type RunDeps } from "./ru
 
 const caseId = { case_id: z.string().regex(/^[\w-]+$/).describe('Case folder name, for example "027".') };
 
-const stepInput = { ...caseId, step: z.number().int().positive().optional().describe("History event number to expose through (inclusive), for example 7. Never exposes later events.") };
+const stepInput = {
+  ...caseId,
+  step: z.number().int().positive().optional().describe("History event number to expose through (inclusive), for example 7. Never exposes later events."),
+  single_action: z.boolean().optional().describe("Execute at most one business tool action and stop, leaving the case open if that action was not hold, escalate or close_case. For step-by-step evaluation. Default: the agent takes every action the stage needs and ends the run itself."),
+};
 
-const runCaseInput = { ...stepInput, to_end: z.boolean().optional().describe("Keep resuming after each hold until the case closes, escalates or has no further outside events. Ignores single-action mode.") };
+const runCaseInput = { ...stepInput, to_end: z.boolean().optional().describe("Keep resuming after each hold until the case closes, escalates or has no further outside events. Cannot be combined with single_action.") };
 
 export function createServer(opts: { casesDir: string; deps: RunDeps }): McpServer {
   const { casesDir, deps } = opts;
@@ -24,8 +28,8 @@ export function createServer(opts: { casesDir: string; deps: RunDeps }): McpServ
   const answer = (id: string) => readFileSync(join(deps.out, "ANSWERS", id, "ANSWER.md"), "utf8");
   const reply = (t: string) => ({ content: [{ type: "text" as const, text: t }] });
   const replyWith = (id: string, state: Awaited<ReturnType<typeof processCase>>) => reply(`${summary(state)}\n\n${answer(id)}`);
-  const run = async (id: string, next: boolean, step?: number) =>
-    replyWith(id, await processCase(deps, caseDir(id), next, { step, singleStep: true }));
+  const run = async (id: string, next: boolean, step?: number, singleAction?: boolean) =>
+    replyWith(id, await processCase(deps, caseDir(id), next, { step, singleStep: singleAction ?? false }));
   const runToEnd = async (id: string) => replyWith(id, await processToEnd(deps, caseDir(id)));
 
   server.registerTool(
@@ -36,18 +40,22 @@ export function createServer(opts: { casesDir: string; deps: RunDeps }): McpServ
   server.registerTool(
     "run_case",
     {
-      description: "Start or restart a case at optional step (history event number, inclusive); otherwise use the initial decision point. Execute at most ONE business tool action and return the status and ANSWER.md. Replaces saved state. Use resume_case for subsequent actions. With to_end, instead run the whole case: keep resuming after each hold until it closes, escalates or has no further outside events.",
+      description: "Start or restart a case at optional step (history event number, inclusive); otherwise use the initial decision point. The agent takes the actions this stage needs and ends the run with hold, escalate or close_case; returns the status and ANSWER.md. Replaces saved state. Use resume_case when the next outside reply arrives. With to_end, run the whole case: keep resuming after each hold until it closes, escalates or has no further outside events. With single_action, stop after one business tool action.",
       inputSchema: runCaseInput,
     },
-    async ({ case_id, step, to_end }) => (to_end ? runToEnd(case_id) : run(case_id, false, step)),
+    async ({ case_id, step, to_end, single_action }) => {
+      if (to_end && single_action) throw new Error("to_end and single_action cannot be combined.");
+      if (to_end && step !== undefined) throw new Error("to_end always starts at the initial decision point; omit step.");
+      return to_end ? runToEnd(case_id) : run(case_id, false, step, single_action);
+    },
   );
   server.registerTool(
     "resume_case",
     {
-      description: "Continue a saved case with at most ONE business tool action. Optional step selects the same or a later history event; earlier steps require run_case. Without step, open cases continue at the current event; held cases receive only the next external reply. Returns the status and ANSWER.md.",
+      description: "Continue a saved case. Optional step selects the same or a later history event; earlier steps require run_case. Without step, an open case continues at the current event; a held case receives only the next external reply. The agent acts and ends the run as in run_case; with single_action it stops after one business tool action. Returns the status and ANSWER.md.",
       inputSchema: stepInput,
     },
-    async ({ case_id, step }) => run(case_id, true, step),
+    async ({ case_id, step, single_action }) => run(case_id, true, step, single_action),
   );
   server.registerTool(
     "get_case",

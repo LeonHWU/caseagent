@@ -80,7 +80,8 @@ export async function processCase(deps: RunDeps, dir: string, next: boolean, opt
     if (state.status.kind === "closed" || state.status.kind === "escalated") {
       throw new Error(`case ${c.id} is already ${state.status.kind}. Run it once without --next to restart.`);
     }
-    const seen = options.step ?? (options.singleStep && state.status.kind === "open" ? state.seen : nextSeen(c, state.seen));
+    // An open case was stopped mid-stage by a single-action call, so it continues at the same event.
+    const seen = options.step ?? (state.status.kind === "open" ? state.seen : nextSeen(c, state.seen));
     if (seen === null) throw new Error(`case ${c.id} has no further events from the tenant, landlord or a contractor.`);
     if (seen < state.seen) throw new Error(`step ${seen} precedes saved step ${state.seen}. Use run_case to restart.`);
     newFrom = seen === state.seen ? seen : state.seen + 1;

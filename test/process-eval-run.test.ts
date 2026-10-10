@@ -17,7 +17,7 @@ const evalRoot = join(dirname(fileURLToPath(import.meta.url)), "../evals/Process
 const manifest = JSON.parse(readFileSync(join(evalRoot, "manifest.json"), "utf8"));
 const sampleOf = (id: string) => JSON.parse(readFileSync(join(evalRoot, "samples", `${id}.json`), "utf8"));
 
-// A valid tool input for the sample's first acceptable action, so run_case (single-step) records it.
+// A valid tool input for the sample's first acceptable action, so run_case (single_action) records it.
 const inputFor: Record<string, Record<string, unknown>> = {
   hold: { waiting_for: "Waiting for Tenant" },
   send_message: { to: "tenant", channel: "email", text: "Please try a plunger first." },

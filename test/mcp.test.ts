@@ -75,7 +75,7 @@ test("errors come back as tool errors, not crashes", async () => {
 });
 
 
-test("explicit step exposes only its prefix and executes one action from a multi-tool response", async () => {
+test("single_action: an explicit step exposes only its prefix and executes one action from a multi-tool response", async () => {
   const prompts: string[] = [];
   const client: ModelClient = { messages: { create: async (p) => {
     prompts.push(JSON.stringify(p.messages));
@@ -85,15 +85,15 @@ test("explicit step exposes only its prefix and executes one action from a multi
     ], stop_reason: "tool_use", usage: { input_tokens: 1, output_tokens: 1 } } as unknown as Anthropic.Message;
   } } };
   const mcp = await connect(client);
-  const first = text(await mcp.callTool({ name: "run_case", arguments: { case_id: "027", step: 7 } }));
+  const first = text(await mcp.callTool({ name: "run_case", arguments: { case_id: "027", step: 7, single_action: true } }));
   assert.match(first, /^027: open/);
   assert.match(first, /Events seen:.*event 7/);
   assert.doesNotMatch(first, /\| hold \|/);
-  const resumed = text(await mcp.callTool({ name: "resume_case", arguments: { case_id: "027" } }));
+  const resumed = text(await mcp.callTool({ name: "resume_case", arguments: { case_id: "027", single_action: true } }));
   assert.match(resumed, /Events seen:.*event 7/);
   assert.equal(prompts.length, 2);
   assert.doesNotMatch(prompts[0], /\[event 011\]/);
-  const later = text(await mcp.callTool({ name: "resume_case", arguments: { case_id: "027", step: 11 } }));
+  const later = text(await mcp.callTool({ name: "resume_case", arguments: { case_id: "027", step: 11, single_action: true } }));
   assert.match(later, /Events seen:.*event 11/);
   const backward = await mcp.callTool({ name: "resume_case", arguments: { case_id: "027", step: 7 } });
   assert.equal(backward.isError, true);
@@ -107,4 +107,26 @@ test("invalid steps fail before invoking the model", async () => {
     const result = await mcp.callTool({ name: "run_case", arguments: { case_id: "027", step } });
     assert.equal(result.isError, true);
   }
+});
+
+test("multi-action is the default: one call sends the message and holds the case", async () => {
+  const client: ModelClient = { messages: { create: async () => ({ content: [
+    { type: "tool_use", id: "a", name: "send_message", input: { to: "tenant", channel: "email", text: "Please try a plunger and let us know.", reason: "Blocked drain [event 001]." } },
+    { type: "tool_use", id: "b", name: "hold", input: { waiting_for: "Waiting for Tenant", reason: "Asked the tenant [event 001]." } },
+  ], stop_reason: "tool_use", usage: { input_tokens: 1, output_tokens: 1 } }) as unknown as Anthropic.Message } };
+  const mcp = await connect(client);
+  const out = text(await mcp.callTool({ name: "run_case", arguments: { case_id: "027" } }));
+  assert.match(out, /^027: hold \(Waiting for Tenant\)/);
+  assert.match(out, /## Outbox\n\n\*\*Run 1, to tenant, email:\*\*\n\nPlease try a plunger/);
+  assert.doesNotMatch(out, /one action per call/);
+});
+
+test("to_end rejects single_action and an explicit step instead of ignoring them", async () => {
+  const mcp = await connect(scripted([]));
+  const both = await mcp.callTool({ name: "run_case", arguments: { case_id: "027", to_end: true, single_action: true } });
+  assert.equal(both.isError, true);
+  assert.match(text(both), /cannot be combined/);
+  const stepped = await mcp.callTool({ name: "run_case", arguments: { case_id: "027", to_end: true, step: 7 } });
+  assert.equal(stepped.isError, true);
+  assert.match(text(stepped), /omit step/);
 });

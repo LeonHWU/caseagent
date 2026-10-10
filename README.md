@@ -57,6 +57,8 @@ npm run extract                                        # Docling pre-extract of 
 
 Two run modes. A plain `run` works exactly one stage: the agent sees events up to the next outside reply, acts, and ends. `--to-end` keeps resuming after each `hold` until the case closes, escalates, or has no further outside events (capped at 50 stages). Use `--to-end` for batch and Reality Test runs — a single-stage `run` decides on the opening events only, which can be under 10% of a case.
 
+The MCP tools follow the same rules. `run_case` and `resume_case` work one stage: the agent takes every action the stage needs, for example a message and then `hold`, and ends the run itself. `run_case` with `to_end` runs the whole case. `single_action: true` stops after one business action; the Process Reward eval uses it to grade the next action at a historical step.
+
 The tests read the public cases from `data/public/Property Management` (gitignored). Link them once:
 
 ```bash

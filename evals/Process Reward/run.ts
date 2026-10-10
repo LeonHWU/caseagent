@@ -71,7 +71,9 @@ export async function runSuite(opts: {
       let mcpError = false;
       try {
         await Promise.all([server.connect(a), client.connect(b)]);
-        const response = await client.callTool(sample.input.mcp_call, undefined, { timeout: timeoutMs });
+        // Each sample grades the next single business action, so the call runs in single-action mode.
+        const call = { ...sample.input.mcp_call, arguments: { ...sample.input.mcp_call.arguments, single_action: true } };
+        const response = await client.callTool(call, undefined, { timeout: timeoutMs });
         if (response.isError) {
           mcpError = true;
           error = (response.content as { text?: string }[]).map((c) => c.text ?? '').join('\n') || 'MCP tool error';
