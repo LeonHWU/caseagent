@@ -37,16 +37,22 @@ npm test
 
 ### Attachments (optional Docling step)
 
-The agent reads attachments itself: PDF text through pdf.js, CSV and text files as they are, and images as image input to Claude. For better structure, run [Docling](https://github.com/docling-project/docling) once before the agent. It needs [uv](https://docs.astral.sh/uv/).
+The agent picks one form for each visible attachment, in this order:
+
+1. **A PDF at or under `NATIVE_PDF_MAX_MB`** (default 5) **with at most 100 pages goes to Claude as the PDF itself.** Claude then reads its text and its page images, scanned pages included. All the native PDFs in one prompt share a 20 MB budget; when the budget runs out, the rest of the PDFs use text.
+2. **Docling markdown** in `<case>/attachments/.docling/<file>.md`, when the file exists.
+3. **The built-in readers.** These are pdf.js for PDF text, raw text for CSV, TXT and MD files, and image input for PNG and JPEG files.
+
+[Docling](https://github.com/docling-project/docling) runs once, before the agent, and needs [uv](https://docs.astral.sh/uv/):
 
 ```bash
 npm run extract -- <cases-dir>    # writes <case>/attachments/.docling/<file>.md
 ```
 
-Docling keeps tables and headings as markdown and also reads `.docx`, `.xlsx`, `.pptx` and `.html`. The agent uses a `.docling` file when one exists and its built-in reader when one does not. Re-runs skip files that are already converted.
+Docling keeps tables and headings as markdown and also reads `.docx`, `.xlsx`, `.pptx` and `.html` files. It runs OCR on scanned pages. On macOS it uses the system Vision engine through `ocrmac`; on other systems it uses RapidOCR. Re-runs skip files that are already converted. `scripts/extract.py.lock` pins every Python dependency, and uv ignores packages published after 2026-10-03.
 
 - The first run installs Docling 2.132.0 and its models, about 4 GB in the uv cache.
-- On the public data, all 28 PDF and CSV files convert in about 1 minute.
+- On the public data, all 28 PDF and CSV files convert in about 2 minutes, including the OCR setup.
 
 ### As an MCP server
 
@@ -83,7 +89,8 @@ Keep `--silent`. Without it, npm prints a banner to stdout and breaks the MCP pr
 ## Known limitations
 
 - Attachment text is capped at 8,000 characters per file, so long inspection reports are cut.
-- The Docling run reports "No OCR engine found". The public PDFs contain real text, so this does not matter for them. A scanned PDF would come out empty.
+- A native PDF costs about 4 to 7 times the tokens of its Docling markdown: 3.7k against 0.6k for a 2-page invoice, and 24k against 6k for a 12-page report. Lower `NATIVE_PDF_MAX_MB` to send more PDFs as text.
+- OCR can misread characters, for example "0ZZ" as "OZZ" in a postcode.
 - The agent sees time only through event timestamps, so "3 days without reply" works only when a later event shows the gap.
 
 ## Next steps

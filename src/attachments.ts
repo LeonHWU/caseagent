@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { existsSync, readFileSync, statSync, writeFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import * as pdfjs from "pdfjs-dist";
 
@@ -9,10 +9,27 @@ pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorkerPath.href;
 const MAX_CHARS = 8000;
 const TRUNCATION_NOTE = "\n\n[Text truncated due to length]";
 
+// Small PDFs go to Claude as the PDF itself, so it sees the layout, tables and any scanned pages.
+// Larger ones fall back to extracted text. The page limit is the Messages API limit for PDF input.
+export const NATIVE_PDF_MAX_BYTES = Number(process.env.NATIVE_PDF_MAX_MB ?? 5) * 1024 * 1024;
+const NATIVE_PDF_MAX_PAGES = 100;
+
 export type AttachmentContent =
   | { type: "text"; text: string }
   | { type: "image"; data: string; format: "png" | "jpeg" }
+  | { type: "document"; data: string; pages: number }
   | { type: "error"; error: string };
+
+async function nativePdf(path: string, maxBytes: number): Promise<AttachmentContent | null> {
+  if (statSync(path).size > maxBytes) return null;
+  const data = readFileSync(path);
+  try {
+    const { numPages } = await pdfjs.getDocument({ data: new Uint8Array(data) }).promise;
+    return numPages <= NATIVE_PDF_MAX_PAGES ? { type: "document", data: data.toString("base64"), pages: numPages } : null;
+  } catch {
+    return null;
+  }
+}
 
 function getCachePath(cacheDir: string, filename: string): string {
   return join(cacheDir, `${filename}.txt`);
@@ -41,10 +58,20 @@ function truncateText(text: string): string {
   return text;
 }
 
-export async function readAttachment(caseDir: string, filename: string, cacheDir: string): Promise<AttachmentContent> {
+export async function readAttachment(
+  caseDir: string,
+  filename: string,
+  cacheDir: string,
+  opts: { nativeMaxBytes?: number } = {},
+): Promise<AttachmentContent> {
   const filepath = join(caseDir, "attachments", filename);
 
   try {
+    if (filename.toLowerCase().endsWith(".pdf")) {
+      const native = await nativePdf(filepath, opts.nativeMaxBytes ?? NATIVE_PDF_MAX_BYTES);
+      if (native) return native;
+    }
+
     // `npm run extract` (Docling) writes structured markdown here; it beats the built-in readers when present.
     const docling = join(caseDir, "attachments", ".docling", `${filename}.md`);
     if (existsSync(docling)) return { type: "text", text: truncateText(readFileSync(docling, "utf8")) };

@@ -45,6 +45,11 @@ export async function runCase(opts: {
         data: img.data,
       },
     })),
+    ...prompt.documents.map((doc) => ({
+      type: "document" as const,
+      title: doc.filename,
+      source: { type: "base64" as const, media_type: "application/pdf" as const, data: doc.data },
+    })),
   ];
 
   const messages: Anthropic.MessageParam[] = [{ role: "user", content }];

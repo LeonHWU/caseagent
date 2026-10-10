@@ -4,7 +4,7 @@ import type { Case, CaseEvent } from "./parse.ts";
 import type { CaseState } from "./state.ts";
 import { isAgency } from "./parse.ts";
 import type { AttachmentContent } from "./attachments.ts";
-import { readAttachment } from "./attachments.ts";
+import { NATIVE_PDF_MAX_BYTES, readAttachment } from "./attachments.ts";
 
 function renderEvent(e: CaseEvent): string {
   return `[event ${String(e.n).padStart(3, "0")}] ${e.at} | ${e.channel} | from ${e.from} | to ${e.to}\n${e.body}`;
@@ -62,7 +62,11 @@ function getLastContactDays(visible: CaseEvent[]): string {
 export type CasePrompt = {
   text: string;
   images: Array<{ filename: string; format: "png" | "jpeg"; data: string }>;
+  documents: Array<{ filename: string; data: string }>;
 };
+
+// A request may be 32 MB and base64 adds a third, so native PDFs share a 20 MB budget per prompt.
+const NATIVE_PDF_TOTAL_BYTES = 20 * 1024 * 1024;
 
 export async function renderCase(c: Case, state: CaseState, visible: CaseEvent[], newFrom: number, caseDir?: string, cacheDir = join(caseDir ?? ".", ".attachments-cache")): Promise<CasePrompt> {
   const earlier = visible.filter((e) => e.n < newFrom).map(renderEvent);
@@ -98,12 +102,18 @@ export async function renderCase(c: Case, state: CaseState, visible: CaseEvent[]
 
   // Build attachment section and collect images
   const attachmentLines: string[] = [];
-  const images: Array<{ filename: string; format: "png" | "jpeg"; data: string }> = [];
+  const images: CasePrompt["images"] = [];
+  const documents: CasePrompt["documents"] = [];
+  let nativeBudget = NATIVE_PDF_TOTAL_BYTES;
 
   if (visibleAttachmentNames.size > 0 && caseDir) {
     for (const filename of Array.from(visibleAttachmentNames).sort()) {
-      const content = await readAttachment(caseDir, filename, cacheDir);
-      if (content.type === "text") {
+      const content = await readAttachment(caseDir, filename, cacheDir, { nativeMaxBytes: Math.min(NATIVE_PDF_MAX_BYTES, nativeBudget) });
+      if (content.type === "document") {
+        nativeBudget -= Buffer.byteLength(content.data, "base64");
+        documents.push({ filename, data: content.data });
+        attachmentLines.push(`### ${filename}\n\n(PDF attached in full: ${content.pages} page${content.pages === 1 ? "" : "s"})`);
+      } else if (content.type === "text") {
         attachmentLines.push(`### ${filename}\n\n${content.text}`);
       } else if (content.type === "image") {
         images.push({ filename, format: content.format, data: content.data });
@@ -132,5 +142,5 @@ export async function renderCase(c: Case, state: CaseState, visible: CaseEvent[]
     "Decide the next step as Northbridge Lettings. Act with the tools, then end the run with exactly one of hold, escalate or close_case.",
   ].join("\n\n");
 
-  return { text, images };
+  return { text, images, documents };
 }

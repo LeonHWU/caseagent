@@ -1,6 +1,12 @@
 # /// script
 # requires-python = ">=3.10,<3.13"
-# dependencies = ["docling==2.132.0"]
+# dependencies = [
+#   "docling==2.132.0",
+#   "docling[ocrmac]==2.132.0; sys_platform == 'darwin'",
+#   "docling[rapidocr]==2.132.0; sys_platform != 'darwin'",
+# ]
+# [tool.uv]
+# exclude-newer = "2026-10-03T00:00:00Z"
 # ///
 """Convert every case attachment to markdown with Docling, once, before the agent runs.
 
