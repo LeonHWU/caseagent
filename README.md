@@ -35,6 +35,13 @@ npm run case -- run-all <cases-dir> --concurrency 4    # every case in a folder
 npm test
 ```
 
+The tests read the public cases from `data/public/Property Management` (gitignored). Link them once:
+
+```bash
+git clone https://github.com/DwellyOrg/HackatonPublicCases.git ../HackatonPublicCases
+mkdir -p data/public && ln -s "$(cd ../HackatonPublicCases && pwd)/Property Management" "data/public/Property Management"
+```
+
 ### Attachments (optional Docling step)
 
 The agent picks one form for each visible attachment, in this order:
