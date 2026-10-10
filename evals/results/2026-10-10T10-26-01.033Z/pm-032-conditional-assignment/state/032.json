@@ -1,0 +1,24 @@
+{
+  "caseId": "032",
+  "initialSeen": 8,
+  "seen": 8,
+  "runs": 1,
+  "status": {
+    "kind": "open"
+  },
+  "actions": [
+    {
+      "run": 1,
+      "afterEvent": 8,
+      "tool": "assign_contractor",
+      "input": {
+        "trade": "Plumber",
+        "notes": "Flat 10, 130 Lantern Quay, Willowbank, ZZ5 1ZZ. Tenant reports a fault with the flush button/mechanism on the toilet in the second bedroom. Landlord has approved the repair. Please fix on the visit if it is a minor repair (e.g. button, linkage, or valve parts). If it needs more than that, send us a quote before doing any work. Please arrange access with the tenant, and send the invoice and a photo of the completed work.",
+        "reason": "Landlord replied \"Yes please mend it\" [event 006] and approval is confirmed with instruction to proceed to provider selection [event 007]. The landlord is not using their own contractor, so I am assigning a plumber. The original request asks for a quote if the job is big [event 008]."
+      },
+      "ok": true,
+      "result": "Plumber contractor assigned"
+    }
+  ],
+  "incomplete": false
+}

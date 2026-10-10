@@ -1,0 +1,25 @@
+{
+  "caseId": "049",
+  "initialSeen": 7,
+  "seen": 7,
+  "runs": 1,
+  "status": {
+    "kind": "open"
+  },
+  "actions": [
+    {
+      "run": 1,
+      "afterEvent": 7,
+      "tool": "send_message",
+      "input": {
+        "to": "tenant",
+        "channel": "email",
+        "text": "Dear Tenant,\n\nThank you for reporting the sagging shed door at Flat 13, 103 Meadow Row, Bellmere, ZZ3 7ZZ.\n\nThe landlord is happy for you to deal with it if you can, for example by tightening the hinge screws. If that is not practical, or the door gets worse, please let us know and we will arrange a contractor to look at it.\n\nCould you confirm which you would prefer? If you are happy to carry on lifting the door for now, just tell us and we will keep the report on file.\n\nKind regards,\nNorthbridge Lettings",
+        "reason": "Landlord approved the tenant fixing the door themselves, or otherwise a contractor [event 007]. Tenant said they are happy to lift the door but reported it in case it worsens [event 001]. Asking the tenant which route they want."
+      },
+      "ok": true,
+      "result": "email to tenant queued in the outbox"
+    }
+  ],
+  "incomplete": false
+}

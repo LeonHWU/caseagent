@@ -1,0 +1,24 @@
+{
+  "caseId": "011",
+  "initialSeen": 3,
+  "seen": 3,
+  "runs": 1,
+  "status": {
+    "kind": "open"
+  },
+  "actions": [
+    {
+      "run": 1,
+      "afterEvent": 3,
+      "tool": "request_landlord_approval",
+      "input": {
+        "scope": "Appliance engineer to inspect and repair the dishwasher at Flat 12, 78 Copperfield Walk, Kingshaven, ZZ3 1ZZ. It fills and washes but never finishes its cycle. The problem started recently. The tenant reports no access issues or alarms. Two guinea pigs live at the property.",
+        "cost": "unknown",
+        "reason": "The tenant reports the dishwasher never ends its cycle [event 001]. It is classed as routine [event 002]. The system asks for the landlord approval step first [event 003]. Rule 1 requires approval before any contractor visit. No quote exists yet, so the cost is unknown. I will ask the tenant to try a simple reset once the landlord replies."
+      },
+      "ok": true,
+      "result": "approval request for \"Appliance engineer to inspect and repair the dishwasher at Flat 12, 78 Copperfield Walk, Kingshaven, ZZ3 1ZZ. It fills and washes but never finishes its cycle. The problem started recently. The tenant reports no access issues or alarms. Two guinea pigs live at the property.\" (cost: unknown) sent to the landlord"
+    }
+  ],
+  "incomplete": false
+}

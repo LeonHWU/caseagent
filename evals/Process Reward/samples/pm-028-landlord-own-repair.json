@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "id": "pm-028-landlord-own-repair",
+  "title": "Wait for landlord confirmation when the landlord arranges the repair",
+  "track": "Property Management",
+  "category": "landlord_own_contractor",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "028",
+  "step": 7,
+  "input": {
+    "cases_dir": "fixtures/pm-028-landlord-own-repair",
+    "case_dir": "fixtures/pm-028-landlord-own-repair/028",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "028",
+        "step": 7
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "hold",
+        "exact_arguments": {
+          "waiting_for": "Waiting for Landlord"
+        },
+        "semantic_requirements": [
+          {
+            "id": "ownership",
+            "description": "State that the landlord has offered to handle the issue and wait for the landlord or their provider to confirm progress/completion.",
+            "weight": 2
+          },
+          {
+            "id": "citation",
+            "description": "The reason cites event 007.",
+            "weight": 1
+          },
+          {
+            "id": "no_completion",
+            "description": "Do not interpret will sort as already completed.",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "Calling assign_contractor separately and duplicating the assignment.",
+      "Calling close_case based only on the landlord promise to handle the issue."
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/028/index.md",
+    "source_history": "Property Management/028/history.md",
+    "source_index_sha256": "257e55256e2ed04fd06eef2602f49a7dcd81d71450416f0823b9623330e0240e",
+    "source_history_sha256": "a9182218c4900faa8f252fea39af93a12b58068ce5678aec365662ad04ee8d5e",
+    "input_evidence": [
+      {
+        "event": 3,
+        "file": "Property Management/028/history.md",
+        "anchor": "event-003",
+        "start_line": 23,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/028/history.md#event-003",
+        "channel": "Email",
+        "from": "Northbridge Lettings",
+        "to": "Landlord",
+        "excerpt": "Address: Flat 7, 87 Alder Lane, Bellmere, ZZ3 8ZZ\n\nGood afternoon, Grace,\n\nThe tenant of this property has reported the following. Can you please advise if you wish for me to instruct a contractor to attend or if you want to arrange your own contractor?\n\nRequest description: Hi. The pipe become loose at the back garden as shown in the photo below.\n\nKind regards\n\nAttachment: attachment-17-document (unavailable)"
+      },
+      {
+        "event": 7,
+        "file": "Property Management/028/history.md",
+        "anchor": "event-007",
+        "start_line": 75,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/028/history.md#event-007",
+        "channel": "Email",
+        "from": "Landlord",
+        "to": "Northbridge Lettings",
+        "excerpt": "Thanks Felix,\n\nWe will sort this issue.\n\nGrace Oakley\nDirector"
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 8,
+        "file": "Property Management/028/history.md",
+        "anchor": "event-008",
+        "start_line": 89,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/028/history.md#event-008",
+        "channel": "Hold",
+        "from": "Northbridge Lettings",
+        "to": "Not specified",
+        "excerpt": "Put on hold by Felix Sawyer. Reason: Waiting for Landlord. Comment: Held awaiting landlords contractor to complete."
+      }
+    ],
+    "derivation": "Event 003 offers the landlord a choice between arranging their own repair and an agency assignment; 007 replies We will sort this issue. Historical event 008 explicitly records Waiting for Landlord while awaiting completion by the landlord contractor. Map directly to hold, retaining the landlord as the waiting party.",
+    "review_scope": "Historical prefix events 001–007 and the reference action; later events are not inputs or required facts."
+  },
+  "grading": {
+    "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
+    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
+    "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
+  }
+}

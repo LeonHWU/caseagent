@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "name": "property-management-process-reference-v1",
+  "sample_count": 10,
+  "source_revision": "9bcdca585955dfb930005ed742572606e68f5688",
+  "mcp_base_revision": "1ff6e853c170813d7c587e16a2b19975f0bdefab",
+  "samples": [
+    {
+      "id": "pm-011-initial-approval",
+      "case_id": "011",
+      "step": 3,
+      "sample": "samples/pm-011-initial-approval.json",
+      "cases_dir": "fixtures/pm-011-initial-approval"
+    },
+    {
+      "id": "pm-011-approved-assignment",
+      "case_id": "011",
+      "step": 10,
+      "sample": "samples/pm-011-approved-assignment.json",
+      "cases_dir": "fixtures/pm-011-approved-assignment"
+    },
+    {
+      "id": "pm-017-switch-troubleshooting",
+      "case_id": "017",
+      "step": 8,
+      "sample": "samples/pm-017-switch-troubleshooting.json",
+      "cases_dir": "fixtures/pm-017-switch-troubleshooting"
+    },
+    {
+      "id": "pm-017-await-tenant",
+      "case_id": "017",
+      "step": 9,
+      "sample": "samples/pm-017-await-tenant.json",
+      "cases_dir": "fixtures/pm-017-await-tenant"
+    },
+    {
+      "id": "pm-013-report-completion",
+      "case_id": "013",
+      "step": 27,
+      "sample": "samples/pm-013-report-completion.json",
+      "cases_dir": "fixtures/pm-013-report-completion"
+    },
+    {
+      "id": "pm-028-landlord-own-repair",
+      "case_id": "028",
+      "step": 7,
+      "sample": "samples/pm-028-landlord-own-repair.json",
+      "cases_dir": "fixtures/pm-028-landlord-own-repair"
+    },
+    {
+      "id": "pm-032-conditional-assignment",
+      "case_id": "032",
+      "step": 8,
+      "sample": "samples/pm-032-conditional-assignment.json",
+      "cases_dir": "fixtures/pm-032-conditional-assignment"
+    },
+    {
+      "id": "pm-035-landlord-resolved-close",
+      "case_id": "035",
+      "step": 12,
+      "sample": "samples/pm-035-landlord-resolved-close.json",
+      "cases_dir": "fixtures/pm-035-landlord-resolved-close"
+    },
+    {
+      "id": "pm-044-clarify-window",
+      "case_id": "044",
+      "step": 4,
+      "sample": "samples/pm-044-clarify-window.json",
+      "cases_dir": "fixtures/pm-044-clarify-window"
+    },
+    {
+      "id": "pm-049-conditional-self-fix",
+      "case_id": "049",
+      "step": 7,
+      "sample": "samples/pm-049-conditional-self-fix.json",
+      "cases_dir": "fixtures/pm-049-conditional-self-fix"
+    }
+  ]
+}
