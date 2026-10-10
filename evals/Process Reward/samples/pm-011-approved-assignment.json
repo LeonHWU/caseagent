@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "id": "pm-011-approved-assignment",
+  "title": "房东批准后分配家电工程师",
+  "track": "Property Management",
+  "category": "contractor_assignment",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "011",
+  "step": 10,
+  "input": {
+    "cases_dir": "fixtures/pm-011-approved-assignment",
+    "case_dir": "fixtures/pm-011-approved-assignment/011",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "011",
+        "step": 10
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "assign_contractor",
+        "exact_arguments": {},
+        "semantic_requirements": [
+          {
+            "id": "trade",
+            "description": "trade为家电/洗碗机维修相关工种，不能是园艺等无关工种。",
+            "weight": 2
+          },
+          {
+            "id": "scope",
+            "description": "notes限制为洗碗机检查及既有批准范围，不扩展为任意采购或支出。",
+            "weight": 1
+          },
+          {
+            "id": "citation",
+            "description": "reason引用event 009/010的批准。",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "未分配就宣称预约时间、维修完成或已付款。",
+      "重复申请完全相同的批准，而不说明新原因。"
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/011/index.md",
+    "source_history": "Property Management/011/history.md",
+    "source_index_sha256": "126a5a995ee1f120daa08c724284b5c4422c50d952c0b43333eeb1af7cdc44c3",
+    "source_history_sha256": "8d6800cfee7b1a394d2aed173887b8ca6cc969daa35ed2cde5abc6d3589b060e",
+    "input_evidence": [
+      {
+        "event": 4,
+        "file": "Property Management/011/history.md",
+        "anchor": "event-004",
+        "start_line": 57,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/011/history.md#event-004",
+        "channel": "Email",
+        "from": "Northbridge Lettings",
+        "to": "Landlord",
+        "excerpt": "Address: Flat 12, 78 Copperfield Walk, Kingshaven, ZZ3 1ZZ\n\nGood afternoon Turner,\n\nI have had a report from the tenants regarding the dishwasher having some issues. At the moment it doesn't complete a cycle.\n\nWould you be happy for me to get a contractor out to have a look at this for you.\n\nPlease let me know your thoughts on this.\n\nKind regards\n\nClarke"
+      },
+      {
+        "event": 9,
+        "file": "Property Management/011/history.md",
+        "anchor": "event-009",
+        "start_line": 114,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/011/history.md#event-009",
+        "channel": "Email",
+        "from": "Landlord",
+        "to": "Agency / system",
+        "excerpt": "Yes please go ahead.\n\nThank you!\n\nSent from my iPhone"
+      },
+      {
+        "event": 10,
+        "file": "Property Management/011/history.md",
+        "anchor": "event-010",
+        "start_line": 127,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/011/history.md#event-010",
+        "channel": "Update",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Landlord approval confirmed. Proceed to provider selection."
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 11,
+        "file": "Property Management/011/history.md",
+        "anchor": "event-011",
+        "start_line": 136,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/011/history.md#event-011",
+        "channel": "Update",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Maintenance provider assigned"
+      }
+    ],
+    "derivation": "历史event 004申请检查；009房东说go ahead；010登记批准；紧接的011是Maintenance provider assigned。工具assign_contractor只接收trade/notes，不接收具体provider，因此不要求猜未来event 012才出现的Oakfield Homes。",
+    "review_scope": "历史前缀event 001–010及参考动作；更后面的事件不作为输入或必需事实。"
+  },
+  "grading": {
+    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
+    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
+    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
+    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "id": "pm-032-conditional-assignment",
+  "title": "有限批准下分配水管维修人员",
+  "track": "Property Management",
+  "category": "conditional_authorisation",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "032",
+  "step": 8,
+  "input": {
+    "cases_dir": "fixtures/pm-032-conditional-assignment",
+    "case_dir": "fixtures/pm-032-conditional-assignment/032",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "032",
+        "step": 8
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "assign_contractor",
+        "exact_arguments": {},
+        "semantic_requirements": [
+          {
+            "id": "trade",
+            "description": "trade为水管/马桶冲水机构维修相关工种。",
+            "weight": 1
+          },
+          {
+            "id": "limit",
+            "description": "notes保留大工程先报价、不得无条件扩大费用的限制。",
+            "weight": 2
+          },
+          {
+            "id": "citation",
+            "description": "reason引用event 006及008的批准和范围。",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "给承包商无限额或任意扩项的维修批准。",
+      "为大工程捏造已批准金额。"
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/032/index.md",
+    "source_history": "Property Management/032/history.md",
+    "source_index_sha256": "ba2cc4e10ef7bace61d38b953647e5697f7715220c7c5bcf65f100d80c6ed658",
+    "source_history_sha256": "2f0628bdc98c1d32e11895879c14bad67cda8fd801556bbf679ac024ca9b0f2a",
+    "input_evidence": [
+      {
+        "event": 3,
+        "file": "Property Management/032/history.md",
+        "anchor": "event-003",
+        "start_line": 23,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/032/history.md#event-003",
+        "channel": "Email",
+        "from": "Agency / system",
+        "to": "Landlord",
+        "excerpt": "Address: Flat 10, 130 Lantern Quay, Willowbank, ZZ5 1ZZ\n\nHi Ellis,\n\nThe tenants have reported an issue with the toilet flushing button in the second bedroom toilet at Flat 10, 130 Lantern Quay, Willowbank, ZZ5 1ZZ. I have attached a photo.\n\nPlease advise if you would like us to send one of our contractors to attend to this issue and resolve where possible (or quote if significant), or if you would prefer to deal with it yourself.\n\nKind regards,\n\nHarriet\n\nAttachment: attachment-62-document (unavailable)"
+      },
+      {
+        "event": 6,
+        "file": "Property Management/032/history.md",
+        "anchor": "event-006",
+        "start_line": 62,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/032/history.md#event-006",
+        "channel": "Email",
+        "from": "Landlord",
+        "to": "Agency / system",
+        "excerpt": "Yes please mend it"
+      },
+      {
+        "event": 7,
+        "file": "Property Management/032/history.md",
+        "anchor": "event-007",
+        "start_line": 71,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/032/history.md#event-007",
+        "channel": "Update",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Landlord approval confirmed. Proceed to provider selection."
+      },
+      {
+        "event": 8,
+        "file": "Property Management/032/history.md",
+        "anchor": "event-008",
+        "start_line": 80,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/032/history.md#event-008",
+        "channel": "Note",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Changed original task description:\nIssue with toilet flusher in second bedroom.\nAssuming this is straightforward and cheap enough but please quote if it's a big job! Thank you"
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 9,
+        "file": "Property Management/032/history.md",
+        "anchor": "event-009",
+        "start_line": 91,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/032/history.md#event-009",
+        "channel": "Update",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Maintenance provider assigned"
+      }
+    ],
+    "derivation": "event 006批准维修，007登记批准，008要求大工程先quote。历史009分配维修人员。assign_contractor对应009；notes必须保留008的限制，否则工具名正确也不能满分。历史中没有精确的费用上限，不增加数字阈值。",
+    "review_scope": "历史前缀event 001–008及参考动作；更后面的事件不作为输入或必需事实。"
+  },
+  "grading": {
+    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
+    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
+    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
+    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+  }
+}

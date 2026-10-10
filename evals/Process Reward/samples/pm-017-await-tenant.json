@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "id": "pm-017-await-tenant",
+  "title": "已发排查指引后等待租客反馈",
+  "track": "Property Management",
+  "category": "waiting_state",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "017",
+  "step": 9,
+  "input": {
+    "cases_dir": "fixtures/pm-017-await-tenant",
+    "case_dir": "fixtures/pm-017-await-tenant/017",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "017",
+        "step": 9
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "hold",
+        "exact_arguments": {
+          "waiting_for": "Waiting for Tenant"
+        },
+        "semantic_requirements": [
+          {
+            "id": "wait",
+            "description": "说明已经发出开关检查请求，正在等租客确认。",
+            "weight": 2
+          },
+          {
+            "id": "citation",
+            "description": "reason引用event 009。",
+            "weight": 1
+          },
+          {
+            "id": "no_future",
+            "description": "不能声称已收到回复或故障已解决。",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "close_case。",
+      "尚未获得排查反馈就分配承包商。"
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/017/index.md",
+    "source_history": "Property Management/017/history.md",
+    "source_index_sha256": "8a8cc4d76c80701d5f100d1fbc0f7daea2430b8c65d724ec5331ab4490f26251",
+    "source_history_sha256": "4e6841b2ce52d8b2fcbfb7af0ff2f2ad6099ea495b5143add1dd6b3ad54911b0",
+    "input_evidence": [
+      {
+        "event": 8,
+        "file": "Property Management/017/history.md",
+        "anchor": "event-008",
+        "start_line": 88,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/017/history.md#event-008",
+        "channel": "Email",
+        "from": "Landlord",
+        "to": "Northbridge Lettings",
+        "excerpt": "There is a switch to the righthand side of the hob when needs to be switched on."
+      },
+      {
+        "event": 9,
+        "file": "Property Management/017/history.md",
+        "anchor": "event-009",
+        "start_line": 97,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/017/history.md#event-009",
+        "channel": "Email",
+        "from": "Northbridge Lettings",
+        "to": "Tenant",
+        "excerpt": "Address: Flat 1, 31 Juniper Mews, Cedarford, ZZ7 7ZZ\n\nGood afternoon Clara,\n\nI trust you are well.\n\nThe landlord has advised that there is a switch to the right-hand side of the hob which needs to be switched on. Please could you check this and let me know if everything is working correctly?\n\nKind regards,\nImogen\nNorthbridge Lettings"
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 10,
+        "file": "Property Management/017/history.md",
+        "anchor": "event-010",
+        "start_line": 116,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/017/history.md#event-010",
+        "channel": "Note",
+        "from": "Northbridge Lettings",
+        "to": "Internal",
+        "excerpt": "Landlord suggested tenant check on the right hand of the hob there should be a switch. Awaiting tenant response."
+      }
+    ],
+    "derivation": "历史event 010是Note，正文明确Awaiting tenant response；它不是原始tool call。这里将相同的等待状态映射为现有hold工具及Waiting for Tenant枚举，不要求复制原Note渠道。",
+    "review_scope": "历史前缀event 001–009及参考动作；更后面的事件不作为输入或必需事实。"
+  },
+  "grading": {
+    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
+    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
+    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
+    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+  }
+}

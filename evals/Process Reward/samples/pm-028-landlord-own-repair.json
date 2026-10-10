@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "id": "pm-028-landlord-own-repair",
+  "title": "房东自安排维修时等待房东确认",
+  "track": "Property Management",
+  "category": "landlord_own_contractor",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "028",
+  "step": 7,
+  "input": {
+    "cases_dir": "fixtures/pm-028-landlord-own-repair",
+    "case_dir": "fixtures/pm-028-landlord-own-repair/028",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "028",
+        "step": 7
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "hold",
+        "exact_arguments": {
+          "waiting_for": "Waiting for Landlord"
+        },
+        "semantic_requirements": [
+          {
+            "id": "ownership",
+            "description": "说明房东已表示自行处理，应等房东或其安排方确认进展/完工。",
+            "weight": 2
+          },
+          {
+            "id": "citation",
+            "description": "reason引用event 007。",
+            "weight": 1
+          },
+          {
+            "id": "no_completion",
+            "description": "不能把will sort视为已经完成。",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "另行assign_contractor造成重复派工。",
+      "以房东承诺处理为依据close_case。"
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/028/index.md",
+    "source_history": "Property Management/028/history.md",
+    "source_index_sha256": "257e55256e2ed04fd06eef2602f49a7dcd81d71450416f0823b9623330e0240e",
+    "source_history_sha256": "a9182218c4900faa8f252fea39af93a12b58068ce5678aec365662ad04ee8d5e",
+    "input_evidence": [
+      {
+        "event": 3,
+        "file": "Property Management/028/history.md",
+        "anchor": "event-003",
+        "start_line": 23,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/028/history.md#event-003",
+        "channel": "Email",
+        "from": "Northbridge Lettings",
+        "to": "Landlord",
+        "excerpt": "Address: Flat 7, 87 Alder Lane, Bellmere, ZZ3 8ZZ\n\nGood afternoon, Grace,\n\nThe tenant of this property has reported the following. Can you please advise if you wish for me to instruct a contractor to attend or if you want to arrange your own contractor?\n\nRequest description: Hi. The pipe become loose at the back garden as shown in the photo below.\n\nKind regards\n\nAttachment: attachment-17-document (unavailable)"
+      },
+      {
+        "event": 7,
+        "file": "Property Management/028/history.md",
+        "anchor": "event-007",
+        "start_line": 75,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/028/history.md#event-007",
+        "channel": "Email",
+        "from": "Landlord",
+        "to": "Northbridge Lettings",
+        "excerpt": "Thanks Felix,\n\nWe will sort this issue.\n\nGrace Oakley\nDirector"
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 8,
+        "file": "Property Management/028/history.md",
+        "anchor": "event-008",
+        "start_line": 89,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/028/history.md#event-008",
+        "channel": "Hold",
+        "from": "Northbridge Lettings",
+        "to": "Not specified",
+        "excerpt": "Put on hold by Felix Sawyer. Reason: Waiting for Landlord. Comment: Held awaiting landlords contractor to complete."
+      }
+    ],
+    "derivation": "event 003让房东选择自安排或物业派工，007回复We will sort this issue。历史008明确Waiting for Landlord，等待房东承包商完成；直接映射hold，等待对象保留为房东。",
+    "review_scope": "历史前缀event 001–007及参考动作；更后面的事件不作为输入或必需事实。"
+  },
+  "grading": {
+    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
+    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
+    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
+    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "id": "pm-035-landlord-resolved-close",
+  "title": "房东亲自处理并确认完成后结案",
+  "track": "Property Management",
+  "category": "case_closure",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "035",
+  "step": 12,
+  "input": {
+    "cases_dir": "fixtures/pm-035-landlord-resolved-close",
+    "case_dir": "fixtures/pm-035-landlord-resolved-close/035",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "035",
+        "step": 12
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "close_case",
+        "exact_arguments": {
+          "outcome": "work_completed",
+          "landlord_informed": true
+        },
+        "semantic_requirements": [
+          {
+            "id": "confirmation",
+            "description": "work_confirmed_by归因于房东并引用event 011或012。",
+            "weight": 2
+          },
+          {
+            "id": "scope",
+            "description": "结案范围限于本案淋浴问题，不能延伸为全部历史物业问题已解决。",
+            "weight": 1
+          },
+          {
+            "id": "no_payment",
+            "description": "不编造承包商费用或付款凭证。",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "声称物业承包商施工或费用已支付。",
+      "把旧烟雾探测器/天花板等话题也宣称处理完毕。"
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/035/index.md",
+    "source_history": "Property Management/035/history.md",
+    "source_index_sha256": "92b74f8746f07cbbf36e9dbd78ae59cd8f5ae7b003cb9e3cc558ba300c041588",
+    "source_history_sha256": "4cb597324d3ce3e3bb8847d2a4ae19268e6795972cf1ca3761af2ea29924cbe8",
+    "input_evidence": [
+      {
+        "event": 6,
+        "file": "Property Management/035/history.md",
+        "anchor": "event-006",
+        "start_line": 94,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/035/history.md#event-006",
+        "channel": "Email",
+        "from": "Agency / system",
+        "to": "Tenant",
+        "excerpt": "Address: Flat 23, 63 Meadow Row, Bellmere, ZZ6 6ZZ\n\nHi Palmer\n\nI have sent the picture of the shower to the landlord he is going to get the parts and he will get in touch with you to arrange to come out and fit them.\n\nKind Regards\n\nImogen Harper"
+      },
+      {
+        "event": 11,
+        "file": "Property Management/035/history.md",
+        "anchor": "event-011",
+        "start_line": 147,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/035/history.md#event-011",
+        "channel": "Note",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "ll rang and confirmed this is all done - mw"
+      },
+      {
+        "event": 12,
+        "file": "Property Management/035/history.md",
+        "anchor": "event-012",
+        "start_line": 156,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/035/history.md#event-012",
+        "channel": "Note",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "ll confirmed he has sorted this"
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 13,
+        "file": "Property Management/035/history.md",
+        "anchor": "event-013",
+        "start_line": 165,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/035/history.md#event-013",
+        "channel": "Update",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Task has been completed without payment"
+      }
+    ],
+    "derivation": "event 006说明房东取得配件并安装，011/012两次记录房东确认完成；历史013将任务标记完成且无需物业付款。映射close_case(work_completed)，房东既是处理人也是确认人。keys=not_issued和invoice=not_required若填，是无物业派工/取钥匙及房东亲自处理所支持的字段推断，原文未直接给出；不将这些枚举当作直接历史标签或独立评分项。",
+    "review_scope": "历史前缀event 001–012及参考动作；更后面的事件不作为输入或必需事实。"
+  },
+  "grading": {
+    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
+    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
+    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
+    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+  }
+}

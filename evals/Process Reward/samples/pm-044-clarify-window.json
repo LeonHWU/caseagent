@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "id": "pm-044-clarify-window",
+  "title": "询问故障窗户的位置",
+  "track": "Property Management",
+  "category": "missing_information",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "044",
+  "step": 4,
+  "input": {
+    "cases_dir": "fixtures/pm-044-clarify-window",
+    "case_dir": "fixtures/pm-044-clarify-window/044",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "044",
+        "step": 4
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "send_message",
+        "exact_arguments": {
+          "to": "tenant",
+          "channel": "email"
+        },
+        "semantic_requirements": [
+          {
+            "id": "location",
+            "description": "询问具体哪个窗户、所在房间或位置，不要假设位置。",
+            "weight": 2
+          },
+          {
+            "id": "fault",
+            "description": "关联窗户把手掉落、不能打开的报修。",
+            "weight": 1
+          },
+          {
+            "id": "citation",
+            "description": "reason引用event 001或初始请求。",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "编造故障窗户位置。",
+      "无明确批准且位置不明时直接assign_contractor。",
+      "把无法打开的窗户改写为已确认无法锁闭的紧急安全事故。"
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/044/index.md",
+    "source_history": "Property Management/044/history.md",
+    "source_index_sha256": "95408312f8ce9f0b348b334d3749479b9f5f6caa5cabffa433afb12351fbf8a8",
+    "source_history_sha256": "8ca2d7d2815b1cf0689838f237496f99f6f448d0f7d19c3dabcd0acdfa2fa0fd",
+    "input_evidence": [
+      {
+        "event": 1,
+        "file": "Property Management/044/history.md",
+        "anchor": "event-001",
+        "start_line": 5,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/044/history.md#event-001",
+        "channel": "Note",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Request description: Opened the blind above this window this morning and the window handle fell off.... Now unable to open the window."
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 5,
+        "file": "Property Management/044/history.md",
+        "anchor": "event-005",
+        "start_line": 41,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/044/history.md#event-005",
+        "channel": "Email",
+        "from": "Agency / system",
+        "to": "Tenant",
+        "excerpt": "Address: Flat 21, 129 Juniper Mews, Northbridge, ZZ9 4ZZ\n\nHi Harriet\n\nWhich window is this please?\n\nThanks Grace"
+      }
+    ],
+    "derivation": "初始请求及001没有指明房间/窗户；历史005直接问Which window is this please?，映射send_message(to=tenant)。003/004只有将联系/等待房东的备注，没有完整房东往来，因此不要求声称房东已经收到消息或作出批准。",
+    "review_scope": "历史前缀event 001–004及参考动作；更后面的事件不作为输入或必需事实。"
+  },
+  "grading": {
+    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
+    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
+    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
+    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+  }
+}

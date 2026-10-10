@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "id": "pm-013-report-completion",
+  "title": "收到匹配工单的完工信息后通知房东",
+  "track": "Property Management",
+  "category": "landlord_update",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "013",
+  "step": 27,
+  "input": {
+    "cases_dir": "fixtures/pm-013-report-completion",
+    "case_dir": "fixtures/pm-013-report-completion/013",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "013",
+        "step": 27
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "send_message",
+        "exact_arguments": {
+          "to": "landlord",
+          "channel": "email"
+        },
+        "semantic_requirements": [
+          {
+            "id": "completion",
+            "description": "说明该地址的洗碗机工作已由承包商报告完成并已发送发票。",
+            "weight": 2
+          },
+          {
+            "id": "scope",
+            "description": "状态归因于event 027，不能称租客已确认、费用已扣除或发票已支付。",
+            "weight": 1
+          },
+          {
+            "id": "no_amount",
+            "description": "不能使用未来event 028才出现的£162.85；可说发票金额待核实。",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "编造£162.85等当前不可见金额。",
+      "宣称已支付或已经从租金扣除。",
+      "忽略尚待通知房东而直接结案。"
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/013/index.md",
+    "source_history": "Property Management/013/history.md",
+    "source_index_sha256": "fb62e9ba4a1e26c3e44ae07e1bcd6cac53aaa148f89bb9d07e07b39d0e51dcce",
+    "source_history_sha256": "146e50e521e06c85a74c1b39980a3b4dd0042e2d397c93892e0e2f8b32e1785e",
+    "input_evidence": [
+      {
+        "event": 6,
+        "file": "Property Management/013/history.md",
+        "anchor": "event-006",
+        "start_line": 61,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/013/history.md#event-006",
+        "channel": "Email",
+        "from": "Agency / system",
+        "to": "Contractor",
+        "excerpt": "Dear Harbour Surveying,\n\nThis is a new Dishwasher Repair Request for the property at Flat 2, 42 Beacon Close, Bellmere, ZZ4 2ZZ.\n\nPlease contact the tenant to arrange a suitable time to quote for this job.\n\nContact Details: 07700 900752\nTenant Name: Nora Palmer\nRequest description: Dishwasher starts then beeps and powers light flashes.  Just stops working. It’s  an integrated dishwasher .\n\nWe request that you arrange this appointment as soon as possible to ensure a smooth experience for our customers.\n\nPlease include in your email, along with the quote, the estimated time required to complete the work after receiving the landlord’s approval.\n\nPlease remember that along with a quotation, you must provide a photo or video (where applicable) clearly highlighting what needs to be changed and explaining why."
+      },
+      {
+        "event": 27,
+        "file": "Property Management/013/history.md",
+        "anchor": "event-027",
+        "start_line": 312,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/013/history.md#event-027",
+        "channel": "Email",
+        "from": "Contractor",
+        "to": "Agency / system",
+        "excerpt": "The customer, Langley from Harbour Surveying, sent an invoice for a completed job at Flat 2, 42 Beacon Close, Bellmere, ZZ4 2ZZ."
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 28,
+        "file": "Property Management/013/history.md",
+        "anchor": "event-028",
+        "start_line": 321,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/013/history.md#event-028",
+        "channel": "Email",
+        "from": "Agency / system",
+        "to": "Landlord",
+        "excerpt": "Address: Flat 2, 42 Beacon Close, Bellmere, ZZ4 2ZZ\n\nHi Clara, I hope you are well. We sent Harbour Surveying to Flat 2, 42 Beacon Close, Bellmere, ZZ4 2ZZ - They have repaired the dishwasher on site and it is all up and running. I will pass the invoice of £162.85 to come from the rent Regards,"
+      }
+    ],
+    "derivation": "event 027是承包商发送匹配本案地址的completed job invoice。历史028通知房东维修完成；保留这个动作，但排除028新增的£162.85金额，因为截断输入没有该数字。这是信息可见性约束，不是另造修正路径。",
+    "review_scope": "历史前缀event 001–027及参考动作；更后面的事件不作为输入或必需事实。"
+  },
+  "grading": {
+    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
+    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
+    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
+    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+  }
+}

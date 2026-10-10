@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "id": "pm-011-initial-approval",
+  "title": "首次上门前申请房东批准",
+  "track": "Property Management",
+  "category": "landlord_approval",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "011",
+  "step": 3,
+  "input": {
+    "cases_dir": "fixtures/pm-011-initial-approval",
+    "case_dir": "fixtures/pm-011-initial-approval/011",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "011",
+        "step": 3
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "request_landlord_approval",
+        "exact_arguments": {},
+        "semantic_requirements": [
+          {
+            "id": "scope",
+            "description": "说明洗碗机不能结束循环，请求批准工程师上门检查。",
+            "weight": 2
+          },
+          {
+            "id": "cost",
+            "description": "费用尚未知，不编造报价或声称已获批准。",
+            "weight": 1
+          },
+          {
+            "id": "citation",
+            "description": "reason 引用可见的故障或审批事件。",
+            "weight": 1
+          }
+        ]
+      },
+      {
+        "tool": "send_message",
+        "exact_arguments": {
+          "to": "landlord",
+          "channel": "email"
+        },
+        "semantic_requirements": [
+          {
+            "id": "scope",
+            "description": "说明洗碗机不能结束循环，请求批准工程师上门检查。",
+            "weight": 2
+          },
+          {
+            "id": "cost",
+            "description": "费用尚未知，不编造报价或声称已获批准。",
+            "weight": 1
+          },
+          {
+            "id": "citation",
+            "description": "reason 引用可见事件。",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "在无批准时 assign_contractor。",
+      "声称已经维修完成或已取得房东批准。"
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/011/index.md",
+    "source_history": "Property Management/011/history.md",
+    "source_index_sha256": "126a5a995ee1f120daa08c724284b5c4422c50d952c0b43333eeb1af7cdc44c3",
+    "source_history_sha256": "8d6800cfee7b1a394d2aed173887b8ca6cc969daa35ed2cde5abc6d3589b060e",
+    "input_evidence": [
+      {
+        "event": 1,
+        "file": "Property Management/011/history.md",
+        "anchor": "event-001",
+        "start_line": 5,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/011/history.md#event-001",
+        "channel": "Note",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Request description: Request summary with context: The Riverside Services dishwasher runs perpetually and does not complete its cycle, suggesting a malfunction.\n\nTenant's original query: Dish washer repair, the dish washer turns on, fills up and seems to wash but never ever stops it’s cycle\n\nAdditional details provided:\n- Has this issue been persistent, or did it start recently? Started recently\n- Are there any pets at the property? Yes two guinea pigs"
+      },
+      {
+        "event": 2,
+        "file": "Property Management/011/history.md",
+        "anchor": "event-002",
+        "start_line": 20,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/011/history.md#event-002",
+        "channel": "Note",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "[AI Intake Classification]\n\nTenant said:\n  Dish washer repair, the dish washer turns on, fills up and seems to wash but never ever stops it’s cycle\n\nIssue:\n  Appliances · Dishwasher not completing cycle\n  Severity: ROUTINE — While the dishwasher is not completing its cycle, it does not prevent the use of other kitchen appliances and does not pose an immediate risk.\n  Confidence: high\n  Containment steps shown to tenant:\n    1. Photograph the dishwasher and any error messages or unusual lights on its display after it has stopped working. This will help identify the issue.\n  Summary: The Riverside Services dishwasher runs perpetually and does not complete its cycle, suggesting a malfunction.\n\nTenant's clarifying Q&A:\n  Q: Has this issue been persistent, or did it start recently?\n  A: Started recently\n  Q: Are there any access considerations we should know about, such as entry codes or alarms and security systems that would need to be disarmed?\n  A: No\n  Q: Are there any pets at the property?\n  A: Yes two guinea pigs"
+      },
+      {
+        "event": 3,
+        "file": "Property Management/011/history.md",
+        "anchor": "event-003",
+        "start_line": 48,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/011/history.md#event-003",
+        "channel": "Update",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Please complete landlord approval step first"
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 4,
+        "file": "Property Management/011/history.md",
+        "anchor": "event-004",
+        "start_line": 57,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/011/history.md#event-004",
+        "channel": "Email",
+        "from": "Northbridge Lettings",
+        "to": "Landlord",
+        "excerpt": "Address: Flat 12, 78 Copperfield Walk, Kingshaven, ZZ3 1ZZ\n\nGood afternoon Turner,\n\nI have had a report from the tenants regarding the dishwasher having some issues. At the moment it doesn't complete a cycle.\n\nWould you be happy for me to get a contractor out to have a look at this for you.\n\nPlease let me know your thoughts on this.\n\nKind regards\n\nClarke"
+      }
+    ],
+    "derivation": "event 001/002记录故障，003要求先完成房东审批。历史event 004向房东询问是否同意承包商检查；映射为request_landlord_approval，允许等价的send_message。参考历史没有费用数字，cost只能unknown或相同含义。",
+    "review_scope": "历史前缀event 001–003及参考动作；更后面的事件不作为输入或必需事实。"
+  },
+  "grading": {
+    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
+    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
+    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
+    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+  }
+}

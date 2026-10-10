@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "id": "pm-049-conditional-self-fix",
+  "title": "转达可自行修理且保留承包商备选的批准",
+  "track": "Property Management",
+  "category": "conditional_tenant_action",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "049",
+  "step": 7,
+  "input": {
+    "cases_dir": "fixtures/pm-049-conditional-self-fix",
+    "case_dir": "fixtures/pm-049-conditional-self-fix/049",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "049",
+        "step": 7
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "send_message",
+        "exact_arguments": {
+          "to": "tenant",
+          "channel": "email"
+        },
+        "semantic_requirements": [
+          {
+            "id": "optional",
+            "description": "房东允许租客在有能力时自行修，不能要求租客必须修。",
+            "weight": 2
+          },
+          {
+            "id": "fallback",
+            "description": "不能修或不便处理时请反馈，再安排承包商。",
+            "weight": 1
+          },
+          {
+            "id": "citation",
+            "description": "reason引用event 007批准，不提前引用013的完成结果。",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "把自行修理写成强制义务。",
+      "提前close_case或声称租客已修好。",
+      "编造未提供的拆卸/结构维修操作指令。"
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/049/index.md",
+    "source_history": "Property Management/049/history.md",
+    "source_index_sha256": "910ae2d6763d2c034f5f7365d3f2f6a504206f93e5115e02d304e23f7bde0fa7",
+    "source_history_sha256": "e42f3ea31ec4f31f60c6069eb55f3d0ff1dc8aa87ce75278c9ddb2fcb7105994",
+    "input_evidence": [
+      {
+        "event": 1,
+        "file": "Property Management/049/history.md",
+        "anchor": "event-001",
+        "start_line": 5,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/049/history.md#event-001",
+        "channel": "Note",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Request description: Minor issue / weathering: Shed door is sagging and needs to be lifted from the bottom to close properly\n\nWe don't mind lifting it from the bottom, but wanted to report it in case it gets worse"
+      },
+      {
+        "event": 4,
+        "file": "Property Management/049/history.md",
+        "anchor": "event-004",
+        "start_line": 52,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/049/history.md#event-004",
+        "channel": "Email",
+        "from": "Northbridge Lettings",
+        "to": "Landlord",
+        "excerpt": "Address: Flat 13, 103 Meadow Row, Bellmere, ZZ3 7ZZ\n\nGood morning,\n\nI have had a report of the shed door sagging and needing it to be lifted.\n\nThe tenants are happy to do this but wanted to report this in case it gets worse.\n\nAre you happy for them to do this or would you like a contractor to go out deal with it.\n\nKind regards\n\nRowan"
+      },
+      {
+        "event": 7,
+        "file": "Property Management/049/history.md",
+        "anchor": "event-007",
+        "start_line": 91,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/049/history.md#event-007",
+        "channel": "Email",
+        "from": "Landlord",
+        "to": "Northbridge Lettings",
+        "excerpt": "The landlord approves the tenant to fix the door if they can, otherwise to assign it to a contractor."
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 8,
+        "file": "Property Management/049/history.md",
+        "anchor": "event-008",
+        "start_line": 100,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/049/history.md#event-008",
+        "channel": "Email",
+        "from": "Northbridge Lettings",
+        "to": "Tenant",
+        "excerpt": "Address: Flat 13, 103 Meadow Row, Bellmere, ZZ3 7ZZ\n\nGood morning,\n\nI have spoken to the landlord and he is happy for you to fix the door if you are able. Please let me know if not and I will then get a contractor out to you.\n\nKind regards\n\nRowan"
+      }
+    ],
+    "derivation": "event 001是轻微棚门下垂；004请房东选择；007批准租客有能力则自行修，否则派承包商。历史008完整转达该条件，直接映射send_message(to=tenant,channel=email)。后续若无回复就关闭的012未用作标签。",
+    "review_scope": "历史前缀event 001–007及参考动作；更后面的事件不作为输入或必需事实。"
+  },
+  "grading": {
+    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
+    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
+    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
+    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+  }
+}

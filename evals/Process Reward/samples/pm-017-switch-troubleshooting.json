@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "id": "pm-017-switch-troubleshooting",
+  "title": "转达房东提供的抽油烟机开关位置",
+  "track": "Property Management",
+  "category": "tenant_troubleshooting",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "017",
+  "step": 8,
+  "input": {
+    "cases_dir": "fixtures/pm-017-switch-troubleshooting",
+    "case_dir": "fixtures/pm-017-switch-troubleshooting/017",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "017",
+        "step": 8
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "send_message",
+        "exact_arguments": {
+          "to": "tenant",
+          "channel": "email"
+        },
+        "semantic_requirements": [
+          {
+            "id": "instruction",
+            "description": "转达灶台右侧开关需要打开的具体信息。",
+            "weight": 2
+          },
+          {
+            "id": "confirmation",
+            "description": "请租客检查并回复是否恢复正常。",
+            "weight": 1
+          },
+          {
+            "id": "citation",
+            "description": "reason引用event 008，不提前使用event 011的成功结果。",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "提前宣称抽油烟机已经正常。",
+      "尚未确认排查结果就close_case或安排收费维修。"
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/017/index.md",
+    "source_history": "Property Management/017/history.md",
+    "source_index_sha256": "8a8cc4d76c80701d5f100d1fbc0f7daea2430b8c65d724ec5331ab4490f26251",
+    "source_history_sha256": "4e6841b2ce52d8b2fcbfb7af0ff2f2ad6099ea495b5143add1dd6b3ad54911b0",
+    "input_evidence": [
+      {
+        "event": 1,
+        "file": "Property Management/017/history.md",
+        "anchor": "event-001",
+        "start_line": 5,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/017/history.md#event-001",
+        "channel": "Note",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Request description: Extractor fan in kitchen does not seem to work (turn on). May be a simple technician fix. Thank you"
+      },
+      {
+        "event": 8,
+        "file": "Property Management/017/history.md",
+        "anchor": "event-008",
+        "start_line": 88,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/017/history.md#event-008",
+        "channel": "Email",
+        "from": "Landlord",
+        "to": "Northbridge Lettings",
+        "excerpt": "There is a switch to the righthand side of the hob when needs to be switched on."
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 9,
+        "file": "Property Management/017/history.md",
+        "anchor": "event-009",
+        "start_line": 97,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/017/history.md#event-009",
+        "channel": "Email",
+        "from": "Northbridge Lettings",
+        "to": "Tenant",
+        "excerpt": "Address: Flat 1, 31 Juniper Mews, Cedarford, ZZ7 7ZZ\n\nGood afternoon Clara,\n\nI trust you are well.\n\nThe landlord has advised that there is a switch to the right-hand side of the hob which needs to be switched on. Please could you check this and let me know if everything is working correctly?\n\nKind regards,\nImogen\nNorthbridge Lettings"
+      }
+    ],
+    "derivation": "event 008是房东提供的具体排查信息。历史event 009将其转达租客并要求反馈；直接映射到send_message(to=tenant,channel=email)。租客确认正常的011只能作为后续记录，不能出现在输入或决策事实中。",
+    "review_scope": "历史前缀event 001–008及参考动作；更后面的事件不作为输入或必需事实。"
+  },
+  "grading": {
+    "action_source": "实际保存的CaseState.actions或traces中的tool条目，不能只依据模型文字或ANSWER.md状态。",
+    "rule": "只有一个实际工具尝试；名称及exact_arguments匹配其一；semantic_requirements按权重累计折算至0–4分。禁止行为触发时0分。历史不是唯一可接受答案，可保留人工复核的替代路径。",
+    "tool_error": "工具失败/拒绝不算成功执行；记录失败，不手工改答案。",
+    "semantic_review": "用可见输入及标签评消息/参数语义，不能把未来reference_actions中的新增事实当作agent已知。"
+  }
+}
