@@ -26,6 +26,7 @@ export async function runCase(opts: {
   caseDir?: string;
   cacheDir?: string;
   adapters?: Record<string, ToolAdapter>;
+  singleStep?: boolean;
 }): Promise<string[]> {
   const { c, state, client, model, policy, trace, caseDir, cacheDir, adapters } = opts;
   state.runs += 1;
@@ -50,6 +51,8 @@ export async function runCase(opts: {
   const thoughts: string[] = [];
   trace("run_start", { case: c.id, run: state.runs, seen: state.seen, model });
 
+  const systemText = opts.singleStep ? `${policy}\nExecute exactly one tool action for this invocation. Do not chain actions.` : policy;
+
   // Add cache control to tools - last tool definition gets the breakpoint
   const toolsWithCache: Anthropic.Tool[] = TOOL_SPECS.map((t, i) => ({
     ...t,
@@ -59,7 +62,7 @@ export async function runCase(opts: {
   for (let turn = 1; turn <= MAX_TURNS; turn++) {
     // Add cache_control to system and message content
     const systemParam: Anthropic.MessageCreateParamsNonStreaming["system"] = [
-      { type: "text", text: policy, cache_control: { type: "ephemeral" } },
+      { type: "text", text: systemText, cache_control: { type: "ephemeral" } },
     ];
 
     const messagesForRequest: Anthropic.MessageParam[] = messages.map((msg, idx) => {
@@ -103,7 +106,7 @@ export async function runCase(opts: {
       const out = runTool(u.name, u.input, state, adapters);
       state.actions.push({ run: state.runs, afterEvent: state.seen, tool: u.name, input: u.input as Record<string, unknown>, ok: out.ok, result: out.result });
       trace("tool", { name: u.name, input: u.input, ...out });
-      if (out.ends) return thoughts;
+      if (out.ends || opts.singleStep) return thoughts;
       results.push({ type: "tool_result", tool_use_id: u.id, content: out.result, is_error: !out.ok });
     }
     messages.push({ role: "user", content: results });

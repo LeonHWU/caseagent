@@ -73,3 +73,38 @@ test("errors come back as tool errors, not crashes", async () => {
   assert.equal(unrun.isError, true);
   assert.match(text(unrun), /no saved state/);
 });
+
+
+test("explicit step exposes only its prefix and executes one action from a multi-tool response", async () => {
+  const prompts: string[] = [];
+  const client: ModelClient = { messages: { create: async (p) => {
+    prompts.push(JSON.stringify(p.messages));
+    return { content: [
+      { type: "tool_use", id: "a", name: "add_note", input: { text: "Review", reason: "Review [event 007]." } },
+      { type: "tool_use", id: "b", name: "hold", input: { waiting_for: "Waiting for Tenant", reason: "Wait" } },
+    ], stop_reason: "tool_use", usage: { input_tokens: 1, output_tokens: 1 } } as unknown as Anthropic.Message;
+  } } };
+  const mcp = await connect(client);
+  const first = text(await mcp.callTool({ name: "run_case", arguments: { case_id: "027", step: 7 } }));
+  assert.match(first, /^027: open/);
+  assert.match(first, /Events seen:.*event 7/);
+  assert.doesNotMatch(first, /\| hold \|/);
+  const resumed = text(await mcp.callTool({ name: "resume_case", arguments: { case_id: "027" } }));
+  assert.match(resumed, /Events seen:.*event 7/);
+  assert.equal(prompts.length, 2);
+  assert.doesNotMatch(prompts[0], /\[event 011\]/);
+  const later = text(await mcp.callTool({ name: "resume_case", arguments: { case_id: "027", step: 11 } }));
+  assert.match(later, /Events seen:.*event 11/);
+  const backward = await mcp.callTool({ name: "resume_case", arguments: { case_id: "027", step: 7 } });
+  assert.equal(backward.isError, true);
+  assert.match(text(backward), /precedes saved step/);
+  assert.equal(prompts.length, 3);
+});
+
+test("invalid steps fail before invoking the model", async () => {
+  const mcp = await connect(scripted([]));
+  for (const step of [0, -1, 1.5, 999]) {
+    const result = await mcp.callTool({ name: "run_case", arguments: { case_id: "027", step } });
+    assert.equal(result.isError, true);
+  }
+});

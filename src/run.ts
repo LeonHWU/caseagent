@@ -33,7 +33,7 @@ export function summary(state: CaseState): string {
   return `${state.caseId}: ${statusLabel(state.status)}${state.incomplete ? " [incomplete]" : ""}`;
 }
 
-export async function processCase(deps: RunDeps, dir: string, next: boolean): Promise<CaseState> {
+export async function processCase(deps: RunDeps, dir: string, next: boolean, options: { step?: number; singleStep?: boolean } = {}): Promise<CaseState> {
   const { out, client, model, policy } = deps;
 
   let c: ReturnType<typeof loadCase>;
@@ -62,18 +62,22 @@ export async function processCase(deps: RunDeps, dir: string, next: boolean): Pr
 
   const statePath = join(out, "state", `${c.id}.json`);
   const tracePath = join(out, "traces", `${c.id}.jsonl`);
+  if (options.step !== undefined && (!Number.isInteger(options.step) || !c.events.some((e) => e.n === options.step))) {
+    throw new Error(`step ${options.step} is not an event in case ${c.id}`);
+  }
   mkdirSync(dirname(tracePath), { recursive: true });
 
   let state = next ? loadState(statePath) : null;
   let newFrom = 1;
   if (next) {
     if (!state) throw new Error(`case ${c.id} has no saved state. Run it once without --next.`);
-    const seen = nextSeen(c, state.seen);
+    const seen = options.step ?? (options.singleStep && state.status.kind === "open" ? state.seen : nextSeen(c, state.seen));
     if (seen === null) throw new Error(`case ${c.id} has no further events from the tenant, landlord or a contractor.`);
-    newFrom = state.seen + 1;
+    if (seen < state.seen) throw new Error(`step ${seen} precedes saved step ${state.seen}. Use run_case to restart.`);
+    newFrom = seen === state.seen ? seen : state.seen + 1;
     state.seen = seen;
   } else {
-    state = newState(c.id, initialSeen(c));
+    state = newState(c.id, options.step ?? initialSeen(c));
     startTrace(tracePath);
   }
 
@@ -81,7 +85,7 @@ export async function processCase(deps: RunDeps, dir: string, next: boolean): Pr
     appendFileSync(tracePath, JSON.stringify({ t: new Date().toISOString(), kind, ...data }) + "\n");
   let thoughts: string[] = [];
   try {
-    thoughts = await runCase({ c, state: state!, newFrom, client, model, policy, trace, caseDir: dir, cacheDir: join(out, "state", `${c.id}.attachments`) });
+    thoughts = await runCase({ c, state: state!, newFrom, client, model, policy, trace, singleStep: options.singleStep, caseDir: dir, cacheDir: join(out, "state", `${c.id}.attachments`) });
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
     state!.incomplete = true;

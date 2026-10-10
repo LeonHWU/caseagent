@@ -8,7 +8,9 @@ import { liveDeps, processCase, processToEnd, summary, type RunDeps } from "./ru
 
 const caseId = { case_id: z.string().regex(/^[\w-]+$/).describe('Case folder name, for example "027".') };
 
-const runCaseInput = { ...caseId, to_end: z.boolean().optional().describe("Keep resuming after each hold until the case closes, escalates or has no further outside events.") };
+const stepInput = { ...caseId, step: z.number().int().positive().optional().describe("History event number to expose through (inclusive), for example 7. Never exposes later events.") };
+
+const runCaseInput = { ...stepInput, to_end: z.boolean().optional().describe("Keep resuming after each hold until the case closes, escalates or has no further outside events. Ignores single-action mode.") };
 
 export function createServer(opts: { casesDir: string; deps: RunDeps }): McpServer {
   const { casesDir, deps } = opts;
@@ -21,8 +23,8 @@ export function createServer(opts: { casesDir: string; deps: RunDeps }): McpServ
   };
   const answer = (id: string) => readFileSync(join(deps.out, "ANSWERS", id, "ANSWER.md"), "utf8");
   const reply = (t: string) => ({ content: [{ type: "text" as const, text: t }] });
-  const run = async (id: string, next: boolean) => {
-    const state = await processCase(deps, caseDir(id), next);
+  const run = async (id: string, next: boolean, step?: number) => {
+    const state = await processCase(deps, caseDir(id), next, { step, singleStep: true });
     return reply(`${summary(state)}\n\n${answer(id)}`);
   };
 
@@ -39,18 +41,18 @@ export function createServer(opts: { casesDir: string; deps: RunDeps }): McpServ
   server.registerTool(
     "run_case",
     {
-      description: "Run a case from the start as Northbridge Lettings, up to its first hold, escalation or close. With to_end, keep resuming after each hold until the case closes, escalates or has no further outside events. Replaces any saved run of this case. Returns the status and ANSWER.md.",
+      description: "Start or restart a case at optional step (history event number, inclusive); otherwise use the initial decision point. Execute at most ONE business tool action and return the status and ANSWER.md. Replaces saved state. Use resume_case for subsequent actions. With to_end, instead run the whole case: keep resuming after each hold until it closes, escalates or has no further outside events.",
       inputSchema: runCaseInput,
     },
-    async ({ case_id, to_end }) => (to_end ? runToEnd(case_id) : run(case_id, false)),
+    async ({ case_id, step, to_end }) => (to_end ? runToEnd(case_id) : run(case_id, false, step)),
   );
   server.registerTool(
     "resume_case",
     {
-      description: "Give a held case the next reply from the tenant, landlord or contractor, and continue it. Returns the status and ANSWER.md.",
-      inputSchema: caseId,
+      description: "Continue a saved case with at most ONE business tool action. Optional step selects the same or a later history event; earlier steps require run_case. Without step, open cases continue at the current event; held cases receive only the next external reply. Returns the status and ANSWER.md.",
+      inputSchema: stepInput,
     },
-    async ({ case_id }) => run(case_id, true),
+    async ({ case_id, step }) => run(case_id, true, step),
   );
   server.registerTool(
     "get_case",
