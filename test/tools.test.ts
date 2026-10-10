@@ -86,11 +86,21 @@ test("assign_contractor refuses an approval request made in the same run", () =>
   assert.equal(runTool("assign_contractor", assignInput, s).ok, false);
 });
 
-test("assign_contractor accepts an approval request from an earlier run", () => {
+test("assign_contractor accepts an approval request from an earlier run once the landlord answered", () => {
+  const s = newState("027", 1);
+  s.runs = 2;
+  s.landlordReplied = true;
+  s.actions.push({ run: 1, afterEvent: 1, tool: "request_landlord_approval", input: {}, ok: true, result: "sent" });
+  assert.equal(runTool("assign_contractor", assignInput, s).ok, true);
+});
+
+test("assign_contractor refuses while the landlord has not answered an earlier request", () => {
   const s = newState("027", 1);
   s.runs = 2;
   s.actions.push({ run: 1, afterEvent: 1, tool: "request_landlord_approval", input: {}, ok: true, result: "sent" });
-  assert.equal(runTool("assign_contractor", assignInput, s).ok, true);
+  const out = runTool("assign_contractor", assignInput, s);
+  assert.equal(out.ok, false);
+  assert.match(out.result, /landlord has not answered/);
 });
 
 test("assign_contractor accepts an approval the agency recorded before the first run", () => {

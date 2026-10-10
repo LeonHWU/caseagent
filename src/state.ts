@@ -43,6 +43,7 @@ export type CaseState = {
   notes: Note[];
   incomplete: boolean;
   approvalOnFile?: boolean;
+  landlordReplied?: boolean;
 };
 
 export function newState(caseId: string, initialSeen: number): CaseState {

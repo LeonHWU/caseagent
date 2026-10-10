@@ -33,6 +33,9 @@ export async function runCase(opts: {
   state.status = { kind: "open" };
   const visible = visibleEvents(c, state.initialSeen, state.seen);
   state.approvalOnFile = visible.some((e) => APPROVAL_ON_FILE.test(e.body));
+  // Asking is not approval: a prior request counts only once a landlord event comes after it.
+  const request = state.actions.find((a) => a.tool === "request_landlord_approval" && a.ok);
+  state.landlordReplied = request ? visible.some((e) => e.n > request.afterEvent && /landlord/i.test(e.from)) : false;
   const prompt = await renderCase(c, state, visible, opts.newFrom, caseDir);
 
   // Build message content with text and images
