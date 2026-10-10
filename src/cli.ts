@@ -22,6 +22,12 @@ if (!cmd || !target || !["run", "run-all"].includes(cmd)) {
   console.error(USAGE);
   process.exit(1);
 }
+const concurrency = Number(values.concurrency);
+const limit = values.limit === undefined ? undefined : Number(values.limit);
+if (!Number.isInteger(concurrency) || concurrency < 1 || (limit !== undefined && (!Number.isInteger(limit) || limit < 1))) {
+  console.error("--concurrency and --limit must be positive integers.");
+  process.exit(1);
+}
 if (!process.env.ANTHROPIC_API_KEY) {
   console.error("ANTHROPIC_API_KEY is not set. Copy .env.example to .env and add the key.");
   process.exit(1);
@@ -38,14 +44,14 @@ if (cmd === "run") {
   const dirs = readdirSync(target)
     .filter((d) => existsSync(join(target, d, "index.md")))
     .sort()
-    .slice(0, values.limit ? Number(values.limit) : undefined);
+    .slice(0, limit);
   const queue = [...dirs];
-  const workers = Array.from({ length: Number(values.concurrency) }, async () => {
+  const workers = Array.from({ length: concurrency }, async () => {
     for (let d = queue.shift(); d; d = queue.shift()) {
       try {
         const state = values["to-end"]
           ? await processToEnd(deps, join(target, d))
-          : await processCase(deps, join(target, d), false);
+          : await processCase(deps, join(target, d), values.next);
         console.log(summary(state));
       } catch (e) {
         console.error(`${d}: failed: ${e instanceof Error ? e.message : String(e)}`);

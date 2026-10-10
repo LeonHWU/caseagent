@@ -34,7 +34,7 @@
     ],
     "attachments": [],
     "reset_state": true,
-    "single_business_action": true
+    "single_business_action": false
   },
   "expected": {
     "acceptable_actions": [
@@ -130,7 +130,7 @@
   },
   "grading": {
     "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
-    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "rule": "The run may take several actions. A successful action must match an allowed branch (name and exact_arguments); the run must end on that action, or on hold or escalate after it (close_case only when it is the matched branch); no guard may refuse an action. Sum semantic_requirements weights over the matched action and normalize to a score from 0 to 4. A prohibited behavior in any action of the run yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
     "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
     "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
   }
