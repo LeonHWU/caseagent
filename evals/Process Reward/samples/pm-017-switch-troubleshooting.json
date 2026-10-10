@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "id": "pm-017-switch-troubleshooting",
+  "title": "Relay the extractor fan switch location supplied by the landlord",
+  "track": "Property Management",
+  "category": "tenant_troubleshooting",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "017",
+  "step": 8,
+  "input": {
+    "cases_dir": "fixtures/pm-017-switch-troubleshooting",
+    "case_dir": "fixtures/pm-017-switch-troubleshooting/017",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "017",
+        "step": 8
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "send_message",
+        "exact_arguments": {
+          "to": "tenant",
+          "channel": "email"
+        },
+        "semantic_requirements": [
+          {
+            "id": "instruction",
+            "description": "Relay the specific instruction to turn on the switch on the right-hand side of the hob.",
+            "weight": 2
+          },
+          {
+            "id": "confirmation",
+            "description": "Ask the tenant to check and report whether normal operation has resumed.",
+            "weight": 1
+          },
+          {
+            "id": "citation",
+            "description": "The reason cites event 008 without using the successful outcome in future event 011.",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "Prematurely claiming that the extractor fan is working.",
+      "Calling close_case or arranging paid repairs before confirming the troubleshooting result."
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/017/index.md",
+    "source_history": "Property Management/017/history.md",
+    "source_index_sha256": "8a8cc4d76c80701d5f100d1fbc0f7daea2430b8c65d724ec5331ab4490f26251",
+    "source_history_sha256": "4e6841b2ce52d8b2fcbfb7af0ff2f2ad6099ea495b5143add1dd6b3ad54911b0",
+    "input_evidence": [
+      {
+        "event": 1,
+        "file": "Property Management/017/history.md",
+        "anchor": "event-001",
+        "start_line": 5,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/017/history.md#event-001",
+        "channel": "Note",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Request description: Extractor fan in kitchen does not seem to work (turn on). May be a simple technician fix. Thank you"
+      },
+      {
+        "event": 8,
+        "file": "Property Management/017/history.md",
+        "anchor": "event-008",
+        "start_line": 88,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/017/history.md#event-008",
+        "channel": "Email",
+        "from": "Landlord",
+        "to": "Northbridge Lettings",
+        "excerpt": "There is a switch to the righthand side of the hob when needs to be switched on."
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 9,
+        "file": "Property Management/017/history.md",
+        "anchor": "event-009",
+        "start_line": 97,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/017/history.md#event-009",
+        "channel": "Email",
+        "from": "Northbridge Lettings",
+        "to": "Tenant",
+        "excerpt": "Address: Flat 1, 31 Juniper Mews, Cedarford, ZZ7 7ZZ\n\nGood afternoon Clara,\n\nI trust you are well.\n\nThe landlord has advised that there is a switch to the right-hand side of the hob which needs to be switched on. Please could you check this and let me know if everything is working correctly?\n\nKind regards,\nImogen\nNorthbridge Lettings"
+      }
+    ],
+    "derivation": "Event 008 contains specific troubleshooting information from the landlord. Historical event 009 relays it to the tenant and requests feedback; map it directly to send_message(to=tenant,channel=email). The tenant confirmation in 011 is a later record and must not appear in the input or as a known decision fact.",
+    "review_scope": "Historical prefix events 001–008 and the reference action; later events are not inputs or required facts."
+  },
+  "grading": {
+    "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
+    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
+    "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
+  }
+}

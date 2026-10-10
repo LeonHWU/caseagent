@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "id": "pm-011-initial-approval",
+  "title": "Request landlord approval before the first contractor visit",
+  "track": "Property Management",
+  "category": "landlord_approval",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "011",
+  "step": 3,
+  "input": {
+    "cases_dir": "fixtures/pm-011-initial-approval",
+    "case_dir": "fixtures/pm-011-initial-approval/011",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "011",
+        "step": 3
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "request_landlord_approval",
+        "exact_arguments": {},
+        "semantic_requirements": [
+          {
+            "id": "scope",
+            "description": "Describe the dishwasher failing to finish its cycle and request approval for an engineer to inspect it.",
+            "weight": 2
+          },
+          {
+            "id": "cost",
+            "description": "The cost is unknown; do not invent a quote or claim that approval has already been granted.",
+            "weight": 1
+          },
+          {
+            "id": "citation",
+            "description": "The reason cites visible fault or approval events.",
+            "weight": 1
+          }
+        ]
+      },
+      {
+        "tool": "send_message",
+        "exact_arguments": {
+          "to": "landlord",
+          "channel": "email"
+        },
+        "semantic_requirements": [
+          {
+            "id": "scope",
+            "description": "Describe the dishwasher failing to finish its cycle and request approval for an engineer to inspect it.",
+            "weight": 2
+          },
+          {
+            "id": "cost",
+            "description": "The cost is unknown; do not invent a quote or claim that approval has already been granted.",
+            "weight": 1
+          },
+          {
+            "id": "citation",
+            "description": "The reason cites visible events.",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "Calling assign_contractor without approval.",
+      "Claiming that repairs are complete or that landlord approval has already been obtained."
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/011/index.md",
+    "source_history": "Property Management/011/history.md",
+    "source_index_sha256": "126a5a995ee1f120daa08c724284b5c4422c50d952c0b43333eeb1af7cdc44c3",
+    "source_history_sha256": "8d6800cfee7b1a394d2aed173887b8ca6cc969daa35ed2cde5abc6d3589b060e",
+    "input_evidence": [
+      {
+        "event": 1,
+        "file": "Property Management/011/history.md",
+        "anchor": "event-001",
+        "start_line": 5,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/011/history.md#event-001",
+        "channel": "Note",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Request description: Request summary with context: The Riverside Services dishwasher runs perpetually and does not complete its cycle, suggesting a malfunction.\n\nTenant's original query: Dish washer repair, the dish washer turns on, fills up and seems to wash but never ever stops it’s cycle\n\nAdditional details provided:\n- Has this issue been persistent, or did it start recently? Started recently\n- Are there any pets at the property? Yes two guinea pigs"
+      },
+      {
+        "event": 2,
+        "file": "Property Management/011/history.md",
+        "anchor": "event-002",
+        "start_line": 20,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/011/history.md#event-002",
+        "channel": "Note",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "[AI Intake Classification]\n\nTenant said:\n  Dish washer repair, the dish washer turns on, fills up and seems to wash but never ever stops it’s cycle\n\nIssue:\n  Appliances · Dishwasher not completing cycle\n  Severity: ROUTINE — While the dishwasher is not completing its cycle, it does not prevent the use of other kitchen appliances and does not pose an immediate risk.\n  Confidence: high\n  Containment steps shown to tenant:\n    1. Photograph the dishwasher and any error messages or unusual lights on its display after it has stopped working. This will help identify the issue.\n  Summary: The Riverside Services dishwasher runs perpetually and does not complete its cycle, suggesting a malfunction.\n\nTenant's clarifying Q&A:\n  Q: Has this issue been persistent, or did it start recently?\n  A: Started recently\n  Q: Are there any access considerations we should know about, such as entry codes or alarms and security systems that would need to be disarmed?\n  A: No\n  Q: Are there any pets at the property?\n  A: Yes two guinea pigs"
+      },
+      {
+        "event": 3,
+        "file": "Property Management/011/history.md",
+        "anchor": "event-003",
+        "start_line": 48,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/011/history.md#event-003",
+        "channel": "Update",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Please complete landlord approval step first"
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 4,
+        "file": "Property Management/011/history.md",
+        "anchor": "event-004",
+        "start_line": 57,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/011/history.md#event-004",
+        "channel": "Email",
+        "from": "Northbridge Lettings",
+        "to": "Landlord",
+        "excerpt": "Address: Flat 12, 78 Copperfield Walk, Kingshaven, ZZ3 1ZZ\n\nGood afternoon Turner,\n\nI have had a report from the tenants regarding the dishwasher having some issues. At the moment it doesn't complete a cycle.\n\nWould you be happy for me to get a contractor out to have a look at this for you.\n\nPlease let me know your thoughts on this.\n\nKind regards\n\nClarke"
+      }
+    ],
+    "derivation": "Events 001/002 record the fault, and 003 requires landlord approval first. Historical event 004 asks the landlord to approve a contractor inspection; map this to request_landlord_approval, allowing an equivalent send_message. The reference history contains no cost figure, so cost must be unknown or equivalent.",
+    "review_scope": "Historical prefix events 001–003 and the reference action; later events are not inputs or required facts."
+  },
+  "grading": {
+    "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
+    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
+    "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
+  }
+}

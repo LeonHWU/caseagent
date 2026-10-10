@@ -1,0 +1,24 @@
+{
+  "caseId": "017",
+  "initialSeen": 9,
+  "seen": 9,
+  "runs": 1,
+  "status": {
+    "kind": "hold",
+    "reason": "Waiting for Tenant"
+  },
+  "actions": [
+    {
+      "run": 1,
+      "afterEvent": 9,
+      "tool": "hold",
+      "input": {
+        "waiting_for": "Waiting for Tenant",
+        "reason": "The landlord said the fan runs from a switch to the right of the hob [event 008]. I passed this to the tenant and asked her to check it and report back [event 009]. No contractor visit or spend is needed until she confirms whether the fan works. I am waiting for her reply."
+      },
+      "ok": true,
+      "result": "case on hold: Waiting for Tenant"
+    }
+  ],
+  "incomplete": false
+}

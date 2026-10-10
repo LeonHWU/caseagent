@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "id": "pm-013-report-completion",
+  "title": "Notify the landlord after receiving completion information for the matching job",
+  "track": "Property Management",
+  "category": "landlord_update",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "013",
+  "step": 27,
+  "input": {
+    "cases_dir": "fixtures/pm-013-report-completion",
+    "case_dir": "fixtures/pm-013-report-completion/013",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "013",
+        "step": 27
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "send_message",
+        "exact_arguments": {
+          "to": "landlord",
+          "channel": "email"
+        },
+        "semantic_requirements": [
+          {
+            "id": "completion",
+            "description": "State that the contractor has reported the dishwasher work at this address complete and has sent an invoice.",
+            "weight": 2
+          },
+          {
+            "id": "scope",
+            "description": "Attribute the status to event 027; do not claim tenant confirmation, a deducted charge, or a paid invoice.",
+            "weight": 1
+          },
+          {
+            "id": "no_amount",
+            "description": "Do not use the amount of £162.85, which first appears in future event 028; the invoice amount may be described as awaiting verification.",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "Inventing £162.85 or any other amount that is not currently visible.",
+      "Claiming that payment has been made or deducted from rent.",
+      "Closing the case directly while ignoring the pending landlord notification."
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/013/index.md",
+    "source_history": "Property Management/013/history.md",
+    "source_index_sha256": "fb62e9ba4a1e26c3e44ae07e1bcd6cac53aaa148f89bb9d07e07b39d0e51dcce",
+    "source_history_sha256": "146e50e521e06c85a74c1b39980a3b4dd0042e2d397c93892e0e2f8b32e1785e",
+    "input_evidence": [
+      {
+        "event": 6,
+        "file": "Property Management/013/history.md",
+        "anchor": "event-006",
+        "start_line": 61,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/013/history.md#event-006",
+        "channel": "Email",
+        "from": "Agency / system",
+        "to": "Contractor",
+        "excerpt": "Dear Harbour Surveying,\n\nThis is a new Dishwasher Repair Request for the property at Flat 2, 42 Beacon Close, Bellmere, ZZ4 2ZZ.\n\nPlease contact the tenant to arrange a suitable time to quote for this job.\n\nContact Details: 07700 900752\nTenant Name: Nora Palmer\nRequest description: Dishwasher starts then beeps and powers light flashes.  Just stops working. It’s  an integrated dishwasher .\n\nWe request that you arrange this appointment as soon as possible to ensure a smooth experience for our customers.\n\nPlease include in your email, along with the quote, the estimated time required to complete the work after receiving the landlord’s approval.\n\nPlease remember that along with a quotation, you must provide a photo or video (where applicable) clearly highlighting what needs to be changed and explaining why."
+      },
+      {
+        "event": 27,
+        "file": "Property Management/013/history.md",
+        "anchor": "event-027",
+        "start_line": 312,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/013/history.md#event-027",
+        "channel": "Email",
+        "from": "Contractor",
+        "to": "Agency / system",
+        "excerpt": "The customer, Langley from Harbour Surveying, sent an invoice for a completed job at Flat 2, 42 Beacon Close, Bellmere, ZZ4 2ZZ."
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 28,
+        "file": "Property Management/013/history.md",
+        "anchor": "event-028",
+        "start_line": 321,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/013/history.md#event-028",
+        "channel": "Email",
+        "from": "Agency / system",
+        "to": "Landlord",
+        "excerpt": "Address: Flat 2, 42 Beacon Close, Bellmere, ZZ4 2ZZ\n\nHi Clara, I hope you are well. We sent Harbour Surveying to Flat 2, 42 Beacon Close, Bellmere, ZZ4 2ZZ - They have repaired the dishwasher on site and it is all up and running. I will pass the invoice of £162.85 to come from the rent Regards,"
+      }
+    ],
+    "derivation": "Event 027 is the contractor sending a completed job invoice matching the case address. Historical event 028 notifies the landlord that repairs are complete. Retain that action, but exclude the £162.85 amount introduced in 028 because it is absent from the truncated input. This is an information visibility constraint, not a newly invented corrective path.",
+    "review_scope": "Historical prefix events 001–027 and the reference action; later events are not inputs or required facts."
+  },
+  "grading": {
+    "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
+    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
+    "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
+  }
+}

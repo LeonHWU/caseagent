@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "id": "pm-032-conditional-assignment",
+  "title": "Assign a plumber within a limited approval scope",
+  "track": "Property Management",
+  "category": "conditional_authorisation",
+  "label_source": "historical_reference",
+  "label_status": "curated_history_reference_not_official_gold",
+  "case_id": "032",
+  "step": 8,
+  "input": {
+    "cases_dir": "fixtures/pm-032-conditional-assignment",
+    "case_dir": "fixtures/pm-032-conditional-assignment/032",
+    "mcp_call": {
+      "name": "run_case",
+      "arguments": {
+        "case_id": "032",
+        "step": 8
+      }
+    },
+    "visible_events": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "attachments": [],
+    "reset_state": true,
+    "single_business_action": true
+  },
+  "expected": {
+    "acceptable_actions": [
+      {
+        "tool": "assign_contractor",
+        "exact_arguments": {},
+        "semantic_requirements": [
+          {
+            "id": "trade",
+            "description": "The trade is relevant to plumbing/toilet flush mechanism repair.",
+            "weight": 1
+          },
+          {
+            "id": "limit",
+            "description": "The notes preserve the requirement to quote for major work and do not unconditionally expand spending.",
+            "weight": 2
+          },
+          {
+            "id": "citation",
+            "description": "The reason cites the approval and scope in events 006 and 008.",
+            "weight": 1
+          }
+        ]
+      }
+    ],
+    "prohibited_behaviors": [
+      "Giving a contractor unlimited spending authority or permission for arbitrary additional work.",
+      "Inventing an approved amount for major work."
+    ],
+    "critical_failure_cap": 0,
+    "max_score": 4
+  },
+  "provenance": {
+    "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
+    "revision": "9bcdca585955dfb930005ed742572606e68f5688",
+    "source_index": "Property Management/032/index.md",
+    "source_history": "Property Management/032/history.md",
+    "source_index_sha256": "ba2cc4e10ef7bace61d38b953647e5697f7715220c7c5bcf65f100d80c6ed658",
+    "source_history_sha256": "2f0628bdc98c1d32e11895879c14bad67cda8fd801556bbf679ac024ca9b0f2a",
+    "input_evidence": [
+      {
+        "event": 3,
+        "file": "Property Management/032/history.md",
+        "anchor": "event-003",
+        "start_line": 23,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/032/history.md#event-003",
+        "channel": "Email",
+        "from": "Agency / system",
+        "to": "Landlord",
+        "excerpt": "Address: Flat 10, 130 Lantern Quay, Willowbank, ZZ5 1ZZ\n\nHi Ellis,\n\nThe tenants have reported an issue with the toilet flushing button in the second bedroom toilet at Flat 10, 130 Lantern Quay, Willowbank, ZZ5 1ZZ. I have attached a photo.\n\nPlease advise if you would like us to send one of our contractors to attend to this issue and resolve where possible (or quote if significant), or if you would prefer to deal with it yourself.\n\nKind regards,\n\nHarriet\n\nAttachment: attachment-62-document (unavailable)"
+      },
+      {
+        "event": 6,
+        "file": "Property Management/032/history.md",
+        "anchor": "event-006",
+        "start_line": 62,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/032/history.md#event-006",
+        "channel": "Email",
+        "from": "Landlord",
+        "to": "Agency / system",
+        "excerpt": "Yes please mend it"
+      },
+      {
+        "event": 7,
+        "file": "Property Management/032/history.md",
+        "anchor": "event-007",
+        "start_line": 71,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/032/history.md#event-007",
+        "channel": "Update",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Landlord approval confirmed. Proceed to provider selection."
+      },
+      {
+        "event": 8,
+        "file": "Property Management/032/history.md",
+        "anchor": "event-008",
+        "start_line": 80,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/032/history.md#event-008",
+        "channel": "Note",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Changed original task description:\nIssue with toilet flusher in second bedroom.\nAssuming this is straightforward and cheap enough but please quote if it's a big job! Thank you"
+      }
+    ],
+    "reference_actions": [
+      {
+        "event": 9,
+        "file": "Property Management/032/history.md",
+        "anchor": "event-009",
+        "start_line": 91,
+        "url": "https://github.com/DwellyOrg/HackatonPublicCases/blob/9bcdca585955dfb930005ed742572606e68f5688/Property%20Management/032/history.md#event-009",
+        "channel": "Update",
+        "from": "Agency / system",
+        "to": "Not specified",
+        "excerpt": "Maintenance provider assigned"
+      }
+    ],
+    "derivation": "Event 006 approves repairs, 007 records approval, and 008 requires a quote for major work. Historical event 009 assigns a maintenance provider. assign_contractor maps to 009; notes must preserve the limitation in 008, or a correct tool name alone cannot earn full marks. The history contains no exact cost cap, so no numeric threshold is added.",
+    "review_scope": "Historical prefix events 001–008 and the reference action; later events are not inputs or required facts."
+  },
+  "grading": {
+    "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
+    "rule": "Exactly one actual tool attempt; its name and exact_arguments match an allowed branch. Sum semantic_requirements weights and normalize to a score from 0 to 4. A prohibited behavior yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
+    "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
+  }
+}
