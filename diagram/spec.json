@@ -1,0 +1,40 @@
+{
+  "layout": "graph",
+  "direction": "right",
+  "style": "default",
+  "animation": "flow",
+  "canvas": { "fps": 20, "frames": 41 },
+  "title": {
+    "prefix": "How",
+    "highlight": "case-agent",
+    "subtitle": "Northbridge Lettings works one maintenance case per run"
+  },
+  "nodes": [
+    { "id": "case", "label": "Case folder", "icon": "folder", "icon_style": "illustrated", "body": "index.md · history.md\nattachments/", "color": "#48e0c2" },
+    { "id": "parse", "label": "Parse", "icon": "scan", "icon_style": "illustrated", "body": "events; ending fields\nstripped", "color": "#68b7ff" },
+    { "id": "cut", "label": "Cut", "icon": "eye", "icon_style": "illustrated", "body": "only events this\nrun may see", "color": "#7bb8ff" },
+    { "id": "agent", "label": "Claude loop", "icon": "agent", "icon_style": "hero", "icon_size": "hero", "body": "prompt.ts + policy.md\n≤15 turns", "color": "#b78bff" },
+    { "id": "tools", "label": "7 tools", "icon": "tool-call", "icon_style": "illustrated", "body": "zod-checked · every action\ncites a reason", "color": "#f4b64e" },
+    { "id": "hold", "label": "Hold", "kind": "terminal", "icon": "wait", "body": "waits for landlord · tenant\nprovider · quote", "accent": "amber" },
+    { "id": "escalate", "label": "Escalate", "kind": "terminal", "icon": "handoff", "body": "a person takes over", "accent": "pink" },
+    { "id": "close", "label": "Close", "kind": "terminal", "icon": "check", "body": "all final checks answered", "accent": "green" },
+    { "id": "record", "label": "Record", "icon": "db", "icon_style": "illustrated", "body": "state.json · traces\nANSWER + REASONING", "color": "#ff7ab6" }
+  ],
+  "edges": [
+    { "from": "case", "to": "parse" },
+    { "from": "parse", "to": "cut" },
+    { "from": "cut", "to": "agent" },
+    { "from": "agent", "to": "tools", "label": "tool call" },
+    { "from": "tools", "to": "agent", "kind": "loop", "label": "result · ≤15 turns", "accent": "purple" },
+    { "from": "tools", "to": "hold", "label": "hold" },
+    { "from": "tools", "to": "escalate", "label": "escalate" },
+    { "from": "tools", "to": "close", "label": "close_case" },
+    { "from": "agent", "to": "escalate", "label": "no end in 15", "accent": "pink" },
+    { "from": "hold", "to": "record" },
+    { "from": "escalate", "to": "record" },
+    { "from": "close", "to": "record" },
+    { "from": "record", "to": "cut", "kind": "loop", "label": "--next: next reply", "accent": "cyan" }
+  ],
+  "footer": "Tools are simulated outbox writes; every run ends hold, escalated, or closed",
+  "signature": "Dwelly · London 2026"
+}

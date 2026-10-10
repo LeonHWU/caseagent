@@ -35,6 +35,25 @@ npm run case -- run-all <cases-dir> --concurrency 4    # every case in a folder
 npm test
 ```
 
+### As an MCP server
+
+`src/mcp.ts` serves the same agent over stdio, with four tools: `list_cases`, `run_case`, `resume_case` and `get_case`. Each tool takes a case id such as `027`. The server reads cases from `CASES_DIR` (default `data/public/Property Management`) and writes to `OUT_DIR` (default `runs/mcp`). Both paths are relative to the repo.
+
+Add this entry to the MCP config of the client, for example `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "case-agent": {
+      "command": "npm",
+      "args": ["--prefix", "/absolute/path/to/case-agent", "run", "--silent", "mcp"]
+    }
+  }
+}
+```
+
+Keep `--silent`. Without it, npm prints a banner to stdout and breaks the MCP protocol.
+
 ## Models, APIs and services
 
 - Anthropic Claude (`claude-sonnet-5-5` by default; set `MODEL` to change it) through `@anthropic-ai/sdk`.
