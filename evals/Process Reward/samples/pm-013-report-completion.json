@@ -84,7 +84,8 @@
       "Closing the case directly while ignoring the pending landlord notification."
     ],
     "critical_failure_cap": 0,
-    "max_score": 4
+    "max_score": 4,
+    "close_allowed_after_action": true
   },
   "provenance": {
     "repository": "https://github.com/DwellyOrg/HackatonPublicCases",
@@ -130,12 +131,12 @@
         "excerpt": "Address: Flat 2, 42 Beacon Close, Bellmere, ZZ4 2ZZ\n\nHi Clara, I hope you are well. We sent Harbour Surveying to Flat 2, 42 Beacon Close, Bellmere, ZZ4 2ZZ - They have repaired the dishwasher on site and it is all up and running. I will pass the invoice of £162.85 to come from the rent Regards,"
       }
     ],
-    "derivation": "Event 027 is the contractor sending a completed job invoice matching the case address. Historical event 028 notifies the landlord that repairs are complete. Retain that action, but exclude the £162.85 amount introduced in 028 because it is absent from the truncated input. This is an information visibility constraint, not a newly invented corrective path.",
+    "derivation": "Event 027 is the contractor sending a completed job invoice matching the case address. Historical event 028 notifies the landlord that repairs are complete. Retain that action, but exclude the £162.85 amount introduced in 028 because it is absent from the truncated input. This is an information visibility constraint, not a newly invented corrective path. After event 028 the agency closed the request before any outside reply (events 029-034: Result, completed, final checks, key return, closed), so a run that reports to the landlord and then closes matches history.",
     "review_scope": "Historical prefix events 001–027 and the reference action; later events are not inputs or required facts."
   },
   "grading": {
     "action_source": "Use recorded CaseState.actions or tool entries in traces, not only model statements or the status in ANSWER.md.",
-    "rule": "The run may take several actions. A successful action must match an allowed branch (name and exact_arguments); the run must end on that action, or on hold or escalate after it (close_case only when it is the matched branch); no guard may refuse an action. Sum semantic_requirements weights over the matched action and normalize to a score from 0 to 4. A prohibited behavior in any action of the run yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
+    "rule": "The run may take several actions. A successful action must match an allowed branch (name and exact_arguments); the run must end on that action, or on hold or escalate after it (close_case only when it is the matched branch, or after it here, because the agency closed right after event 028); no guard may refuse an action. Sum semantic_requirements weights over the matched action and normalize to a score from 0 to 4. A prohibited behavior in any action of the run yields 0. History is not the only acceptable answer; alternative paths may be retained for manual review.",
     "tool_error": "A failed/refused tool is not successful execution. Record the failure; do not manually fix the answer.",
     "semantic_review": "Assess message/argument semantics against the visible input and labels. Do not treat new facts in future reference_actions as facts already known to the agent."
   }

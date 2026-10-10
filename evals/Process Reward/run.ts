@@ -11,7 +11,9 @@ import { isIncomplete, type CaseState } from '../../src/state.ts';
 const root = fileURLToPath(new URL('.', import.meta.url));
 const repo = resolve(root, '../..');
 
-type Expected = { acceptable_actions: { tool: string; exact_arguments: Record<string, unknown> }[] };
+// close_allowed_after_action: the agency closed the case right after the reference action, before any
+// outside reply, so a run may end with close_case after the matched action.
+type Expected = { acceptable_actions: { tool: string; exact_arguments: Record<string, unknown> }[]; close_allowed_after_action?: boolean };
 // completed: the agent ended the run itself; the record still needs semantic review.
 // model_failure: the model never ended the run (turn exhaustion); strict score 0.
 // runtime_failure: the API, the loader or the MCP call failed; no score, because the model was not judged.
@@ -40,7 +42,8 @@ const END_TOOLS = new Set(['hold', 'escalate', 'close_case']);
 // A multi-action run passes the structural check when:
 // 1. a successful action matches an acceptable branch (tool and exact_arguments);
 // 2. the run ended on that action, or on hold or escalate after it; close_case
-//    is accepted only when it is the matched branch itself;
+//    is accepted only when it is the matched branch itself, or when the sample records
+//    that the agency closed right after the reference action;
 // 3. no guard refused an action, because a refusal means the model tried something
 //    the rules forbid (an unapproved assignment, an event reference in a message).
 // Extra actions beside the match go to semantic review.
@@ -51,7 +54,7 @@ export function gradeRun(actions: CaseState['actions'], expected: Expected): { m
   if (matched === -1) violations.push('no successful action matches an acceptable branch');
   const end = actions.findLast((a) => a.ok && END_TOOLS.has(a.tool));
   if (!end) violations.push('the run did not end with hold, escalate or close_case');
-  else if (matched !== -1 && end !== actions[matched] && end.tool === 'close_case') violations.push('close_case ended a run whose expected action was not close_case');
+  else if (matched !== -1 && end !== actions[matched] && end.tool === 'close_case' && !expected.close_allowed_after_action) violations.push('close_case ended a run whose expected action was not close_case');
   if (matched !== -1 && end && actions.indexOf(end) < matched) violations.push('the run ended before the matched action');
   for (const a of actions) if (!a.ok && a.result.startsWith('refused:')) violations.push(`${a.tool} was refused: ${a.result.slice('refused: '.length)}`);
   return { matched: matched === -1 ? null : matched, violations };

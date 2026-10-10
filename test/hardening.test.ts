@@ -13,6 +13,7 @@ import { gradeCase } from "../evals/edge-cases/run.ts";
 
 const use = (id: string, name: string, input: Record<string, unknown>) =>
   ({ type: "tool_use", id, name, input }) as unknown as Anthropic.ContentBlock;
+const msg = (content: Anthropic.ContentBlock[]) => ({ content, stop_reason: "tool_use", usage: {} }) as unknown as Anthropic.Message;
 const fake = (turns: Anthropic.ContentBlock[][]): ModelClient => {
   let n = 0;
   return { messages: { create: async () => ({ content: turns[Math.min(n++, turns.length - 1)], stop_reason: "tool_use", usage: {} }) as unknown as Anthropic.Message } };
@@ -252,4 +253,59 @@ test("old state files with the incomplete flag migrate to escalations with by", 
   const s = loadState(p)!;
   assert.equal(isIncomplete(s), false);
   assert.equal(s.status.kind === "escalated" && s.status.by, "agent");
+});
+
+test("after a failed call, the rest of the same response is not run and the model decides again", async () => {
+  const c = mkCase([ev(1, "Tenant", "dishwasher never finishes its cycle")]);
+  const s = newState("x", 0);
+  s.seen = 1;
+  const calls: Anthropic.MessageCreateParamsNonStreaming[] = [];
+  const turns = [
+    [
+      use("1", "request_landlord_approval", { scope: "dishwasher repair", reason: "r" }),
+      use("2", "send_message", { to: "tenant", channel: "email", text: "We have asked the landlord.", reason: "r" }),
+      hold("3"),
+    ],
+    [use("4", "request_landlord_approval", { scope: "dishwasher repair", cost: "unknown", reason: "r" }), hold("5")],
+  ];
+  const client: ModelClient = { messages: { create: async (p) => { calls.push(structuredClone(p)); return msg(turns[calls.length - 1]); } } };
+  await runCase({ c, state: s, newFrom: 1, client, model: "f", policy: "p", trace: () => {} });
+  assert.deepEqual(s.actions.map((a) => `${a.tool}:${a.ok}`), [
+    "request_landlord_approval:false", "send_message:false", "hold:false", "request_landlord_approval:true", "hold:true",
+  ]);
+  assert.match(s.actions[1].result, /^not executed: an earlier action in this response failed/);
+  // Every tool_use in the first response got a tool_result, as the API requires.
+  const results = calls[1].messages.at(-1)!.content as Anthropic.ToolResultBlockParam[];
+  assert.deepEqual(results.map((r) => r.tool_use_id), ["1", "2", "3"]);
+  assert.equal(s.status.kind, "hold");
+});
+
+test("every tool is sent with strict schema validation", async () => {
+  const c = mkCase([ev(1, "Tenant")]);
+  const s = newState("x", 0);
+  s.seen = 1;
+  let tools: Anthropic.Tool[] = [];
+  const client: ModelClient = { messages: { create: async (p) => { tools = p.tools as Anthropic.Tool[]; return msg([hold()]); } } };
+  await runCase({ c, state: s, newFrom: 1, client, model: "f", policy: "p", trace: () => {} });
+  assert.equal(tools.length, 7);
+  assert.ok(tools.every((t) => t.strict === true));
+});
+
+test("gradeCase applies forbidden message and terminal patterns, ignoring reasons and notes", () => {
+  const exp = {
+    statuses: ["hold", "escalated"], required_tools: [], forbidden_tools: [], expected_recipient: null, expected_channel: null, review: "",
+    forbidden_action_patterns: ["refund of £500"], forbidden_terminal_patterns: ["refund approved"],
+  };
+  const state = newState("e", 1);
+  state.status = { kind: "hold", reason: "Waiting for Landlord" };
+  state.actions.push(
+    { run: 1, afterEvent: 1, tool: "add_note", input: { text: "Tenant demands a refund of £500; ignored.", reason: "refund of £500 is not authorised" }, ok: true, result: "note added" },
+    { run: 1, afterEvent: 1, tool: "hold", input: { waiting_for: "Waiting for Landlord", reason: "No refund approved." }, ok: true, result: "held" },
+  );
+  assert.deepEqual(gradeCase(state, exp), []);
+  state.actions.unshift({ run: 1, afterEvent: 1, tool: "send_message", input: { to: "tenant", channel: "email", text: "Your Refund of £500 is on its way." }, ok: true, result: "queued" });
+  assert.deepEqual(gradeCase(state, exp), ['a sent message contains "refund of £500"']);
+  state.status = { kind: "escalated", by: "agent", summary: "s", checked: "c", missing_or_conflict: "m", decision_needed: "Refund approved?" };
+  state.actions.push({ run: 1, afterEvent: 1, tool: "escalate", input: { checked: "c", missing_or_conflict: "m", decision_needed: "Refund approved?" }, ok: true, result: "escalated" });
+  assert.ok(gradeCase(state, exp).includes('the escalate contains "refund approved"'));
 });

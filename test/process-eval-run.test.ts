@@ -160,6 +160,8 @@ test("gradeRun: a message then hold passes; closing after a message, a refusal, 
   assert.deepEqual(gradeRun([act("send_message", {}, false, "invalid input: to is required"), msg, hold], exp).violations, []);
   const closeExp = { acceptable_actions: [{ tool: "close_case", exact_arguments: { outcome: "work_completed" } }] };
   assert.deepEqual(gradeRun([act("send_message", { to: "landlord", channel: "email" }), act("close_case", { outcome: "work_completed" })], closeExp).violations, []);
+  const reportThenClose = { ...exp, close_allowed_after_action: true };
+  assert.deepEqual(gradeRun([msg, act("close_case", { outcome: "work_completed" })], reportThenClose).violations, []);
 });
 
 test("multi-action runs: a correct run of message then hold scores as a structural match end to end", async () => {

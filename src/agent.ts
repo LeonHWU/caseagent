@@ -78,8 +78,10 @@ export async function runCase(opts: {
   const systemText = opts.singleStep ? `${policy}\nExecute exactly one tool action for this invocation. Do not chain actions.` : policy;
 
   // Add cache control to tools - last tool definition gets the breakpoint
+  // strict: the API enforces each input schema, so a call cannot arrive with a required field missing.
   const toolsWithCache: Anthropic.Tool[] = TOOL_SPECS.map((t, i) => ({
     ...t,
+    strict: true,
     ...(i === TOOL_SPECS.length - 1 ? { cache_control: { type: "ephemeral" } } : {}),
   })) as Anthropic.Tool[];
 
@@ -126,21 +128,32 @@ export async function runCase(opts: {
     }
     const results: Anthropic.ToolResultBlockParam[] = [];
     let ended = false;
+    let failed = false;
     let executed = 0;
     for (const u of uses) {
       // Calls after an end tool, or after the first call in single-action mode, are refused and
       // recorded so the trace and the answer show them instead of silently dropping them.
-      const skip = ended ? "the run already ended" : opts.singleStep && executed > 0 ? "one action per call" : null;
+      // Calls after a failed call in the same response are not run: the model wrote them before it
+      // saw the failure, so a later message could claim the failed action happened.
+      const skip = ended
+        ? "refused: the run already ended"
+        : opts.singleStep && executed > 0
+          ? "refused: one action per call"
+          : failed
+            ? "not executed: an earlier action in this response failed. Read its error, then decide again"
+            : null;
       if (skip) {
-        const result = `refused: ${skip}; the action was not executed`;
+        const result = `${skip}; the action was not executed`;
         state.actions.push({ run: state.runs, afterEvent: state.seen, tool: u.name, input: u.input as Record<string, unknown>, ok: false, result });
         trace("tool", { name: u.name, input: u.input, ok: false, ends: false, result });
+        results.push({ type: "tool_result", tool_use_id: u.id, content: result, is_error: true });
         continue;
       }
       const out = runTool(u.name, u.input, state, adapters);
       state.actions.push({ run: state.runs, afterEvent: state.seen, tool: u.name, input: u.input as Record<string, unknown>, ok: out.ok, result: out.result });
       trace("tool", { name: u.name, input: u.input, ...out });
       executed++;
+      if (!out.ok) failed = true;
       if (out.ends) {
         ended = true;
         continue;
