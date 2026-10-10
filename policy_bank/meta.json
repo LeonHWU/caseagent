@@ -1,0 +1,71 @@
+{
+ "design": [
+  [
+   "How long to wait on a slow landlord, and may the agency ever decide alone?",
+   "Never decide for the landlord on spend or scope. Chase by email/phone; after repeated unanswered chasers, escalate to a human with the case summary. (Evidence: case 008 chased ~20 days with no auto-decision.)"
+  ],
+  [
+   "Approval threshold or spend limit?",
+   "None is evidenced. Default: every quote goes to the landlord; no autonomous approval."
+  ],
+  [
+   "Who bears checkout cleaning cost (landlord vs tenant deposit)?",
+   "Invoice goes to the landlord; deposit deduction is a human decision (see P-014)."
+  ],
+  [
+   "Is a quote-vs-invoice variance checked?",
+   "Compare them; if the invoice exceeds the quote, say so to the landlord and ask before payment is passed. Evidence is mixed (007 unchecked, 008 explained)."
+  ],
+  [
+   "Who authorises a scope change after approval?",
+   "Landlord. If scope shrinks or grows, tell the landlord before closing."
+  ],
+  [
+   "What are the 'final checks'?",
+   "Not stated. Use: completion confirmed, invoice routed, photos/documents or skip reason logged, keys back if relevant, landlord informed."
+  ],
+  [
+   "How is the NOT TENANTED auto-pause cleared?",
+   "Not shown. Treat as a prompt to continue manually; never contact a tenant on a vacant property."
+  ],
+  [
+   "Urgency, emergencies, safety?",
+   "No emergency case seen yet. Default: anything involving gas, fire, flooding, no heating/water, security or injury is escalated to a human immediately and never held for landlord approval. (Cases 031 overflowing cistern with an earlier leak letter, 034 shower too hot, 026 oven, door locks were all handled as routine, so this is our own safety margin.)"
+  ],
+  [
+   "How many tenant chasers, and what if evidence never comes?",
+   "Not stated. Email, then a call, then repeat; escalate to a human after repeated silence."
+  ],
+  [
+   "Photo adequacy and missing documents?",
+   "Not checked in any case. Ask for them; if missing, log the skip reason and still close (P-013)."
+  ],
+  [
+   "Can the agent say a job is done or fully delivered?",
+   "Only with evidence (contractor confirmation or invoice). If the delivered scope is narrower than the request, say so. (Case 018 told the landlord it was done with no contractor reply on record; case 019 delivered clearance but not the levelling and gravel asked for.)"
+  ],
+  [
+   "Hazards the intake did not resolve (e.g. a tree near power lines).",
+   "Unanswered intake questions about height, access or hazard are a prompt to ask again or escalate; do not treat as routine silently (case 018)."
+  ],
+  [
+   "May the agent close while the repair is untested or the landlord has not been told?",
+   "No. Close only when the contractor has confirmed completion, and send the landlord an outcome message first (P-060). Case 025 closed with 'not been fully tested yet' on record."
+  ],
+  [
+   "An email body names a different property or address from the case.",
+   "Trust the case header. If the mismatch could mean the wrong property (33 and 34 closed with one), verify or flag before sending to anyone or closing."
+  ]
+ ],
+ "noise": [
+  "Dates are scrambled between index.md and history.md and inside attachments; use event order only.",
+  "Names are unstable: landlord, staff and contractor names swap or collide within a case.",
+  "Email bodies often carry the wrong property address or 'synthetic-...' placeholders; trust the case header.",
+  "Attachments are often missing, 'unavailable', or named differently in history vs on disk.",
+  "Duplicated emails, SMS and holds; inbound emails are machine-summarised and sometimes empty.",
+  "Event order and system status can lag reality (e.g. approval logged after work started).",
+  "Quote and invoice amounts, supplier names and scope often differ slightly with no explanation.",
+  "Inspection-report text is template boilerplate (e.g. deposit wording) and is not a case-specific decision.",
+  "Contractor emails are sometimes empty or unreadable and system prompts can be mis-ordered; never invent missing content."
+ ]
+}
