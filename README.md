@@ -54,6 +54,13 @@ npm run typecheck
 npm run extract                                        # Docling pre-extract of attachments (optional)
 ```
 
+The tests read the public cases from `data/public/Property Management` (gitignored). Link them once:
+
+```bash
+git clone https://github.com/DwellyOrg/HackatonPublicCases.git ../HackatonPublicCases
+mkdir -p data/public && ln -s "$(cd ../HackatonPublicCases && pwd)/Property Management" "data/public/Property Management"
+```
+
 ## Models, APIs and external services
 
 - Anthropic Messages API through `@anthropic-ai/sdk`. Model: `claude-sonnet-5-5` by default (set `MODEL`; the batch must finish inside 30 minutes). Prompt caching breakpoints on the system prompt, tool specs and the latest message.
