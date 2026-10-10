@@ -22,6 +22,7 @@ test("full message text appears in outbox", () => {
       result: "email to tenant queued in the outbox",
     },
   ];
+  s.notes = [{ run: 1, afterEvent: 1, text: "Tenant first." }];
   s.status = { kind: "hold", reason: "Waiting for Tenant" };
   const out = mkdtempSync(join(tmpdir(), "answers-"));
   writeAnswer(out, c, s, visibleEvents(c, 1, 1), []);
@@ -102,4 +103,24 @@ test("each run has its own timeline block", () => {
   assert.match(answer, /### Run 2/);
   assert.match(answer, /First message/);
   assert.match(answer, /Second message/);
+});
+
+test("REASONING.md groups notes by run: two runs give two note blocks", () => {
+  const c = loadCase("data/public/Property Management/027");
+  const s = newState("027", 1);
+  s.runs = 2;
+  s.actions = [
+    { run: 1, afterEvent: 1, tool: "hold", input: { waiting_for: "Waiting for Tenant", reason: "Awaiting response." }, ok: true, result: "case on hold: Waiting for Tenant" },
+    { run: 2, afterEvent: 2, tool: "hold", input: { waiting_for: "Waiting for Landlord", reason: "Awaiting landlord approval." }, ok: true, result: "case on hold: Waiting for Landlord" },
+  ];
+  s.notes = [
+    { run: 1, afterEvent: 1, text: "Tenant contacted for information." },
+    { run: 2, afterEvent: 2, text: "Tenant provided details." },
+  ];
+  s.status = { kind: "hold", reason: "Waiting for Landlord" };
+  const out = mkdtempSync(join(tmpdir(), "answers-"));
+  writeAnswer(out, c, s, visibleEvents(c, 1, 2), []);
+  const reasoning = readFileSync(join(out, "ANSWERS/027/REASONING.md"), "utf8");
+  assert.match(reasoning, /## Run 1\n[\s\S]*Tenant contacted for information[\s\S]*## Run 2\n[\s\S]*Tenant provided details/);
+  assert.doesNotMatch(reasoning.split("## Run 2")[0], /Tenant provided details/);
 });

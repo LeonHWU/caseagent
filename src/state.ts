@@ -27,6 +27,12 @@ export type Action = {
   result: string;
 };
 
+export type Note = {
+  run: number;
+  afterEvent: number;
+  text: string;
+};
+
 export type CaseState = {
   caseId: string;
   initialSeen: number;
@@ -34,15 +40,20 @@ export type CaseState = {
   runs: number;
   status: Status;
   actions: Action[];
+  notes: Note[];
   incomplete: boolean;
 };
 
 export function newState(caseId: string, initialSeen: number): CaseState {
-  return { caseId, initialSeen, seen: initialSeen, runs: 0, status: { kind: "open" }, actions: [], incomplete: false };
+  return { caseId, initialSeen, seen: initialSeen, runs: 0, status: { kind: "open" }, actions: [], notes: [], incomplete: false };
 }
 
 export function loadState(path: string): CaseState | null {
-  return existsSync(path) ? (JSON.parse(readFileSync(path, "utf8")) as CaseState) : null;
+  if (!existsSync(path)) return null;
+  const state = JSON.parse(readFileSync(path, "utf8")) as CaseState;
+  // Default notes to [] for old state files that don't have it
+  if (!state.notes) state.notes = [];
+  return state;
 }
 
 export function saveState(path: string, state: CaseState): void {

@@ -50,11 +50,48 @@ export async function runCase(opts: {
   const thoughts: string[] = [];
   trace("run_start", { case: c.id, run: state.runs, seen: state.seen, model });
 
+  // Add cache control to tools - last tool definition gets the breakpoint
+  const toolsWithCache: Anthropic.Tool[] = TOOL_SPECS.map((t, i) => ({
+    ...t,
+    ...(i === TOOL_SPECS.length - 1 ? { cache_control: { type: "ephemeral" } } : {}),
+  })) as Anthropic.Tool[];
+
   for (let turn = 1; turn <= MAX_TURNS; turn++) {
-    const resp = await client.messages.create({ model, max_tokens: 4096, system: policy, tools: TOOL_SPECS, messages });
+    // Add cache_control to system and message content
+    const systemParam: Anthropic.MessageCreateParamsNonStreaming["system"] = [
+      { type: "text", text: policy, cache_control: { type: "ephemeral" } },
+    ];
+
+    const messagesForRequest: Anthropic.MessageParam[] = messages.map((msg, idx) => {
+      if (idx === messages.length - 1 && msg.role === "user" && Array.isArray(msg.content)) {
+        // Add cache_control to the last content block of the latest message
+        const content = msg.content.map((block, blockIdx) => {
+          const lastBlock = blockIdx === msg.content.length - 1;
+          return lastBlock && typeof block === "object" ? { ...block, cache_control: { type: "ephemeral" } } : block;
+        }) as Anthropic.MessageParam["content"];
+        return { ...msg, content };
+      }
+      return msg;
+    });
+
+    const resp = await client.messages.create({
+      model,
+      max_tokens: 4096,
+      system: systemParam,
+      tools: toolsWithCache,
+      messages: messagesForRequest,
+    });
+
     trace("model", { turn, stop: resp.stop_reason, usage: resp.usage, content: resp.content });
     messages.push({ role: "assistant", content: resp.content });
-    for (const b of resp.content) if (b.type === "text" && b.text.trim()) thoughts.push(b.text.trim());
+
+    // Extract and store text blocks as notes
+    for (const b of resp.content) {
+      if (b.type === "text" && b.text.trim()) {
+        thoughts.push(b.text.trim());
+        state.notes.push({ run: state.runs, afterEvent: state.seen, text: b.text.trim() });
+      }
+    }
 
     const uses = resp.content.filter((b): b is Anthropic.ToolUseBlock => b.type === "tool_use");
     if (uses.length === 0) {

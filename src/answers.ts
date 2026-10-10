@@ -7,6 +7,15 @@ function summarizeLine(s: string, maxLen: number = 80): string {
   return s.split("\n")[0].slice(0, maxLen);
 }
 
+// Events a run received: those after the previous run's last seen event, up to its own last seen event.
+function runEvents(s: CaseState, visible: CaseEvent[], run: number): CaseEvent[] {
+  const seenIn = (r: number) => Math.max(0, ...s.actions.filter((a) => a.run === r).map((a) => a.afterEvent), ...s.notes.filter((n) => n.run === r).map((n) => n.afterEvent));
+  let from = 0;
+  for (let r = run - 1; r >= 1 && from === 0; r--) from = seenIn(r);
+  const to = seenIn(run) || from;
+  return visible.filter((e) => e.n > from && e.n <= to);
+}
+
 function answerMd(c: Case, s: CaseState, visible: CaseEvent[]): string {
   // Summary
   const summary =
@@ -21,15 +30,11 @@ function answerMd(c: Case, s: CaseState, visible: CaseEvent[]): string {
     runs.get(action.run)!.push(action);
   }
 
-  let prevSeen = 0;
   const timelineBlocks = Array.from({ length: s.runs }, (_, i) => {
     const run = i + 1;
     const runActions = runs.get(run) || [];
-    const upTo = runActions.length ? Math.max(...runActions.map((a) => a.afterEvent)) : prevSeen;
-    const runEvents = visible.filter((e) => e.n > (run === 1 ? 0 : prevSeen) && e.n <= upTo);
-    prevSeen = upTo;
-
-    const eventLines = runEvents.map((e) => {
+    const runEvts = runEvents(s, visible, run);
+    const eventLines = runEvts.map((e) => {
       const excerpt = summarizeLine(e.body, 60);
       return `- event ${String(e.n).padStart(3, "0")}: ${e.channel} from ${e.from} · ${excerpt}`;
     });
@@ -124,21 +129,52 @@ ${failedLines.length > 0 ? failedLines.join("\n") : "None."}
 `;
 }
 
-function reasoningMd(c: Case, s: CaseState, thoughts: string[]): string {
-  const steps = s.actions.map((a) => `### Run ${a.run} · ${a.tool}\n\n${String(a.input.reason ?? "(no reason given)")}`).join("\n\n");
+function reasoningMd(c: Case, s: CaseState, visible: CaseEvent[]): string {
+  // Group actions and notes by run
+  const runs = Math.max(0, ...s.actions.map((a) => a.run), ...s.notes.map((n) => n.run));
+
+  const runSections: string[] = [];
+  for (let run = 1; run <= runs; run++) {
+    const runActions = s.actions.filter((a) => a.run === run);
+    const runNotes = s.notes.filter((n) => n.run === run);
+
+    if (runActions.length === 0 && runNotes.length === 0) continue;
+
+    const eventsInRun = runEvents(s, visible, run)
+      .map((e) => `- [event ${String(e.n).padStart(3, "0")}]`)
+      .join("\n");
+
+    const actions = runActions
+      .map((a) => `- **${a.tool}** (${a.ok ? "ok" : "failed"}): ${String(a.input.reason ?? "(no reason given)")}`)
+      .join("\n");
+
+    const notes = runNotes.map((n) => n.text).join("\n\n");
+
+    const runSection = `## Run ${run}
+
+### Events received
+
+${eventsInRun || "None."}
+
+### Agent notes
+
+${notes || "None."}
+
+### Actions
+
+${actions || "None."}
+`;
+    runSections.push(runSection);
+  }
+
   return `# Reasoning for case ${c.id}
 
-${steps || "No actions."}
-
-## Agent notes from the latest run
-
-${thoughts.join("\n\n") || "None."}
-`;
+${runSections.join("\n")}`;
 }
 
 export function writeAnswer(outDir: string, c: Case, s: CaseState, visible: CaseEvent[], thoughts: string[]): void {
   const dir = join(outDir, "ANSWERS", c.id);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "ANSWER.md"), answerMd(c, s, visible));
-  writeFileSync(join(dir, "REASONING.md"), reasoningMd(c, s, thoughts));
+  writeFileSync(join(dir, "REASONING.md"), reasoningMd(c, s, visible));
 }
