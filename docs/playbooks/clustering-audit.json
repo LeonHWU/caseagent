@@ -1,0 +1,611 @@
+{
+  "method": "Manual semantic grouping by execution route and purpose, followed by deterministic counts; no embedding clustering, API call, or agent performance scoring.",
+  "assignment_basis": "Read all 50 index overviews and outcomes, parse all history events, and inspect selected decision evidence. Source summaries are grouping aids, not verified policies.",
+  "primary_assignment_rule": "Each case has one dominant scenario: tenant-confirmed resolution, landlord-managed repair, agency-managed repair, checkout work, garden work, warranty/remedial work, tenant-owned replacement, or evidence/inspection task. Specialized purpose routes take precedence over generic agency coordination. Mixed routes are marked.",
+  "secondary_assignment_rule": "Decision modules contain a selected set of reviewed supporting cases. These memberships are not exhaustive estimates of prevalence.",
+  "source_revision": "9bcdca585955dfb930005ed742572606e68f5688",
+  "case_count": 50,
+  "event_count": 1505,
+  "channel_counts": {
+    "Note": 192,
+    "Update": 443,
+    "Email": 506,
+    "Hold": 236,
+    "Call": 74,
+    "SMS": 54
+  },
+  "primary_cluster_counts": {
+    "PB01": 4,
+    "PB02": 5,
+    "PB03": 25,
+    "PB04": 6,
+    "PB05": 4,
+    "PB06": 2,
+    "PB07": 2,
+    "PB08": 2
+  },
+  "playbook_count": 12,
+  "scenario_count": 8,
+  "decision_module_count": 4,
+  "cases": [
+    {
+      "case_id": "001",
+      "title": "Case 001: Communal Garden and Hedge Maintenance Request",
+      "event_count": 44,
+      "primary_playbook": "PB05",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": true,
+      "index_sha256": "c5226a5096041267b0feade49f057539cba0d517ddbf6411c3cfabd2f1be3e6f",
+      "history_sha256": "c08371a28725f8804b1e119b2d3a4f31fdced7917055b4abc9c3a2926dee534c"
+    },
+    {
+      "case_id": "002",
+      "title": "Case 002: Blocked toilet at Flat 3, 15 Willowmere Road, Alderwick, ZZ3 2ZZ",
+      "event_count": 49,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB09"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "fee33fc3157d462c5136f8e3ac8c45c9ba3d0466cbc24405bba150b14af727ec",
+      "history_sha256": "7dfd10fe92722f27ec9ed3c0705bf6f4034b7222e0fd723588baf54e1ece91c6"
+    },
+    {
+      "case_id": "003",
+      "title": "Case 003: Checkout Cleaning Estimate and Invoice",
+      "event_count": 23,
+      "primary_playbook": "PB04",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": false,
+      "index_sha256": "d4ba332ac205e8a43e031d6c7bd216180cfca7d6ff8c51e25abe310b7ba1869e",
+      "history_sha256": "9749dc92c5f2c6fd3ceb553eead32e3595c44e7c4040480fe289f4870336984c"
+    },
+    {
+      "case_id": "004",
+      "title": "Case 004: Checkout Clean",
+      "event_count": 42,
+      "primary_playbook": "PB04",
+      "secondary_decision_modules": [
+        "PB10",
+        "PB12"
+      ],
+      "mixed_route_or_caution": true,
+      "index_sha256": "02ba84acd27c0830b12183ef2427e3712df8c981b97267722379765c913fcfb7",
+      "history_sha256": "8bae53e287391fb32f1a6a736131dd86a1b4bae8af780f3458ec6717079446a6"
+    },
+    {
+      "case_id": "005",
+      "title": "Case 005: Check-Out Cleaning",
+      "event_count": 37,
+      "primary_playbook": "PB04",
+      "secondary_decision_modules": [
+        "PB09",
+        "PB10",
+        "PB11",
+        "PB12"
+      ],
+      "mixed_route_or_caution": true,
+      "index_sha256": "e796ccdf59faf4fef54cf3dc52f4169c1019686d161fa38bc40bdb647a637619",
+      "history_sha256": "f56a378925d16686c260bbc743b2c2849c7b6d1f8d967bbfbb1c6e63f395f29a"
+    },
+    {
+      "case_id": "006",
+      "title": "Case 006: Check-Out Works: Carpet Replacement and Repainting",
+      "event_count": 27,
+      "primary_playbook": "PB04",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": false,
+      "index_sha256": "c73156b66bf29149e13814685357870d76d42c4fa6eaa8d86372f86953701f98",
+      "history_sha256": "e33e990a26f56808326248dabde83782defe2ccf2ae2cd50746e3339d6c32acf"
+    },
+    {
+      "case_id": "007",
+      "title": "Case 007: Check-Out Works: Lounge Lighting and Ceiling Repair",
+      "event_count": 37,
+      "primary_playbook": "PB04",
+      "secondary_decision_modules": [
+        "PB09",
+        "PB10"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "7588385e26ac82b09bc69ce3160303e22103959e924cfd815eb72f9aba335e88",
+      "history_sha256": "69d9776cdbf3915af2842af539a5d76d27f2164e42f61ab29862c34281e1db0e"
+    },
+    {
+      "case_id": "008",
+      "title": "Case 008: Check-Out Works",
+      "event_count": 49,
+      "primary_playbook": "PB04",
+      "secondary_decision_modules": [
+        "PB09",
+        "PB11"
+      ],
+      "mixed_route_or_caution": true,
+      "index_sha256": "6854ec02177dce4e98ac13051022fec9410035e8d9817bc0a548ea3b953cd106",
+      "history_sha256": "1335074bf892e522d28c64baf19382c8d1ead851bca21ffd37e9509be85c3919"
+    },
+    {
+      "case_id": "009",
+      "title": "Case 009: Front garden maintenance follow-up",
+      "event_count": 23,
+      "primary_playbook": "PB05",
+      "secondary_decision_modules": [
+        "PB11",
+        "PB12"
+      ],
+      "mixed_route_or_caution": true,
+      "index_sha256": "7d22e08ffff2004693bc2a57e534cead3b1fad8128232a56815a2d9ddfbdb67f",
+      "history_sha256": "ad61321988ea769e40260b74e92bd443669ff9037ff7d62576df878af3559294"
+    },
+    {
+      "case_id": "010",
+      "title": "Case 010: Solar panel readings photo request",
+      "event_count": 15,
+      "primary_playbook": "PB08",
+      "secondary_decision_modules": [
+        "PB12"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "72ca1fea17684966fb7cd6564092bc9eb746116b67fc72fbe16d6a8403030854",
+      "history_sha256": "8029c2495c324f1f106139da8682f7fa362b3a26a6584f7dc7a3b05f0a73b51f"
+    },
+    {
+      "case_id": "011",
+      "title": "Case 011: Dishwasher Repair Request",
+      "event_count": 32,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB09"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "126a5a995ee1f120daa08c724284b5c4422c50d952c0b43333eeb1af7cdc44c3",
+      "history_sha256": "8d6800cfee7b1a394d2aed173887b8ca6cc969daa35ed2cde5abc6d3589b060e"
+    },
+    {
+      "case_id": "012",
+      "title": "Case 012: Dishwasher Door Repair",
+      "event_count": 31,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": false,
+      "index_sha256": "197658f20f325010d7ca99534374ed31849081fc51dd83f78e3c398d61d3d248",
+      "history_sha256": "1996c10c8807342367cf83c6a79f7f5d116f5590e790b55ab9df77f1881ca916"
+    },
+    {
+      "case_id": "013",
+      "title": "Case 013: Integrated Dishwasher Repair Request",
+      "event_count": 35,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB12"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "fb62e9ba4a1e26c3e44ae07e1bcd6cac53aaa148f89bb9d07e07b39d0e51dcce",
+      "history_sha256": "146e50e521e06c85a74c1b39980a3b4dd0042e2d397c93892e0e2f8b32e1785e"
+    },
+    {
+      "case_id": "014",
+      "title": "Case 014: Front Door Repair Request",
+      "event_count": 16,
+      "primary_playbook": "PB01",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": false,
+      "index_sha256": "49d7084e33fb91128afb1874c1a359a448058eee76ec9c9563462d222a197f10",
+      "history_sha256": "51d9003bdad04f4d1415c9346e2d391f605b2a541d07549a41af8f20f9ea81ae"
+    },
+    {
+      "case_id": "015",
+      "title": "Case 015: Front Door Repair Request",
+      "event_count": 19,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB11",
+        "PB12"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "04ac498100c6a6cd798cd854da6ffed0e78337d3a57a814d70021a7b5d4f4fdd",
+      "history_sha256": "c14d55880fd761ca070b647a16a0d4478578244325c64d83c57f499288bfbc53"
+    },
+    {
+      "case_id": "016",
+      "title": "Case 016: Garden Door Repair Request",
+      "event_count": 26,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB12"
+      ],
+      "mixed_route_or_caution": true,
+      "index_sha256": "2fa9d89af643a2c34a10c4feedb7bfa55d9c95d1c6bd6c4a3d205a3ec5a6cc1e",
+      "history_sha256": "528103049d6f7fa283cee80def4e65006b1daec5cca7a5534aa2d6f9a3943824"
+    },
+    {
+      "case_id": "017",
+      "title": "Case 017: Kitchen Extractor Fan Repair Request",
+      "event_count": 14,
+      "primary_playbook": "PB01",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": false,
+      "index_sha256": "8a8cc4d76c80701d5f100d1fbc0f7daea2430b8c65d724ec5331ab4490f26251",
+      "history_sha256": "4e6841b2ce52d8b2fcbfb7af0ff2f2ad6099ea495b5143add1dd6b3ad54911b0"
+    },
+    {
+      "case_id": "018",
+      "title": "Case 018: Garden Maintenance Request",
+      "event_count": 17,
+      "primary_playbook": "PB05",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": false,
+      "index_sha256": "1954ad83f485362a92bf1772ea7bb5aca277db76e9e6e05643ead520a4b19b54",
+      "history_sha256": "50e64b8e30e0dd14fce3bde93fec14a5d2c9a7038f2f3379df51a52017d25607"
+    },
+    {
+      "case_id": "019",
+      "title": "Case 019: Garden Maintenance Request",
+      "event_count": 44,
+      "primary_playbook": "PB05",
+      "secondary_decision_modules": [
+        "PB09"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "6ef4f40eec012db529b70c0b5ebe39bebba62af1fc78cdf190c8cfae30549c19",
+      "history_sha256": "7529c886fb9b6a48c01388fba4db4bfba9d46460d7eeb3594f4f78cd10ee81cd"
+    },
+    {
+      "case_id": "020",
+      "title": "Case 020: Property inspection",
+      "event_count": 20,
+      "primary_playbook": "PB08",
+      "secondary_decision_modules": [
+        "PB10",
+        "PB12"
+      ],
+      "mixed_route_or_caution": true,
+      "index_sha256": "b3d93b0c03de19de1cd612f7741dd41a975e2cd4966134b85e0c5007bda38349",
+      "history_sha256": "f124e50e11036aed13bbd4cf0463ae9cd7bcdb4d5399ae63a085a4c513ea80d4"
+    },
+    {
+      "case_id": "021",
+      "title": "Case 021: Key Replacement Request",
+      "event_count": 29,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB12"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "75f2be29d3947109aa123c072760b9c9ea294d4330ea9eeb35b1730ed825f27e",
+      "history_sha256": "50c6900b3b4c1be040cba1aab6f293d726502ae8fd4d1ca76aa57a9c2b3d100e"
+    },
+    {
+      "case_id": "022",
+      "title": "Case 022: Front Door Lock Repair Request",
+      "event_count": 23,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB12"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "9f02ab7d34907db44e9649286c6a633dc69564b2b79373db481ae13137954b41",
+      "history_sha256": "a80c500801fafcc52bc716b85ef9451462d3d2c4e72d9ef6aac264838c239caf"
+    },
+    {
+      "case_id": "023",
+      "title": "Case 023: Balcony Door Lock Repair",
+      "event_count": 27,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB12"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "e382c97998c2df9b9fed4b17cd37b79c242b38165fe22e9faef93bf3f7df0ad7",
+      "history_sha256": "b705d2d76ffed69348c8403c220638878237996556895ec241fa299fb24e066f"
+    },
+    {
+      "case_id": "024",
+      "title": "Case 024: Oven repair request",
+      "event_count": 32,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": false,
+      "index_sha256": "b6c0e4d90bf7ab014ef439372712b023fc0bc973c47c47cc80c4e4d81474acee",
+      "history_sha256": "f96c098bad9162a18cf8619757a248dd2d33f3e842ed9a42993cea5ca59dee37"
+    },
+    {
+      "case_id": "025",
+      "title": "Case 025: Oven Repair Request",
+      "event_count": 64,
+      "primary_playbook": "PB06",
+      "secondary_decision_modules": [
+        "PB10"
+      ],
+      "mixed_route_or_caution": true,
+      "index_sha256": "b9bd191d2e2387051296183e626eba980c81fd5bcdc3144fa98b85b9820c68bd",
+      "history_sha256": "8101970309d2eb0c5db0d0bad3d03f13402ac5b9d560a7b9d2367f5e45cc7a04"
+    },
+    {
+      "case_id": "026",
+      "title": "Case 026: Oven Repair Request",
+      "event_count": 38,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB10"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "e7fc7d710880a4a3d1286f671905f02d2037cc2441d939bd27109d70a279f2fb",
+      "history_sha256": "d3ab597e03eb0d2e3cfded66e0d4594b19cd34c4bd5732b22bfe176ca3188238"
+    },
+    {
+      "case_id": "027",
+      "title": "Case 027: Blocked Bath Drain Request",
+      "event_count": 17,
+      "primary_playbook": "PB01",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": false,
+      "index_sha256": "9cd66b88f700a08298d0e90e4ba31df7206385378ccaca3344682097a4a74b22",
+      "history_sha256": "ee63740d757d7957b5d56933945c1a683a38e8690d0071275616084370e5b0a6"
+    },
+    {
+      "case_id": "028",
+      "title": "Case 028: Loose Water Pipe in the Back Garden",
+      "event_count": 14,
+      "primary_playbook": "PB02",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": false,
+      "index_sha256": "257e55256e2ed04fd06eef2602f49a7dcd81d71450416f0823b9623330e0240e",
+      "history_sha256": "a9182218c4900faa8f252fea39af93a12b58068ce5678aec365662ad04ee8d5e"
+    },
+    {
+      "case_id": "029",
+      "title": "Case 029: Cracked basin repair request",
+      "event_count": 22,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB12"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "1017fc184f91447907cf9e3ae5642ca017f986e4fcd92b05ab981b629b1ea1ad",
+      "history_sha256": "a1f2d01c026b63d0c360f0a0ad032eda506cf3f01b0fd42d1c5a751fdb341b49"
+    },
+    {
+      "case_id": "030",
+      "title": "Case 030: Plumbing request: slow-filling toilet and bathroom tap",
+      "event_count": 42,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB10"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "4781019938b3a58004c27d8e8cf80bd49dd437ac6a8ce32b80ef24e28846e9c0",
+      "history_sha256": "ccf864d8797f39fabb64f9db2118acec7aaa64f5e593826f21fc6979f0d3c2d8"
+    },
+    {
+      "case_id": "031",
+      "title": "Case 031: Plumbing request",
+      "event_count": 27,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB10",
+        "PB12"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "92ac61deabf51015387b112f6650259822354e5a88862e746fafb924ec2c2b90",
+      "history_sha256": "f87371b639057d12f5702c25cd4b6aee06b681ac3cef369740373585dfb1ccca"
+    },
+    {
+      "case_id": "032",
+      "title": "Case 032: Toilet flush mechanism repair",
+      "event_count": 36,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB09",
+        "PB11"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "ba2cc4e10ef7bace61d38b953647e5697f7715220c7c5bcf65f100d80c6ed658",
+      "history_sha256": "2f0628bdc98c1d32e11895879c14bad67cda8fd801556bbf679ac024ca9b0f2a"
+    },
+    {
+      "case_id": "033",
+      "title": "Case 033: Bathroom Tap Plumbing Request",
+      "event_count": 44,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB09"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "9b25180bfe61c0a6755ed79d51ac5df86c7978304ac1f5262dc1234e4b355230",
+      "history_sha256": "72357b6b9ce0acb9b9bbe5d5b0bcec1bf7987c300c75b4095b7eed5d3a77bea2"
+    },
+    {
+      "case_id": "034",
+      "title": "Case 034: Shower Repair Request",
+      "event_count": 17,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": false,
+      "index_sha256": "f4d0ae3149b7994a766a70fc02db2cef2e81f1722095cf872121555f9626a6cb",
+      "history_sha256": "9a9fac8066e100080777e6d68e1c42327b4023be4f5888841628ebdb4e2c6432"
+    },
+    {
+      "case_id": "035",
+      "title": "Case 035: Shower Repair Request",
+      "event_count": 13,
+      "primary_playbook": "PB02",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": false,
+      "index_sha256": "92b74f8746f07cbbf36e9dbd78ae59cd8f5ae7b003cb9e3cc558ba300c041588",
+      "history_sha256": "4cb597324d3ce3e3bb8847d2a4ae19268e6795972cf1ca3761af2ea29924cbe8"
+    },
+    {
+      "case_id": "036",
+      "title": "Case 036: Shower Tap Repair",
+      "event_count": 52,
+      "primary_playbook": "PB06",
+      "secondary_decision_modules": [
+        "PB10"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "c43c3ad53e93d3dc43295425e98bb99fab20b8cf0dc1aa22d425b2c57a8c2111",
+      "history_sha256": "dab973ea0f326c23f045e655c87f3dba226ab497483f9be851809d02b0aa79a7"
+    },
+    {
+      "case_id": "037",
+      "title": "Case 037: Shower Repair Request",
+      "event_count": 25,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB10"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "a8871499a901c6ee2852006b4107ab19418cb06ef7598c7757a3f4532c647a0e",
+      "history_sha256": "2529f1b9848674ac5a9f6efbaa0e74d5f6cb3406584494f7dd0622b36f6e067f"
+    },
+    {
+      "case_id": "038",
+      "title": "Case 038: Washing Machine Replacement Request",
+      "event_count": 13,
+      "primary_playbook": "PB07",
+      "secondary_decision_modules": [
+        "PB11"
+      ],
+      "mixed_route_or_caution": true,
+      "index_sha256": "c9293563b50118b75167c87ca1dd46e61f7c0bb46f511f26c11c5b19eab788bc",
+      "history_sha256": "24c97eb2511d80141c8b3d95b2d147c791e4ba4f7d83a0d16c1176f7525842ff"
+    },
+    {
+      "case_id": "039",
+      "title": "Case 039: Washing Machine Repair Request",
+      "event_count": 29,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": false,
+      "index_sha256": "c1286087941c3085336e25df8c04d6a7c20529123e8830fe43a81af01d34aa48",
+      "history_sha256": "2581e5a6c4b98ffd44b2223ff226b68cbaf9f2703098b2390286e9f11f1ec9d4"
+    },
+    {
+      "case_id": "040",
+      "title": "Case 040: Washing Machine Repair Request",
+      "event_count": 13,
+      "primary_playbook": "PB07",
+      "secondary_decision_modules": [
+        "PB12"
+      ],
+      "mixed_route_or_caution": true,
+      "index_sha256": "50f4b520c74ba1a058ad99242a1a6b1da19047a7bb41ec600e02c6f2f0d6b919",
+      "history_sha256": "958821c0d76daee0d855da158de7dcf1db9b7dad0bb74e4eef151abdbc1b1066"
+    },
+    {
+      "case_id": "041",
+      "title": "Case 041: Washing Machine Repair Request",
+      "event_count": 25,
+      "primary_playbook": "PB02",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": true,
+      "index_sha256": "6070aa970fe72e29731fa84784bc7b80660136e73fd8b58317e7c8efc958d4a7",
+      "history_sha256": "0d506fb6f12ec12b440537e991ddabda9e6c737c4859d1de1616b6ae88b98fa0"
+    },
+    {
+      "case_id": "042",
+      "title": "Case 042: Washing Machine Repair Request",
+      "event_count": 31,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": false,
+      "index_sha256": "66a031f58b7eaf894e4df61c29284f8e5f7a28391fdcc270105cd6509edaf55d",
+      "history_sha256": "657a0eb815452902e4a85514a4b9fcd8baebeb0680a17af3661d0de867b2f6ee"
+    },
+    {
+      "case_id": "043",
+      "title": "Case 043: Washing Machine Repair Request",
+      "event_count": 25,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB09"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "e491f05bde4b49306deae16060db32794389a97077b2cc33ff20a4fc47102e3f",
+      "history_sha256": "d4dea4806876acf00e6d40a8fa9c494be6f826823ccbd2debb0f91b06a996a39"
+    },
+    {
+      "case_id": "044",
+      "title": "Case 044: Window Handle Repair Request",
+      "event_count": 27,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB12"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "95408312f8ce9f0b348b334d3749479b9f5f6caa5cabffa433afb12351fbf8a8",
+      "history_sha256": "8ca2d7d2815b1cf0689838f237496f99f6f448d0f7d19c3dabcd0acdfa2fa0fd"
+    },
+    {
+      "case_id": "045",
+      "title": "Case 045: Kitchen Window and Patio Door Window Repair",
+      "event_count": 38,
+      "primary_playbook": "PB02",
+      "secondary_decision_modules": [
+        "PB11"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "c37074a252117e3fc1e9fc6196fdc5b88e5b02690322616b82d39261dffde78d",
+      "history_sha256": "3e0752837d192a18668f9a085cbbb9eb03f0568c58a15727bf493260df82bdcc"
+    },
+    {
+      "case_id": "046",
+      "title": "Case 046: Bedroom Window Repair",
+      "event_count": 52,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB09"
+      ],
+      "mixed_route_or_caution": false,
+      "index_sha256": "ae16479430428a6f88a0ac72d653937c8f0c5d35eff983e93c5296a7f4f9685f",
+      "history_sha256": "9c2ad1823e5f801afa3a2149cc2e63d6f9d9e10f614e0825d5f4ed61eb60853e"
+    },
+    {
+      "case_id": "047",
+      "title": "Case 047: Bedroom Window Repair Request",
+      "event_count": 36,
+      "primary_playbook": "PB02",
+      "secondary_decision_modules": [
+        "PB11"
+      ],
+      "mixed_route_or_caution": true,
+      "index_sha256": "77f01c5d8e4c906f4392029380b42a5df80fdb068eb78d3b01dc79ebdb7ef645",
+      "history_sha256": "aff7f65cc7a966f30e7efd892060a8cb7c58aa0f6aa7999b26af9c6a148153f6"
+    },
+    {
+      "case_id": "048",
+      "title": "Case 048: Bathroom Window Repair Request",
+      "event_count": 36,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB11"
+      ],
+      "mixed_route_or_caution": true,
+      "index_sha256": "e9dcf55f4a741cc2472260dd600662498474c755e1f2297c6586622fd1035605",
+      "history_sha256": "be829723d4b22630f9f2874d2b884f7a6a98e70150f4a2a8915fdccfec3f5e54"
+    },
+    {
+      "case_id": "049",
+      "title": "Case 049: Shed Door Repair Request",
+      "event_count": 14,
+      "primary_playbook": "PB01",
+      "secondary_decision_modules": [],
+      "mixed_route_or_caution": false,
+      "index_sha256": "910ae2d6763d2c034f5f7365d3f2f6a504206f93e5115e02d304e23f7bde0fa7",
+      "history_sha256": "e42f3ea31ec4f31f60c6069eb55f3d0ff1dc8aa87ce75278c9ddb2fcb7105994"
+    },
+    {
+      "case_id": "050",
+      "title": "Case 050: Bedroom Window Repair",
+      "event_count": 44,
+      "primary_playbook": "PB03",
+      "secondary_decision_modules": [
+        "PB11"
+      ],
+      "mixed_route_or_caution": true,
+      "index_sha256": "518c35fbcdd419e661bb01685b8308bf5d3ab7b8b49792d413385d33345fb124",
+      "history_sha256": "35780255fbee892c15bd24f06155c0256a6f034c16f148c0b2c924b653fdb1de"
+    }
+  ]
+}

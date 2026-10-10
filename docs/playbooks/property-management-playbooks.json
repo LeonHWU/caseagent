@@ -1,0 +1,2998 @@
+{
+  "schema_version": 1,
+  "bank_version": 1,
+  "track": "Property Management",
+  "retrieval_unit": "playbook",
+  "source_revision": "9bcdca585955dfb930005ed742572606e68f5688",
+  "source_type": "synthetic public examples",
+  "retrieval_contract": {
+    "allowed_content": [
+      "active reviewed playbook content",
+      "selected relevant conditional steps",
+      "at most two short representative examples per playbook"
+    ],
+    "excluded_content": [
+      "whole case transcripts",
+      "per-ticket solution records",
+      "raw source event chunks",
+      "historical approval or completion copied into current-ticket facts"
+    ],
+    "candidate_playbooks_enabled_by_default": false,
+    "empty_reference_set_allowed": true
+  },
+  "global_guards": [
+    "Apply current operational emergency and authority rules before any playbook.",
+    "Unknown current prerequisites remain unknown; historical examples cannot populate ticket state.",
+    "Choose at most one next business action per MCP invocation.",
+    "Only existing agent tools can be proposed; messages and dispatches are simulated in the current agent.",
+    "No physical repair, attachment interpretation, payment, calendar booking or database update capability is added by these files."
+  ],
+  "playbooks": [
+    {
+      "id": "PB01",
+      "version": 1,
+      "title": "Supported tenant checks and confirmed resolution",
+      "kind": "scenario",
+      "status": "candidate",
+      "execution_status": "design_only",
+      "primary_cluster_case_ids": [
+        "014",
+        "017",
+        "027",
+        "049"
+      ],
+      "supporting_case_ids": [
+        "012",
+        "014",
+        "017",
+        "024",
+        "027",
+        "039",
+        "049"
+      ],
+      "trigger": "A routine issue has a specific, supported, non-invasive check or an explicitly permitted tenant action.",
+      "exclusions": [
+        "An emergency or unresolved security risk.",
+        "A check has already failed, is unsafe, requires professional work, or has no applicable current basis.",
+        "Liability or tenant charging has not been established by current authoritative terms."
+      ],
+      "steps": [
+        {
+          "id": "check",
+          "when": "A safe applicable check is evidenced and has not already been tried.",
+          "next_action": "Ask the tenant to perform that check and report the result. Do not copy equipment layout or liability from a historical example.",
+          "compatible_tools": [
+            "send_message"
+          ],
+          "if_required_information_is_missing": "Ask for the specific missing fact; use ordinary triage if no supported check exists.",
+          "evidence_refs": [
+            "E01",
+            "E03"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "wait",
+          "when": "A response to the check is still pending.",
+          "next_action": "Wait for the tenant; do not claim success.",
+          "compatible_tools": [
+            "hold"
+          ],
+          "if_required_information_is_missing": "Obtain a result before moving to resolution.",
+          "evidence_refs": [
+            "E01"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "failed",
+          "when": "The tenant says the check failed or the problem recurred.",
+          "next_action": "Move to approved professional assessment using PB03, or the currently applicable ownership route.",
+          "compatible_tools": [
+            "request_landlord_approval",
+            "send_message"
+          ],
+          "if_required_information_is_missing": "Resolve authorization before dispatch.",
+          "evidence_refs": [
+            "E02",
+            "E04"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "resolved",
+          "when": "The tenant confirms the specific problem is resolved and no material risk remains.",
+          "next_action": "Apply PB12 before closing; record any recurrence or monitoring condition.",
+          "compatible_tools": [
+            "add_note",
+            "close_case"
+          ],
+          "if_required_information_is_missing": "Request the outstanding completion evidence.",
+          "evidence_refs": [
+            "E01",
+            "E03"
+          ],
+          "guard_status": "proposed; requires operational review"
+        }
+      ],
+      "representative_examples": [
+        {
+          "source": "E01",
+          "summary": "The landlord identified the extractor switch; the tenant then confirmed the fan worked."
+        },
+        {
+          "source": "E02",
+          "summary": "Dishwasher checks preceded engineer attendance; the check did not establish resolution."
+        }
+      ],
+      "evidence_limits": [
+        "Four primary cases report tenant resolution; three additional cases support the failed-check branch.",
+        "A historical instruction is not a universal repair method."
+      ],
+      "update_policy": "Update this playbook version after source and operational review. Do not create a searchable record for each ticket.",
+      "source_references": {
+        "E01": {
+          "case_id": "Property Management/017",
+          "event_ids": [
+            "event-008",
+            "event-009",
+            "event-011"
+          ],
+          "finding": "The landlord supplied a switch location, the agency relayed it and the tenant confirmed the fan worked.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/017/history.md",
+          "history_sha256": "4e6841b2ce52d8b2fcbfb7af0ff2f2ad6099ea495b5143add1dd6b3ad54911b0",
+          "index_path": "Property Management/017/index.md",
+          "index_sha256": "8a8cc4d76c80701d5f100d1fbc0f7daea2430b8c65d724ec5331ab4490f26251",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E02": {
+          "case_id": "Property Management/012",
+          "event_ids": [
+            "event-005",
+            "event-006",
+            "event-024"
+          ],
+          "finding": "Quick checks were suggested; later a provider fixed the door lock and tested the dishwasher.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/012/history.md",
+          "history_sha256": "1996c10c8807342367cf83c6a79f7f5d116f5590e790b55ab9df77f1881ca916",
+          "index_path": "Property Management/012/index.md",
+          "index_sha256": "197658f20f325010d7ca99534374ed31849081fc51dd83f78e3c398d61d3d248",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E03": {
+          "case_id": "Property Management/049",
+          "event_ids": [
+            "event-007",
+            "event-008",
+            "event-011",
+            "event-013"
+          ],
+          "finding": "The landlord allowed tenant repair with a contractor fallback; the agency sought and recorded completion.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/049/history.md",
+          "history_sha256": "e42f3ea31ec4f31f60c6069eb55f3d0ff1dc8aa87ce75278c9ddb2fcb7105994",
+          "index_path": "Property Management/049/index.md",
+          "index_sha256": "910ae2d6763d2c034f5f7365d3f2f6a504206f93e5115e02d304e23f7bde0fa7",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E04": {
+          "case_id": "Property Management/024",
+          "event_ids": [
+            "event-006",
+            "event-012",
+            "event-016"
+          ],
+          "finding": "The tenant reported that suggested settings did not solve the oven issue; a provider was then assigned and the agency later reported it fixed.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/024/history.md",
+          "history_sha256": "f96c098bad9162a18cf8619757a248dd2d33f3e842ed9a42993cea5ca59dee37",
+          "index_path": "Property Management/024/index.md",
+          "index_sha256": "b6c0e4d90bf7ab014ef439372712b023fc0bc973c47c47cc80c4e4d81474acee",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      },
+      "provenance": [
+        {
+          "case_id": "Property Management/012",
+          "index_path": "Property Management/012/index.md",
+          "history_path": "Property Management/012/history.md",
+          "index_sha256": "197658f20f325010d7ca99534374ed31849081fc51dd83f78e3c398d61d3d248",
+          "history_sha256": "1996c10c8807342367cf83c6a79f7f5d116f5590e790b55ab9df77f1881ca916",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/014",
+          "index_path": "Property Management/014/index.md",
+          "history_path": "Property Management/014/history.md",
+          "index_sha256": "49d7084e33fb91128afb1874c1a359a448058eee76ec9c9563462d222a197f10",
+          "history_sha256": "51d9003bdad04f4d1415c9346e2d391f605b2a541d07549a41af8f20f9ea81ae",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/017",
+          "index_path": "Property Management/017/index.md",
+          "history_path": "Property Management/017/history.md",
+          "index_sha256": "8a8cc4d76c80701d5f100d1fbc0f7daea2430b8c65d724ec5331ab4490f26251",
+          "history_sha256": "4e6841b2ce52d8b2fcbfb7af0ff2f2ad6099ea495b5143add1dd6b3ad54911b0",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/024",
+          "index_path": "Property Management/024/index.md",
+          "history_path": "Property Management/024/history.md",
+          "index_sha256": "b6c0e4d90bf7ab014ef439372712b023fc0bc973c47c47cc80c4e4d81474acee",
+          "history_sha256": "f96c098bad9162a18cf8619757a248dd2d33f3e842ed9a42993cea5ca59dee37",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/027",
+          "index_path": "Property Management/027/index.md",
+          "history_path": "Property Management/027/history.md",
+          "index_sha256": "9cd66b88f700a08298d0e90e4ba31df7206385378ccaca3344682097a4a74b22",
+          "history_sha256": "ee63740d757d7957b5d56933945c1a683a38e8690d0071275616084370e5b0a6",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/039",
+          "index_path": "Property Management/039/index.md",
+          "history_path": "Property Management/039/history.md",
+          "index_sha256": "c1286087941c3085336e25df8c04d6a7c20529123e8830fe43a81af01d34aa48",
+          "history_sha256": "2581e5a6c4b98ffd44b2223ff226b68cbaf9f2703098b2390286e9f11f1ec9d4",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/049",
+          "index_path": "Property Management/049/index.md",
+          "history_path": "Property Management/049/history.md",
+          "index_sha256": "910ae2d6763d2c034f5f7365d3f2f6a504206f93e5115e02d304e23f7bde0fa7",
+          "history_sha256": "e42f3ea31ec4f31f60c6069eb55f3d0ff1dc8aa87ce75278c9ddb2fcb7105994",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      ]
+    },
+    {
+      "id": "PB02",
+      "version": 1,
+      "title": "Landlord managed repair",
+      "kind": "scenario",
+      "status": "candidate",
+      "execution_status": "design_only",
+      "primary_cluster_case_ids": [
+        "028",
+        "035",
+        "041",
+        "045",
+        "047"
+      ],
+      "supporting_case_ids": [
+        "028",
+        "035",
+        "041",
+        "045",
+        "047"
+      ],
+      "trigger": "The landlord explicitly takes responsibility for arranging the repair or uses their own contractor.",
+      "exclusions": [
+        "Responsibility is only assumed.",
+        "Concurrent agency and landlord assignments are unresolved."
+      ],
+      "steps": [
+        {
+          "id": "ownership",
+          "when": "The current landlord explicitly elects to manage the work.",
+          "next_action": "Record the owner and ask for the plan or completion update; do not open a competing instruction.",
+          "compatible_tools": [
+            "send_message",
+            "add_note"
+          ],
+          "if_required_information_is_missing": "Clarify who is responsible.",
+          "evidence_refs": [
+            "E05",
+            "E06"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "progress",
+          "when": "The landlord-managed work is pending.",
+          "next_action": "Wait or request a progress update according to the configured chase policy.",
+          "compatible_tools": [
+            "hold",
+            "send_message"
+          ],
+          "if_required_information_is_missing": "Do not infer a visit date or chase interval from repeated historic holds.",
+          "evidence_refs": [
+            "E05"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "handoff",
+          "when": "The first attempt failed or another contractor becomes involved.",
+          "next_action": "Clarify the active owner and remaining scope before switching the route.",
+          "compatible_tools": [
+            "send_message",
+            "escalate"
+          ],
+          "if_required_information_is_missing": "Resolve any conflicting assignments.",
+          "evidence_refs": [
+            "E07",
+            "E08"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "done",
+          "when": "A credible current report confirms the in-scope work is complete.",
+          "next_action": "Apply PB12; keep unrelated unfinished work separate.",
+          "compatible_tools": [
+            "add_note",
+            "close_case"
+          ],
+          "if_required_information_is_missing": "Request completion confirmation for this issue.",
+          "evidence_refs": [
+            "E05",
+            "E07"
+          ],
+          "guard_status": "proposed; requires operational review"
+        }
+      ],
+      "representative_examples": [
+        {
+          "source": "E05",
+          "summary": "The landlord chose to repair the loose outdoor pipe and later confirmed completion."
+        },
+        {
+          "source": "E07",
+          "summary": "The landlord arranged further washing-machine repair after an unsuccessful attempt; a towel-rail issue remained separate."
+        }
+      ],
+      "evidence_limits": [
+        "Case 047 includes an agency assignment as well as landlord-contractor completion. It supports conflict handling, not copying duplicate dispatches."
+      ],
+      "update_policy": "Update this playbook version after source and operational review. Do not create a searchable record for each ticket.",
+      "source_references": {
+        "E05": {
+          "case_id": "Property Management/028",
+          "event_ids": [
+            "event-007",
+            "event-012",
+            "event-013"
+          ],
+          "finding": "The landlord undertook the repair and later confirmed completion.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/028/history.md",
+          "history_sha256": "a9182218c4900faa8f252fea39af93a12b58068ce5678aec365662ad04ee8d5e",
+          "index_path": "Property Management/028/index.md",
+          "index_sha256": "257e55256e2ed04fd06eef2602f49a7dcd81d71450416f0823b9623330e0240e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E06": {
+          "case_id": "Property Management/035",
+          "event_ids": [
+            "event-006",
+            "event-012"
+          ],
+          "finding": "The landlord planned to obtain shower parts and fit them, then confirmed resolution.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/035/history.md",
+          "history_sha256": "4cb597324d3ce3e3bb8847d2a4ae19268e6795972cf1ca3761af2ea29924cbe8",
+          "index_path": "Property Management/035/index.md",
+          "index_sha256": "92b74f8746f07cbbf36e9dbd78ae59cd8f5ae7b003cb9e3cc558ba300c041588",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E07": {
+          "case_id": "Property Management/041",
+          "event_ids": [
+            "event-001",
+            "event-012",
+            "event-023",
+            "event-024"
+          ],
+          "finding": "The case includes landlord-led washing-machine handling and reported completion; a separate towel-rail issue must retain its own scope.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/041/history.md",
+          "history_sha256": "0d506fb6f12ec12b440537e991ddabda9e6c737c4859d1de1616b6ae88b98fa0",
+          "index_path": "Property Management/041/index.md",
+          "index_sha256": "6070aa970fe72e29731fa84784bc7b80660136e73fd8b58317e7c8efc958d4a7",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E08": {
+          "case_id": "Property Management/047",
+          "event_ids": [
+            "event-006",
+            "event-010",
+            "event-017",
+            "event-018",
+            "event-035"
+          ],
+          "finding": "The toilet was resolved; a landlord response, agency assignment and landlord-contractor completion coexist.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/047/history.md",
+          "history_sha256": "aff7f65cc7a966f30e7efd892060a8cb7c58aa0f6aa7999b26af9c6a148153f6",
+          "index_path": "Property Management/047/index.md",
+          "index_sha256": "77f01c5d8e4c906f4392029380b42a5df80fdb068eb78d3b01dc79ebdb7ef645",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      },
+      "provenance": [
+        {
+          "case_id": "Property Management/028",
+          "index_path": "Property Management/028/index.md",
+          "history_path": "Property Management/028/history.md",
+          "index_sha256": "257e55256e2ed04fd06eef2602f49a7dcd81d71450416f0823b9623330e0240e",
+          "history_sha256": "a9182218c4900faa8f252fea39af93a12b58068ce5678aec365662ad04ee8d5e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/035",
+          "index_path": "Property Management/035/index.md",
+          "history_path": "Property Management/035/history.md",
+          "index_sha256": "92b74f8746f07cbbf36e9dbd78ae59cd8f5ae7b003cb9e3cc558ba300c041588",
+          "history_sha256": "4cb597324d3ce3e3bb8847d2a4ae19268e6795972cf1ca3761af2ea29924cbe8",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/041",
+          "index_path": "Property Management/041/index.md",
+          "history_path": "Property Management/041/history.md",
+          "index_sha256": "6070aa970fe72e29731fa84784bc7b80660136e73fd8b58317e7c8efc958d4a7",
+          "history_sha256": "0d506fb6f12ec12b440537e991ddabda9e6c737c4859d1de1616b6ae88b98fa0",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/045",
+          "index_path": "Property Management/045/index.md",
+          "history_path": "Property Management/045/history.md",
+          "index_sha256": "c37074a252117e3fc1e9fc6196fdc5b88e5b02690322616b82d39261dffde78d",
+          "history_sha256": "3e0752837d192a18668f9a085cbbb9eb03f0568c58a15727bf493260df82bdcc",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/047",
+          "index_path": "Property Management/047/index.md",
+          "history_path": "Property Management/047/history.md",
+          "index_sha256": "77f01c5d8e4c906f4392029380b42a5df80fdb068eb78d3b01dc79ebdb7ef645",
+          "history_sha256": "aff7f65cc7a966f30e7efd892060a8cb7c58aa0f6aa7999b26af9c6a148153f6",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      ]
+    },
+    {
+      "id": "PB03",
+      "version": 1,
+      "title": "Agency arranged assessment and repair",
+      "kind": "scenario",
+      "status": "candidate",
+      "execution_status": "design_only",
+      "primary_cluster_case_ids": [
+        "002",
+        "011",
+        "012",
+        "013",
+        "015",
+        "016",
+        "021",
+        "022",
+        "023",
+        "024",
+        "026",
+        "029",
+        "030",
+        "031",
+        "032",
+        "033",
+        "034",
+        "037",
+        "039",
+        "042",
+        "043",
+        "044",
+        "046",
+        "048",
+        "050"
+      ],
+      "supporting_case_ids": [
+        "002",
+        "011",
+        "012",
+        "013",
+        "015",
+        "016",
+        "021",
+        "022",
+        "023",
+        "024",
+        "026",
+        "029",
+        "030",
+        "031",
+        "032",
+        "033",
+        "034",
+        "037",
+        "039",
+        "042",
+        "043",
+        "044",
+        "046",
+        "048",
+        "050"
+      ],
+      "trigger": "A repair or professional assessment is needed and the agency is the active coordinator.",
+      "exclusions": [
+        "An emergency requires human handling under current policy.",
+        "A different owner, warranty route, or unresolved material identity conflict applies."
+      ],
+      "steps": [
+        {
+          "id": "triage",
+          "when": "The property, affected item, risk and responsibility are sufficiently clear.",
+          "next_action": "Assess current permission and scope; use PB09 or PB11 where they are unclear.",
+          "compatible_tools": [
+            "send_message",
+            "escalate"
+          ],
+          "if_required_information_is_missing": "Resolve the fact that changes dispatch or authorization.",
+          "evidence_refs": [
+            "E09",
+            "E10"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "approve",
+          "when": "The needed visit or expenditure is not currently authorized.",
+          "next_action": "Request approval for the actual proposed scope and any evidenced cost.",
+          "compatible_tools": [
+            "request_landlord_approval"
+          ],
+          "if_required_information_is_missing": "Do not use approval from a source case.",
+          "evidence_refs": [
+            "E09",
+            "E11"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "dispatch",
+          "when": "Current authorization covers the proposed attendance and scope.",
+          "next_action": "Assign the appropriate trade and give only verified current instructions.",
+          "compatible_tools": [
+            "assign_contractor"
+          ],
+          "if_required_information_is_missing": "Clarify the authorization boundary.",
+          "evidence_refs": [
+            "E09"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "schedule",
+          "when": "A provider is instructed but attendance is pending.",
+          "next_action": "Apply PB10 for booking, access, changes and missed visits.",
+          "compatible_tools": [
+            "send_message",
+            "hold"
+          ],
+          "if_required_information_is_missing": "Obtain the unresolved booking or access information.",
+          "evidence_refs": [
+            "E12"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "quote",
+          "when": "Assessment changes the work, risk or cost beyond authorization.",
+          "next_action": "Apply PB09 before authorizing the changed work.",
+          "compatible_tools": [
+            "request_landlord_approval",
+            "send_message"
+          ],
+          "if_required_information_is_missing": "Obtain the missing quote or scope.",
+          "evidence_refs": [
+            "E11",
+            "E13"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "result",
+          "when": "The provider reports repair, no repair needed, or incomplete work.",
+          "next_action": "Verify the applicable result; apply PB11 and PB12 before closure.",
+          "compatible_tools": [
+            "send_message",
+            "add_note",
+            "close_case"
+          ],
+          "if_required_information_is_missing": "Do not equate a status update with verified completion.",
+          "evidence_refs": [
+            "E14",
+            "E15"
+          ],
+          "guard_status": "proposed; requires operational review"
+        }
+      ],
+      "representative_examples": [
+        {
+          "source": "E09",
+          "summary": "The landlord approved contractor attendance for a flush mechanism, then approved a specific replacement quote."
+        },
+        {
+          "source": "E14",
+          "summary": "After attendance, the provider reported that the door had settled and no repair or invoice was required."
+        }
+      ],
+      "evidence_limits": [
+        "Twenty-five primary cases share agency coordination, not a shared physical diagnosis.",
+        "Technical repairs remain provider work. Source cases 048 and 050 contain material identity conflicts."
+      ],
+      "update_policy": "Update this playbook version after source and operational review. Do not create a searchable record for each ticket.",
+      "source_references": {
+        "E09": {
+          "case_id": "Property Management/032",
+          "event_ids": [
+            "event-003",
+            "event-006",
+            "event-008",
+            "event-012",
+            "event-018",
+            "event-024",
+            "event-025"
+          ],
+          "finding": "The landlord agreed to repair, with a quote required for a larger job; the provider quote was sent to the landlord and a later agency instruction specified the quoted replacement.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/032/history.md",
+          "history_sha256": "2f0628bdc98c1d32e11895879c14bad67cda8fd801556bbf679ac024ca9b0f2a",
+          "index_path": "Property Management/032/index.md",
+          "index_sha256": "ba2cc4e10ef7bace61d38b953647e5697f7715220c7c5bcf65f100d80c6ed658",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E10": {
+          "case_id": "Property Management/044",
+          "event_ids": [
+            "event-005",
+            "event-007",
+            "event-009"
+          ],
+          "finding": "The agency asked which window was affected and used the staircase-window clarification in the landlord request.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/044/history.md",
+          "history_sha256": "8ca2d7d2815b1cf0689838f237496f99f6f448d0f7d19c3dabcd0acdfa2fa0fd",
+          "index_path": "Property Management/044/index.md",
+          "index_sha256": "95408312f8ce9f0b348b334d3749479b9f5f6caa5cabffa433afb12351fbf8a8",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E11": {
+          "case_id": "Property Management/002",
+          "event_ids": [
+            "event-003",
+            "event-016",
+            "event-017",
+            "event-019"
+          ],
+          "finding": "Initial attendance permission was followed by a changed repair proposal, a quote and landlord approval.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/002/history.md",
+          "history_sha256": "7dfd10fe92722f27ec9ed3c0705bf6f4034b7222e0fd723588baf54e1ece91c6",
+          "index_path": "Property Management/002/index.md",
+          "index_sha256": "fee33fc3157d462c5136f8e3ac8c45c9ba3d0466cbc24405bba150b14af727ec",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E12": {
+          "case_id": "Property Management/026",
+          "event_ids": [
+            "event-016",
+            "event-018",
+            "event-021",
+            "event-023"
+          ],
+          "finding": "A booking description and the tenant's understanding differed, prompting clarification.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/026/history.md",
+          "history_sha256": "d3ab597e03eb0d2e3cfded66e0d4594b19cd34c4bd5732b22bfe176ca3188238",
+          "index_path": "Property Management/026/index.md",
+          "index_sha256": "e7fc7d710880a4a3d1286f671905f02d2037cc2441d939bd27109d70a279f2fb",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E13": {
+          "case_id": "Property Management/043",
+          "event_ids": [
+            "event-011",
+            "event-014"
+          ],
+          "finding": "Only simple low-cost work was permitted; parts or complexity required a quote and renewed approval.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/043/history.md",
+          "history_sha256": "d4dea4806876acf00e6d40a8fa9c494be6f826823ccbd2debb0f91b06a996a39",
+          "index_path": "Property Management/043/index.md",
+          "index_sha256": "e491f05bde4b49306deae16060db32794389a97077b2cc33ff20a4fc47102e3f",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E14": {
+          "case_id": "Property Management/016",
+          "event_ids": [
+            "event-022"
+          ],
+          "finding": "The provider reported the door had settled and no repair or invoice was required. Event 024 has contradictory invoice wording.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/016/history.md",
+          "history_sha256": "528103049d6f7fa283cee80def4e65006b1daec5cca7a5534aa2d6f9a3943824",
+          "index_path": "Property Management/016/index.md",
+          "index_sha256": "2fa9d89af643a2c34a10c4feedb7bfa55d9c95d1c6bd6c4a3d205a3ec5a6cc1e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E15": {
+          "case_id": "Property Management/026",
+          "event_ids": [
+            "event-029"
+          ],
+          "finding": "The tenant confirmed the oven worked after the repair and the agency discussed closure.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/026/history.md",
+          "history_sha256": "d3ab597e03eb0d2e3cfded66e0d4594b19cd34c4bd5732b22bfe176ca3188238",
+          "index_path": "Property Management/026/index.md",
+          "index_sha256": "e7fc7d710880a4a3d1286f671905f02d2037cc2441d939bd27109d70a279f2fb",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      },
+      "provenance": [
+        {
+          "case_id": "Property Management/002",
+          "index_path": "Property Management/002/index.md",
+          "history_path": "Property Management/002/history.md",
+          "index_sha256": "fee33fc3157d462c5136f8e3ac8c45c9ba3d0466cbc24405bba150b14af727ec",
+          "history_sha256": "7dfd10fe92722f27ec9ed3c0705bf6f4034b7222e0fd723588baf54e1ece91c6",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/011",
+          "index_path": "Property Management/011/index.md",
+          "history_path": "Property Management/011/history.md",
+          "index_sha256": "126a5a995ee1f120daa08c724284b5c4422c50d952c0b43333eeb1af7cdc44c3",
+          "history_sha256": "8d6800cfee7b1a394d2aed173887b8ca6cc969daa35ed2cde5abc6d3589b060e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/012",
+          "index_path": "Property Management/012/index.md",
+          "history_path": "Property Management/012/history.md",
+          "index_sha256": "197658f20f325010d7ca99534374ed31849081fc51dd83f78e3c398d61d3d248",
+          "history_sha256": "1996c10c8807342367cf83c6a79f7f5d116f5590e790b55ab9df77f1881ca916",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/013",
+          "index_path": "Property Management/013/index.md",
+          "history_path": "Property Management/013/history.md",
+          "index_sha256": "fb62e9ba4a1e26c3e44ae07e1bcd6cac53aaa148f89bb9d07e07b39d0e51dcce",
+          "history_sha256": "146e50e521e06c85a74c1b39980a3b4dd0042e2d397c93892e0e2f8b32e1785e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/015",
+          "index_path": "Property Management/015/index.md",
+          "history_path": "Property Management/015/history.md",
+          "index_sha256": "04ac498100c6a6cd798cd854da6ffed0e78337d3a57a814d70021a7b5d4f4fdd",
+          "history_sha256": "c14d55880fd761ca070b647a16a0d4478578244325c64d83c57f499288bfbc53",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/016",
+          "index_path": "Property Management/016/index.md",
+          "history_path": "Property Management/016/history.md",
+          "index_sha256": "2fa9d89af643a2c34a10c4feedb7bfa55d9c95d1c6bd6c4a3d205a3ec5a6cc1e",
+          "history_sha256": "528103049d6f7fa283cee80def4e65006b1daec5cca7a5534aa2d6f9a3943824",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/021",
+          "index_path": "Property Management/021/index.md",
+          "history_path": "Property Management/021/history.md",
+          "index_sha256": "75f2be29d3947109aa123c072760b9c9ea294d4330ea9eeb35b1730ed825f27e",
+          "history_sha256": "50c6900b3b4c1be040cba1aab6f293d726502ae8fd4d1ca76aa57a9c2b3d100e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/022",
+          "index_path": "Property Management/022/index.md",
+          "history_path": "Property Management/022/history.md",
+          "index_sha256": "9f02ab7d34907db44e9649286c6a633dc69564b2b79373db481ae13137954b41",
+          "history_sha256": "a80c500801fafcc52bc716b85ef9451462d3d2c4e72d9ef6aac264838c239caf",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/023",
+          "index_path": "Property Management/023/index.md",
+          "history_path": "Property Management/023/history.md",
+          "index_sha256": "e382c97998c2df9b9fed4b17cd37b79c242b38165fe22e9faef93bf3f7df0ad7",
+          "history_sha256": "b705d2d76ffed69348c8403c220638878237996556895ec241fa299fb24e066f",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/024",
+          "index_path": "Property Management/024/index.md",
+          "history_path": "Property Management/024/history.md",
+          "index_sha256": "b6c0e4d90bf7ab014ef439372712b023fc0bc973c47c47cc80c4e4d81474acee",
+          "history_sha256": "f96c098bad9162a18cf8619757a248dd2d33f3e842ed9a42993cea5ca59dee37",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/026",
+          "index_path": "Property Management/026/index.md",
+          "history_path": "Property Management/026/history.md",
+          "index_sha256": "e7fc7d710880a4a3d1286f671905f02d2037cc2441d939bd27109d70a279f2fb",
+          "history_sha256": "d3ab597e03eb0d2e3cfded66e0d4594b19cd34c4bd5732b22bfe176ca3188238",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/029",
+          "index_path": "Property Management/029/index.md",
+          "history_path": "Property Management/029/history.md",
+          "index_sha256": "1017fc184f91447907cf9e3ae5642ca017f986e4fcd92b05ab981b629b1ea1ad",
+          "history_sha256": "a1f2d01c026b63d0c360f0a0ad032eda506cf3f01b0fd42d1c5a751fdb341b49",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/030",
+          "index_path": "Property Management/030/index.md",
+          "history_path": "Property Management/030/history.md",
+          "index_sha256": "4781019938b3a58004c27d8e8cf80bd49dd437ac6a8ce32b80ef24e28846e9c0",
+          "history_sha256": "ccf864d8797f39fabb64f9db2118acec7aaa64f5e593826f21fc6979f0d3c2d8",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/031",
+          "index_path": "Property Management/031/index.md",
+          "history_path": "Property Management/031/history.md",
+          "index_sha256": "92ac61deabf51015387b112f6650259822354e5a88862e746fafb924ec2c2b90",
+          "history_sha256": "f87371b639057d12f5702c25cd4b6aee06b681ac3cef369740373585dfb1ccca",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/032",
+          "index_path": "Property Management/032/index.md",
+          "history_path": "Property Management/032/history.md",
+          "index_sha256": "ba2cc4e10ef7bace61d38b953647e5697f7715220c7c5bcf65f100d80c6ed658",
+          "history_sha256": "2f0628bdc98c1d32e11895879c14bad67cda8fd801556bbf679ac024ca9b0f2a",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/033",
+          "index_path": "Property Management/033/index.md",
+          "history_path": "Property Management/033/history.md",
+          "index_sha256": "9b25180bfe61c0a6755ed79d51ac5df86c7978304ac1f5262dc1234e4b355230",
+          "history_sha256": "72357b6b9ce0acb9b9bbe5d5b0bcec1bf7987c300c75b4095b7eed5d3a77bea2",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/034",
+          "index_path": "Property Management/034/index.md",
+          "history_path": "Property Management/034/history.md",
+          "index_sha256": "f4d0ae3149b7994a766a70fc02db2cef2e81f1722095cf872121555f9626a6cb",
+          "history_sha256": "9a9fac8066e100080777e6d68e1c42327b4023be4f5888841628ebdb4e2c6432",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/037",
+          "index_path": "Property Management/037/index.md",
+          "history_path": "Property Management/037/history.md",
+          "index_sha256": "a8871499a901c6ee2852006b4107ab19418cb06ef7598c7757a3f4532c647a0e",
+          "history_sha256": "2529f1b9848674ac5a9f6efbaa0e74d5f6cb3406584494f7dd0622b36f6e067f",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/039",
+          "index_path": "Property Management/039/index.md",
+          "history_path": "Property Management/039/history.md",
+          "index_sha256": "c1286087941c3085336e25df8c04d6a7c20529123e8830fe43a81af01d34aa48",
+          "history_sha256": "2581e5a6c4b98ffd44b2223ff226b68cbaf9f2703098b2390286e9f11f1ec9d4",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/042",
+          "index_path": "Property Management/042/index.md",
+          "history_path": "Property Management/042/history.md",
+          "index_sha256": "66a031f58b7eaf894e4df61c29284f8e5f7a28391fdcc270105cd6509edaf55d",
+          "history_sha256": "657a0eb815452902e4a85514a4b9fcd8baebeb0680a17af3661d0de867b2f6ee",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/043",
+          "index_path": "Property Management/043/index.md",
+          "history_path": "Property Management/043/history.md",
+          "index_sha256": "e491f05bde4b49306deae16060db32794389a97077b2cc33ff20a4fc47102e3f",
+          "history_sha256": "d4dea4806876acf00e6d40a8fa9c494be6f826823ccbd2debb0f91b06a996a39",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/044",
+          "index_path": "Property Management/044/index.md",
+          "history_path": "Property Management/044/history.md",
+          "index_sha256": "95408312f8ce9f0b348b334d3749479b9f5f6caa5cabffa433afb12351fbf8a8",
+          "history_sha256": "8ca2d7d2815b1cf0689838f237496f99f6f448d0f7d19c3dabcd0acdfa2fa0fd",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/046",
+          "index_path": "Property Management/046/index.md",
+          "history_path": "Property Management/046/history.md",
+          "index_sha256": "ae16479430428a6f88a0ac72d653937c8f0c5d35eff983e93c5296a7f4f9685f",
+          "history_sha256": "9c2ad1823e5f801afa3a2149cc2e63d6f9d9e10f614e0825d5f4ed61eb60853e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/048",
+          "index_path": "Property Management/048/index.md",
+          "history_path": "Property Management/048/history.md",
+          "index_sha256": "e9dcf55f4a741cc2472260dd600662498474c755e1f2297c6586622fd1035605",
+          "history_sha256": "be829723d4b22630f9f2874d2b884f7a6a98e70150f4a2a8915fdccfec3f5e54",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/050",
+          "index_path": "Property Management/050/index.md",
+          "history_path": "Property Management/050/history.md",
+          "index_sha256": "518c35fbcdd419e661bb01685b8308bf5d3ab7b8b49792d413385d33345fb124",
+          "history_sha256": "35780255fbee892c15bd24f06155c0256a6f034c16f148c0b2c924b653fdb1de",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      ]
+    },
+    {
+      "id": "PB04",
+      "version": 1,
+      "title": "Checkout cleaning and coordinated works",
+      "kind": "scenario",
+      "status": "candidate",
+      "execution_status": "design_only",
+      "primary_cluster_case_ids": [
+        "003",
+        "004",
+        "005",
+        "006",
+        "007",
+        "008"
+      ],
+      "supporting_case_ids": [
+        "003",
+        "004",
+        "005",
+        "006",
+        "007",
+        "008"
+      ],
+      "trigger": "A checkout request needs a scoped estimate, cleaning, or multiple coordinated works.",
+      "exclusions": [
+        "A vacant property is treated as ordinary occupied-tenant access.",
+        "Deposit liability, deductions or payment authority are inferred from historical practice."
+      ],
+      "steps": [
+        {
+          "id": "scope",
+          "when": "The checkout request or report defines the proposed work.",
+          "next_action": "Obtain the available report and distinguish requested, quoted and approved items.",
+          "compatible_tools": [
+            "send_message",
+            "add_note"
+          ],
+          "if_required_information_is_missing": "Request the missing scope or report instead of inventing its contents.",
+          "evidence_refs": [
+            "E16",
+            "E17"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "approval",
+          "when": "A quote is available but the selected scope is not authorized.",
+          "next_action": "Request approval, including any requested comparison quote, through PB09.",
+          "compatible_tools": [
+            "request_landlord_approval"
+          ],
+          "if_required_information_is_missing": "Clarify price, selected quote or included work.",
+          "evidence_refs": [
+            "E17",
+            "E18"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "dependency",
+          "when": "Cleaning or other work depends on another task finishing.",
+          "next_action": "Verify the predecessor is complete and agree a consistent schedule before instruction.",
+          "compatible_tools": [
+            "send_message",
+            "hold"
+          ],
+          "if_required_information_is_missing": "Resolve inconsistent dates and dependency status.",
+          "evidence_refs": [
+            "E16"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "access",
+          "when": "Approved work can proceed.",
+          "next_action": "Coordinate keys, caretaker access or the verified access arrangement using PB10.",
+          "compatible_tools": [
+            "send_message",
+            "assign_contractor"
+          ],
+          "if_required_information_is_missing": "Follow the configured vacant-property policy and obtain access details.",
+          "evidence_refs": [
+            "E19"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "finish",
+          "when": "Work is reported finished.",
+          "next_action": "Reconcile changes against approved scope and apply PB12 for keys, invoice and confirmation.",
+          "compatible_tools": [
+            "send_message",
+            "add_note",
+            "close_case"
+          ],
+          "if_required_information_is_missing": "Request outstanding evidence; payment is a separate fact.",
+          "evidence_refs": [
+            "E18",
+            "E20"
+          ],
+          "guard_status": "proposed; requires operational review"
+        }
+      ],
+      "representative_examples": [
+        {
+          "source": "E16",
+          "summary": "A checkout clean waited for other checkout works; later schedule wording was inconsistent and needs confirmation."
+        },
+        {
+          "source": "E18",
+          "summary": "A comparison quote was requested; the final invoice was lower because a tap did not need replacing."
+        }
+      ],
+      "evidence_limits": [
+        "Missing photos, unclear invoices and inconsistent dates must not become automatic acceptance rules.",
+        "This module does not decide tenancy liability or deposit deductions."
+      ],
+      "update_policy": "Update this playbook version after source and operational review. Do not create a searchable record for each ticket.",
+      "source_references": {
+        "E16": {
+          "case_id": "Property Management/004",
+          "event_ids": [
+            "event-013",
+            "event-016",
+            "event-023",
+            "event-026"
+          ],
+          "finding": "Cleaning depended on checkout works; later Sunday and Friday wording did not establish a consistent sequence.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/004/history.md",
+          "history_sha256": "8bae53e287391fb32f1a6a736131dd86a1b4bae8af780f3458ec6717079446a6",
+          "index_path": "Property Management/004/index.md",
+          "index_sha256": "02ba84acd27c0830b12183ef2427e3712df8c981b97267722379765c913fcfb7",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E17": {
+          "case_id": "Property Management/005",
+          "event_ids": [
+            "event-013",
+            "event-015",
+            "event-017"
+          ],
+          "finding": "Cleaning scope and carpet coverage were discussed; the landlord approved the quote and requested carpet cleaning.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/005/history.md",
+          "history_sha256": "f56a378925d16686c260bbc743b2c2849c7b6d1f8d967bbfbb1c6e63f395f29a",
+          "index_path": "Property Management/005/index.md",
+          "index_sha256": "e796ccdf59faf4fef54cf3dc52f4169c1019686d161fa38bc40bdb647a637619",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E18": {
+          "case_id": "Property Management/008",
+          "event_ids": [
+            "event-009",
+            "event-010",
+            "event-034",
+            "event-036",
+            "event-045"
+          ],
+          "finding": "A second quote, tax wording and a lower final cost appeared; the invoice email also contains a property mismatch.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/008/history.md",
+          "history_sha256": "1335074bf892e522d28c64baf19382c8d1ead851bca21ffd37e9509be85c3919",
+          "index_path": "Property Management/008/index.md",
+          "index_sha256": "6854ec02177dce4e98ac13051022fec9410035e8d9817bc0a548ea3b953cd106",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E19": {
+          "case_id": "Property Management/007",
+          "event_ids": [
+            "event-023",
+            "event-025"
+          ],
+          "finding": "The provider asked where the keys were and the agency specified caretaker access.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/007/history.md",
+          "history_sha256": "69d9776cdbf3915af2842af539a5d76d27f2164e42f61ab29862c34281e1db0e",
+          "index_path": "Property Management/007/index.md",
+          "index_sha256": "7588385e26ac82b09bc69ce3160303e22103959e924cfd815eb72f9aba335e88",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E20": {
+          "case_id": "Property Management/005",
+          "event_ids": [
+            "event-026",
+            "event-029",
+            "event-030",
+            "event-032"
+          ],
+          "finding": "Later messages requested the cleaning invoice; receipt is not established by these requests.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/005/history.md",
+          "history_sha256": "f56a378925d16686c260bbc743b2c2849c7b6d1f8d967bbfbb1c6e63f395f29a",
+          "index_path": "Property Management/005/index.md",
+          "index_sha256": "e796ccdf59faf4fef54cf3dc52f4169c1019686d161fa38bc40bdb647a637619",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      },
+      "provenance": [
+        {
+          "case_id": "Property Management/003",
+          "index_path": "Property Management/003/index.md",
+          "history_path": "Property Management/003/history.md",
+          "index_sha256": "d4ba332ac205e8a43e031d6c7bd216180cfca7d6ff8c51e25abe310b7ba1869e",
+          "history_sha256": "9749dc92c5f2c6fd3ceb553eead32e3595c44e7c4040480fe289f4870336984c",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/004",
+          "index_path": "Property Management/004/index.md",
+          "history_path": "Property Management/004/history.md",
+          "index_sha256": "02ba84acd27c0830b12183ef2427e3712df8c981b97267722379765c913fcfb7",
+          "history_sha256": "8bae53e287391fb32f1a6a736131dd86a1b4bae8af780f3458ec6717079446a6",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/005",
+          "index_path": "Property Management/005/index.md",
+          "history_path": "Property Management/005/history.md",
+          "index_sha256": "e796ccdf59faf4fef54cf3dc52f4169c1019686d161fa38bc40bdb647a637619",
+          "history_sha256": "f56a378925d16686c260bbc743b2c2849c7b6d1f8d967bbfbb1c6e63f395f29a",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/006",
+          "index_path": "Property Management/006/index.md",
+          "history_path": "Property Management/006/history.md",
+          "index_sha256": "c73156b66bf29149e13814685357870d76d42c4fa6eaa8d86372f86953701f98",
+          "history_sha256": "e33e990a26f56808326248dabde83782defe2ccf2ae2cd50746e3339d6c32acf",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/007",
+          "index_path": "Property Management/007/index.md",
+          "history_path": "Property Management/007/history.md",
+          "index_sha256": "7588385e26ac82b09bc69ce3160303e22103959e924cfd815eb72f9aba335e88",
+          "history_sha256": "69d9776cdbf3915af2842af539a5d76d27f2164e42f61ab29862c34281e1db0e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/008",
+          "index_path": "Property Management/008/index.md",
+          "history_path": "Property Management/008/history.md",
+          "index_sha256": "6854ec02177dce4e98ac13051022fec9410035e8d9817bc0a548ea3b953cd106",
+          "history_sha256": "1335074bf892e522d28c64baf19382c8d1ead851bca21ffd37e9509be85c3919",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      ]
+    },
+    {
+      "id": "PB05",
+      "version": 1,
+      "title": "Garden scope responsibility and completion evidence",
+      "kind": "scenario",
+      "status": "candidate",
+      "execution_status": "design_only",
+      "primary_cluster_case_ids": [
+        "001",
+        "009",
+        "018",
+        "019"
+      ],
+      "supporting_case_ids": [
+        "001",
+        "009",
+        "018",
+        "019"
+      ],
+      "trigger": "A request concerns communal vegetation, tenant garden maintenance, or garden clearance.",
+      "exclusions": [
+        "Boundary, responsibility or disposal requirements are assumed.",
+        "A request for clearing is treated as approval for every landscaping item."
+      ],
+      "steps": [
+        {
+          "id": "scope",
+          "when": "The affected area, requested work and responsible party are clear.",
+          "next_action": "Separate communal work, landlord-managed work and tenant-maintenance follow-up. Route execution through PB01, PB02 or PB03 as applicable.",
+          "compatible_tools": [
+            "send_message",
+            "add_note"
+          ],
+          "if_required_information_is_missing": "Clarify the material scope or responsibility gap.",
+          "evidence_refs": [
+            "E21",
+            "E22"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "quote",
+          "when": "The contractor identifies additional material or disposal requirements.",
+          "next_action": "Obtain and submit the revised scope and quote using PB09.",
+          "compatible_tools": [
+            "request_landlord_approval"
+          ],
+          "if_required_information_is_missing": "Resolve changed cost and included work.",
+          "evidence_refs": [
+            "E23"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "progress",
+          "when": "The responsible party is carrying out the agreed task.",
+          "next_action": "Track progress or request the specifically needed completion evidence.",
+          "compatible_tools": [
+            "send_message",
+            "hold"
+          ],
+          "if_required_information_is_missing": "A promise to send a photo is not completion evidence.",
+          "evidence_refs": [
+            "E22"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "finish",
+          "when": "Current evidence supports completion of the agreed scope.",
+          "next_action": "Apply PB12. Keep uncleared or unapproved items open.",
+          "compatible_tools": [
+            "add_note",
+            "close_case"
+          ],
+          "if_required_information_is_missing": "Do not infer gravel, levelling or other unconfirmed work from a clearance report.",
+          "evidence_refs": [
+            "E23"
+          ],
+          "guard_status": "proposed; requires operational review"
+        }
+      ],
+      "representative_examples": [
+        {
+          "source": "E22",
+          "summary": "Tenant garden-maintenance follow-up requested photographs rather than automatically assigning a contractor."
+        },
+        {
+          "source": "E23",
+          "summary": "Specialist disposal changed the clearance quote; the landlord later approved removal."
+        }
+      ],
+      "evidence_limits": [
+        "Four cases share garden context but have different execution owners. This playbook composes the applicable owner workflow.",
+        "Referenced photos are not automatically accessible."
+      ],
+      "update_policy": "Update this playbook version after source and operational review. Do not create a searchable record for each ticket.",
+      "source_references": {
+        "E21": {
+          "case_id": "Property Management/001",
+          "event_ids": [
+            "event-001",
+            "event-007",
+            "event-022",
+            "event-026"
+          ],
+          "finding": "Communal garden scope, landlord coordination, quote agreement and tenant updates appear.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/001/history.md",
+          "history_sha256": "c08371a28725f8804b1e119b2d3a4f31fdced7917055b4abc9c3a2926dee534c",
+          "index_path": "Property Management/001/index.md",
+          "index_sha256": "c5226a5096041267b0feade49f057539cba0d517ddbf6411c3cfabd2f1be3e6f",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E22": {
+          "case_id": "Property Management/009",
+          "event_ids": [
+            "event-001",
+            "event-006",
+            "event-013",
+            "event-023"
+          ],
+          "finding": "Tenant maintenance was followed up with a request for photos; the record ultimately closes the task.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/009/history.md",
+          "history_sha256": "ad61321988ea769e40260b74e92bd443669ff9037ff7d62576df878af3559294",
+          "index_path": "Property Management/009/index.md",
+          "index_sha256": "7d22e08ffff2004693bc2a57e534cead3b1fad8128232a56815a2d9ddfbdb67f",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E23": {
+          "case_id": "Property Management/019",
+          "event_ids": [
+            "event-009",
+            "event-019",
+            "event-025"
+          ],
+          "finding": "Specialist disposal changed the quote and the landlord then approved removal.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/019/history.md",
+          "history_sha256": "7529c886fb9b6a48c01388fba4db4bfba9d46460d7eeb3594f4f78cd10ee81cd",
+          "index_path": "Property Management/019/index.md",
+          "index_sha256": "6ef4f40eec012db529b70c0b5ebe39bebba62af1fc78cdf190c8cfae30549c19",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      },
+      "provenance": [
+        {
+          "case_id": "Property Management/001",
+          "index_path": "Property Management/001/index.md",
+          "history_path": "Property Management/001/history.md",
+          "index_sha256": "c5226a5096041267b0feade49f057539cba0d517ddbf6411c3cfabd2f1be3e6f",
+          "history_sha256": "c08371a28725f8804b1e119b2d3a4f31fdced7917055b4abc9c3a2926dee534c",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/009",
+          "index_path": "Property Management/009/index.md",
+          "history_path": "Property Management/009/history.md",
+          "index_sha256": "7d22e08ffff2004693bc2a57e534cead3b1fad8128232a56815a2d9ddfbdb67f",
+          "history_sha256": "ad61321988ea769e40260b74e92bd443669ff9037ff7d62576df878af3559294",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/018",
+          "index_path": "Property Management/018/index.md",
+          "history_path": "Property Management/018/history.md",
+          "index_sha256": "1954ad83f485362a92bf1772ea7bb5aca277db76e9e6e05643ead520a4b19b54",
+          "history_sha256": "50e64b8e30e0dd14fce3bde93fec14a5d2c9a7038f2f3379df51a52017d25607",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/019",
+          "index_path": "Property Management/019/index.md",
+          "history_path": "Property Management/019/history.md",
+          "index_sha256": "6ef4f40eec012db529b70c0b5ebe39bebba62af1fc78cdf190c8cfae30549c19",
+          "history_sha256": "7529c886fb9b6a48c01388fba4db4bfba9d46460d7eeb3594f4f78cd10ee81cd",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      ]
+    },
+    {
+      "id": "PB06",
+      "version": 1,
+      "title": "Warranty and remedial repair",
+      "kind": "scenario",
+      "status": "candidate",
+      "execution_status": "design_only",
+      "primary_cluster_case_ids": [
+        "025",
+        "036"
+      ],
+      "supporting_case_ids": [
+        "025",
+        "036"
+      ],
+      "trigger": "A recently supplied item or a previous repair may have warranty or remedial coverage.",
+      "exclusions": [
+        "Coverage or a free repair is assumed from age alone.",
+        "Conflicting warranty terms are resolved by choosing the most convenient statement."
+      ],
+      "steps": [
+        {
+          "id": "verify",
+          "when": "Warranty or defective recent work is credibly raised.",
+          "next_action": "Ask the installer, supplier or provider to verify current coverage and the responsible route.",
+          "compatible_tools": [
+            "send_message"
+          ],
+          "if_required_information_is_missing": "Obtain coverage and cost confirmation.",
+          "evidence_refs": [
+            "E24",
+            "E25"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "conflict",
+          "when": "Coverage reports disagree or attendance dates are inconsistent.",
+          "next_action": "Seek explicit clarification before promising a free visit or a confirmed appointment.",
+          "compatible_tools": [
+            "send_message",
+            "escalate"
+          ],
+          "if_required_information_is_missing": "Keep coverage and booking unknown until resolved.",
+          "evidence_refs": [
+            "E24"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "arrange",
+          "when": "The responsible provider confirms the route and any cost.",
+          "next_action": "Coordinate attendance and parts through PB10; use PB09 if a charge falls outside approval.",
+          "compatible_tools": [
+            "send_message",
+            "hold",
+            "request_landlord_approval"
+          ],
+          "if_required_information_is_missing": "Resolve any charge or access prerequisite.",
+          "evidence_refs": [
+            "E24",
+            "E25"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "result",
+          "when": "The warranty or remedial provider reports completion.",
+          "next_action": "Confirm the result and charge status, then apply PB12.",
+          "compatible_tools": [
+            "send_message",
+            "add_note",
+            "close_case"
+          ],
+          "if_required_information_is_missing": "Do not treat ordered parts as completed repair.",
+          "evidence_refs": [
+            "E24",
+            "E25"
+          ],
+          "guard_status": "proposed; requires operational review"
+        }
+      ],
+      "representative_examples": [
+        {
+          "source": "E24",
+          "summary": "An oven was initially said to be outside a twelve-month warranty; later the provider confirmed two-year manufacturer coverage."
+        },
+        {
+          "source": "E25",
+          "summary": "A faulty previously fitted tap was replaced at no charge, as explicitly confirmed by the provider."
+        }
+      ],
+      "evidence_limits": [
+        "Two distinct coverage examples support verification, not a universal warranty period."
+      ],
+      "update_policy": "Update this playbook version after source and operational review. Do not create a searchable record for each ticket.",
+      "source_references": {
+        "E24": {
+          "case_id": "Property Management/025",
+          "event_ids": [
+            "event-020",
+            "event-025",
+            "event-042",
+            "event-050",
+            "event-062"
+          ],
+          "finding": "Initial warranty statements were superseded by reported manufacturer coverage; parts and completion were separate events.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/025/history.md",
+          "history_sha256": "8101970309d2eb0c5db0d0bad3d03f13402ac5b9d560a7b9d2367f5e45cc7a04",
+          "index_path": "Property Management/025/index.md",
+          "index_sha256": "b9bd191d2e2387051296183e626eba980c81fd5bcdc3144fa98b85b9820c68bd",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E25": {
+          "case_id": "Property Management/036",
+          "event_ids": [
+            "event-025",
+            "event-050",
+            "event-051"
+          ],
+          "finding": "The provider attributed the issue to a faulty previously fitted tap and explicitly confirmed no-charge replacement.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/036/history.md",
+          "history_sha256": "dab973ea0f326c23f045e655c87f3dba226ab497483f9be851809d02b0aa79a7",
+          "index_path": "Property Management/036/index.md",
+          "index_sha256": "c43c3ad53e93d3dc43295425e98bb99fab20b8cf0dc1aa22d425b2c57a8c2111",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      },
+      "provenance": [
+        {
+          "case_id": "Property Management/025",
+          "index_path": "Property Management/025/index.md",
+          "history_path": "Property Management/025/history.md",
+          "index_sha256": "b9bd191d2e2387051296183e626eba980c81fd5bcdc3144fa98b85b9820c68bd",
+          "history_sha256": "8101970309d2eb0c5db0d0bad3d03f13402ac5b9d560a7b9d2367f5e45cc7a04",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/036",
+          "index_path": "Property Management/036/index.md",
+          "history_path": "Property Management/036/history.md",
+          "index_sha256": "c43c3ad53e93d3dc43295425e98bb99fab20b8cf0dc1aa22d425b2c57a8c2111",
+          "history_sha256": "dab973ea0f326c23f045e655c87f3dba226ab497483f9be851809d02b0aa79a7",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      ]
+    },
+    {
+      "id": "PB07",
+      "version": 1,
+      "title": "Tenant supplied replacement and property ownership",
+      "kind": "scenario",
+      "status": "candidate",
+      "execution_status": "design_only",
+      "primary_cluster_case_ids": [
+        "038",
+        "040"
+      ],
+      "supporting_case_ids": [
+        "038",
+        "040"
+      ],
+      "trigger": "The tenant offers or has installed their own replacement for a landlord-provided appliance.",
+      "exclusions": [
+        "Tenant possession is treated as permission to remove or dispose of landlord property.",
+        "Safe installation is inferred despite missing isolation or professional access details."
+      ],
+      "steps": [
+        {
+          "id": "agreement",
+          "when": "Replacement is proposed but responsibilities are not settled.",
+          "next_action": "Clarify landlord consent, ownership on departure, old-appliance disposition, installation and any charges.",
+          "compatible_tools": [
+            "request_landlord_approval",
+            "send_message"
+          ],
+          "if_required_information_is_missing": "Ask for the missing agreement rather than transferring another tenant's arrangement.",
+          "evidence_refs": [
+            "E26",
+            "E27"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "already_changed",
+          "when": "The tenant reports a replacement was already installed.",
+          "next_action": "Record what happened and resolve remaining permission, safety, storage and communication issues.",
+          "compatible_tools": [
+            "send_message",
+            "escalate"
+          ],
+          "if_required_information_is_missing": "Do not backdate approval or assume all follow-up is finished.",
+          "evidence_refs": [
+            "E27"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "finish",
+          "when": "The current agreement and relevant completion facts are confirmed.",
+          "next_action": "Apply PB12, retaining unresolved appliance inspection or storage matters.",
+          "compatible_tools": [
+            "add_note",
+            "close_case"
+          ],
+          "if_required_information_is_missing": "Resolve outstanding follow-up before final closure.",
+          "evidence_refs": [
+            "E26",
+            "E27"
+          ],
+          "guard_status": "proposed; requires operational review"
+        }
+      ],
+      "representative_examples": [
+        {
+          "source": "E26",
+          "summary": "The landlord approved tenant ownership and removal arrangements; the tenant arranged disposal through a family member."
+        },
+        {
+          "source": "E27",
+          "summary": "A tenant swapped machines before the inspection arrangement was settled; the landlord later still requested an update."
+        }
+      ],
+      "evidence_limits": [
+        "Case 038 contains inconsistent property addresses; only the generic agreement structure is retained.",
+        "Case 040 is a cautionary example, not evidence that unapproved replacement or early closure is acceptable."
+      ],
+      "update_policy": "Update this playbook version after source and operational review. Do not create a searchable record for each ticket.",
+      "source_references": {
+        "E26": {
+          "case_id": "Property Management/038",
+          "event_ids": [
+            "event-005",
+            "event-009",
+            "event-010",
+            "event-011",
+            "event-012"
+          ],
+          "finding": "The landlord agreed to a tenant-owned replacement and removal arrangements; event 004 names a different property from event 005.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/038/history.md",
+          "history_sha256": "24c97eb2511d80141c8b3d95b2d147c791e4ba4f7d83a0d16c1176f7525842ff",
+          "index_path": "Property Management/038/index.md",
+          "index_sha256": "c9293563b50118b75167c87ca1dd46e61f7c0bb46f511f26c11c5b19eab788bc",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E27": {
+          "case_id": "Property Management/040",
+          "event_ids": [
+            "event-008",
+            "event-009",
+            "event-010",
+            "event-011",
+            "event-013"
+          ],
+          "finding": "Replacement, a promised later inspection, closure and a later landlord request for an update coexist.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/040/history.md",
+          "history_sha256": "958821c0d76daee0d855da158de7dcf1db9b7dad0bb74e4eef151abdbc1b1066",
+          "index_path": "Property Management/040/index.md",
+          "index_sha256": "50f4b520c74ba1a058ad99242a1a6b1da19047a7bb41ec600e02c6f2f0d6b919",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      },
+      "provenance": [
+        {
+          "case_id": "Property Management/038",
+          "index_path": "Property Management/038/index.md",
+          "history_path": "Property Management/038/history.md",
+          "index_sha256": "c9293563b50118b75167c87ca1dd46e61f7c0bb46f511f26c11c5b19eab788bc",
+          "history_sha256": "24c97eb2511d80141c8b3d95b2d147c791e4ba4f7d83a0d16c1176f7525842ff",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/040",
+          "index_path": "Property Management/040/index.md",
+          "history_path": "Property Management/040/history.md",
+          "index_sha256": "50f4b520c74ba1a058ad99242a1a6b1da19047a7bb41ec600e02c6f2f0d6b919",
+          "history_sha256": "958821c0d76daee0d855da158de7dcf1db9b7dad0bb74e4eef151abdbc1b1066",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      ]
+    },
+    {
+      "id": "PB08",
+      "version": 1,
+      "title": "Reading requests and inspection reports",
+      "kind": "scenario",
+      "status": "candidate",
+      "execution_status": "design_only",
+      "primary_cluster_case_ids": [
+        "010",
+        "020"
+      ],
+      "supporting_case_ids": [
+        "010",
+        "020"
+      ],
+      "trigger": "The task is collecting a reading, scheduling an inspection, or delivering a report rather than authorizing repair.",
+      "exclusions": [
+        "A referenced but unavailable attachment is treated as read.",
+        "A later separate issue is folded into the earlier inspection result."
+      ],
+      "steps": [
+        {
+          "id": "request",
+          "when": "The requested reading or evidence is missing.",
+          "next_action": "Ask for the specific readable evidence and wait for delivery.",
+          "compatible_tools": [
+            "send_message",
+            "hold"
+          ],
+          "if_required_information_is_missing": "A promise to supply evidence does not satisfy delivery.",
+          "evidence_refs": [
+            "E28"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "visit",
+          "when": "An inspection needs scheduling or a change.",
+          "next_action": "Confirm date, access and relevant pet arrangements with PB10.",
+          "compatible_tools": [
+            "send_message",
+            "hold"
+          ],
+          "if_required_information_is_missing": "Resolve conflicting dates or access before confirming.",
+          "evidence_refs": [
+            "E29"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "deliver",
+          "when": "The report or reading is actually available.",
+          "next_action": "Send the available information to the intended recipient and verify the applicable acknowledgement.",
+          "compatible_tools": [
+            "send_message"
+          ],
+          "if_required_information_is_missing": "Do not invent readings or unseen report findings.",
+          "evidence_refs": [
+            "E28",
+            "E29"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "followup",
+          "when": "A later message raises an additional issue.",
+          "next_action": "Record and route the separate matter; do not reinterpret the completed report as addressing it.",
+          "compatible_tools": [
+            "add_note",
+            "send_message"
+          ],
+          "if_required_information_is_missing": "Clarify separate scope where necessary.",
+          "evidence_refs": [
+            "E29"
+          ],
+          "guard_status": "proposed; requires operational review"
+        }
+      ],
+      "representative_examples": [
+        {
+          "source": "E28",
+          "summary": "A solar reading photo was forwarded and the landlord acknowledged receipt."
+        },
+        {
+          "source": "E29",
+          "summary": "An inspection was rescheduled; later dog-flap and spare-key questions were separate matters."
+        }
+      ],
+      "evidence_limits": [
+        "Source date descriptions differ across summaries and history in inspection records; no fixed calendar rule is learned."
+      ],
+      "update_policy": "Update this playbook version after source and operational review. Do not create a searchable record for each ticket.",
+      "source_references": {
+        "E28": {
+          "case_id": "Property Management/010",
+          "event_ids": [
+            "event-006",
+            "event-008",
+            "event-013",
+            "event-015"
+          ],
+          "finding": "A reading photo was requested, promised, forwarded and acknowledged.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/010/history.md",
+          "history_sha256": "8029c2495c324f1f106139da8682f7fa362b3a26a6584f7dc7a3b05f0a73b51f",
+          "index_path": "Property Management/010/index.md",
+          "index_sha256": "72ca1fea17684966fb7cd6564092bc9eb746116b67fc72fbe16d6a8403030854",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E29": {
+          "case_id": "Property Management/020",
+          "event_ids": [
+            "event-002",
+            "event-006",
+            "event-007",
+            "event-008",
+            "event-017",
+            "event-020"
+          ],
+          "finding": "Inspection arrangements changed; a report was sent; later dog-flap and key matters were separate.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/020/history.md",
+          "history_sha256": "f124e50e11036aed13bbd4cf0463ae9cd7bcdb4d5399ae63a085a4c513ea80d4",
+          "index_path": "Property Management/020/index.md",
+          "index_sha256": "b3d93b0c03de19de1cd612f7741dd41a975e2cd4966134b85e0c5007bda38349",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      },
+      "provenance": [
+        {
+          "case_id": "Property Management/010",
+          "index_path": "Property Management/010/index.md",
+          "history_path": "Property Management/010/history.md",
+          "index_sha256": "72ca1fea17684966fb7cd6564092bc9eb746116b67fc72fbe16d6a8403030854",
+          "history_sha256": "8029c2495c324f1f106139da8682f7fa362b3a26a6584f7dc7a3b05f0a73b51f",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/020",
+          "index_path": "Property Management/020/index.md",
+          "history_path": "Property Management/020/history.md",
+          "index_sha256": "b3d93b0c03de19de1cd612f7741dd41a975e2cd4966134b85e0c5007bda38349",
+          "history_sha256": "f124e50e11036aed13bbd4cf0463ae9cd7bcdb4d5399ae63a085a4c513ea80d4",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      ]
+    },
+    {
+      "id": "PB09",
+      "version": 1,
+      "title": "Scope quote and approval boundaries",
+      "kind": "decision_module",
+      "status": "candidate",
+      "execution_status": "design_only",
+      "primary_cluster_case_ids": [],
+      "supporting_case_ids": [
+        "002",
+        "005",
+        "007",
+        "008",
+        "011",
+        "019",
+        "032",
+        "033",
+        "043",
+        "046"
+      ],
+      "trigger": "Approval is missing, limited, ambiguous, or a quote changes the proposed work or expenditure.",
+      "exclusions": [
+        "A historical amount becomes a universal spending limit.",
+        "Permission for inspection is treated as permission for every repair."
+      ],
+      "steps": [
+        {
+          "id": "missing",
+          "when": "Current approval does not cover the proposed action.",
+          "next_action": "Request the exact scope and known cost; identify missing quote information.",
+          "compatible_tools": [
+            "request_landlord_approval",
+            "send_message"
+          ],
+          "if_required_information_is_missing": "Do not dispatch chargeable work under unknown permission.",
+          "evidence_refs": [
+            "E09",
+            "E11"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "limited",
+          "when": "Approval permits only simple work or imposes a condition.",
+          "next_action": "Keep the instruction within that boundary; obtain a quote and further permission for parts or complexity outside it.",
+          "compatible_tools": [
+            "send_message",
+            "request_landlord_approval"
+          ],
+          "if_required_information_is_missing": "Clarify non-numeric limits instead of inventing a threshold.",
+          "evidence_refs": [
+            "E13"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "changed",
+          "when": "A changed quote, risk or scope is reported.",
+          "next_action": "Obtain explicit approval for the changed proposal before proceeding.",
+          "compatible_tools": [
+            "request_landlord_approval"
+          ],
+          "if_required_information_is_missing": "Resolve inconsistent scope, prices or taxes.",
+          "evidence_refs": [
+            "E11",
+            "E23"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "multiple",
+          "when": "Several quotes or multiple work items are under discussion.",
+          "next_action": "Confirm which quote and items were approved; retain the approved version.",
+          "compatible_tools": [
+            "send_message",
+            "request_landlord_approval"
+          ],
+          "if_required_information_is_missing": "An unspecified yes is insufficient when its referent changes the action.",
+          "evidence_refs": [
+            "E17",
+            "E18"
+          ],
+          "guard_status": "proposed; requires operational review"
+        }
+      ],
+      "representative_examples": [
+        {
+          "source": "E13",
+          "summary": "The landlord allowed a simple low-cost washing-machine repair but required a quote for parts or more complex work."
+        },
+        {
+          "source": "E23",
+          "summary": "A disposal requirement changed the garden quote and prompted renewed landlord approval."
+        }
+      ],
+      "evidence_limits": [
+        "Ten selected supporting cases illustrate this module; this is not an exhaustive count of all approvals in the corpus."
+      ],
+      "update_policy": "Update this playbook version after source and operational review. Do not create a searchable record for each ticket.",
+      "source_references": {
+        "E09": {
+          "case_id": "Property Management/032",
+          "event_ids": [
+            "event-003",
+            "event-006",
+            "event-008",
+            "event-012",
+            "event-018",
+            "event-024",
+            "event-025"
+          ],
+          "finding": "The landlord agreed to repair, with a quote required for a larger job; the provider quote was sent to the landlord and a later agency instruction specified the quoted replacement.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/032/history.md",
+          "history_sha256": "2f0628bdc98c1d32e11895879c14bad67cda8fd801556bbf679ac024ca9b0f2a",
+          "index_path": "Property Management/032/index.md",
+          "index_sha256": "ba2cc4e10ef7bace61d38b953647e5697f7715220c7c5bcf65f100d80c6ed658",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E11": {
+          "case_id": "Property Management/002",
+          "event_ids": [
+            "event-003",
+            "event-016",
+            "event-017",
+            "event-019"
+          ],
+          "finding": "Initial attendance permission was followed by a changed repair proposal, a quote and landlord approval.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/002/history.md",
+          "history_sha256": "7dfd10fe92722f27ec9ed3c0705bf6f4034b7222e0fd723588baf54e1ece91c6",
+          "index_path": "Property Management/002/index.md",
+          "index_sha256": "fee33fc3157d462c5136f8e3ac8c45c9ba3d0466cbc24405bba150b14af727ec",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E13": {
+          "case_id": "Property Management/043",
+          "event_ids": [
+            "event-011",
+            "event-014"
+          ],
+          "finding": "Only simple low-cost work was permitted; parts or complexity required a quote and renewed approval.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/043/history.md",
+          "history_sha256": "d4dea4806876acf00e6d40a8fa9c494be6f826823ccbd2debb0f91b06a996a39",
+          "index_path": "Property Management/043/index.md",
+          "index_sha256": "e491f05bde4b49306deae16060db32794389a97077b2cc33ff20a4fc47102e3f",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E17": {
+          "case_id": "Property Management/005",
+          "event_ids": [
+            "event-013",
+            "event-015",
+            "event-017"
+          ],
+          "finding": "Cleaning scope and carpet coverage were discussed; the landlord approved the quote and requested carpet cleaning.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/005/history.md",
+          "history_sha256": "f56a378925d16686c260bbc743b2c2849c7b6d1f8d967bbfbb1c6e63f395f29a",
+          "index_path": "Property Management/005/index.md",
+          "index_sha256": "e796ccdf59faf4fef54cf3dc52f4169c1019686d161fa38bc40bdb647a637619",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E18": {
+          "case_id": "Property Management/008",
+          "event_ids": [
+            "event-009",
+            "event-010",
+            "event-034",
+            "event-036",
+            "event-045"
+          ],
+          "finding": "A second quote, tax wording and a lower final cost appeared; the invoice email also contains a property mismatch.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/008/history.md",
+          "history_sha256": "1335074bf892e522d28c64baf19382c8d1ead851bca21ffd37e9509be85c3919",
+          "index_path": "Property Management/008/index.md",
+          "index_sha256": "6854ec02177dce4e98ac13051022fec9410035e8d9817bc0a548ea3b953cd106",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E23": {
+          "case_id": "Property Management/019",
+          "event_ids": [
+            "event-009",
+            "event-019",
+            "event-025"
+          ],
+          "finding": "Specialist disposal changed the quote and the landlord then approved removal.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/019/history.md",
+          "history_sha256": "7529c886fb9b6a48c01388fba4db4bfba9d46460d7eeb3594f4f78cd10ee81cd",
+          "index_path": "Property Management/019/index.md",
+          "index_sha256": "6ef4f40eec012db529b70c0b5ebe39bebba62af1fc78cdf190c8cfae30549c19",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      },
+      "provenance": [
+        {
+          "case_id": "Property Management/002",
+          "index_path": "Property Management/002/index.md",
+          "history_path": "Property Management/002/history.md",
+          "index_sha256": "fee33fc3157d462c5136f8e3ac8c45c9ba3d0466cbc24405bba150b14af727ec",
+          "history_sha256": "7dfd10fe92722f27ec9ed3c0705bf6f4034b7222e0fd723588baf54e1ece91c6",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/005",
+          "index_path": "Property Management/005/index.md",
+          "history_path": "Property Management/005/history.md",
+          "index_sha256": "e796ccdf59faf4fef54cf3dc52f4169c1019686d161fa38bc40bdb647a637619",
+          "history_sha256": "f56a378925d16686c260bbc743b2c2849c7b6d1f8d967bbfbb1c6e63f395f29a",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/007",
+          "index_path": "Property Management/007/index.md",
+          "history_path": "Property Management/007/history.md",
+          "index_sha256": "7588385e26ac82b09bc69ce3160303e22103959e924cfd815eb72f9aba335e88",
+          "history_sha256": "69d9776cdbf3915af2842af539a5d76d27f2164e42f61ab29862c34281e1db0e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/008",
+          "index_path": "Property Management/008/index.md",
+          "history_path": "Property Management/008/history.md",
+          "index_sha256": "6854ec02177dce4e98ac13051022fec9410035e8d9817bc0a548ea3b953cd106",
+          "history_sha256": "1335074bf892e522d28c64baf19382c8d1ead851bca21ffd37e9509be85c3919",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/011",
+          "index_path": "Property Management/011/index.md",
+          "history_path": "Property Management/011/history.md",
+          "index_sha256": "126a5a995ee1f120daa08c724284b5c4422c50d952c0b43333eeb1af7cdc44c3",
+          "history_sha256": "8d6800cfee7b1a394d2aed173887b8ca6cc969daa35ed2cde5abc6d3589b060e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/019",
+          "index_path": "Property Management/019/index.md",
+          "history_path": "Property Management/019/history.md",
+          "index_sha256": "6ef4f40eec012db529b70c0b5ebe39bebba62af1fc78cdf190c8cfae30549c19",
+          "history_sha256": "7529c886fb9b6a48c01388fba4db4bfba9d46460d7eeb3594f4f78cd10ee81cd",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/032",
+          "index_path": "Property Management/032/index.md",
+          "history_path": "Property Management/032/history.md",
+          "index_sha256": "ba2cc4e10ef7bace61d38b953647e5697f7715220c7c5bcf65f100d80c6ed658",
+          "history_sha256": "2f0628bdc98c1d32e11895879c14bad67cda8fd801556bbf679ac024ca9b0f2a",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/033",
+          "index_path": "Property Management/033/index.md",
+          "history_path": "Property Management/033/history.md",
+          "index_sha256": "9b25180bfe61c0a6755ed79d51ac5df86c7978304ac1f5262dc1234e4b355230",
+          "history_sha256": "72357b6b9ce0acb9b9bbe5d5b0bcec1bf7987c300c75b4095b7eed5d3a77bea2",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/043",
+          "index_path": "Property Management/043/index.md",
+          "history_path": "Property Management/043/history.md",
+          "index_sha256": "e491f05bde4b49306deae16060db32794389a97077b2cc33ff20a4fc47102e3f",
+          "history_sha256": "d4dea4806876acf00e6d40a8fa9c494be6f826823ccbd2debb0f91b06a996a39",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/046",
+          "index_path": "Property Management/046/index.md",
+          "history_path": "Property Management/046/history.md",
+          "index_sha256": "ae16479430428a6f88a0ac72d653937c8f0c5d35eff983e93c5296a7f4f9685f",
+          "history_sha256": "9c2ad1823e5f801afa3a2149cc2e63d6f9d9e10f614e0825d5f4ed61eb60853e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      ]
+    },
+    {
+      "id": "PB10",
+      "version": 1,
+      "title": "Booking access and disrupted attendance",
+      "kind": "decision_module",
+      "status": "candidate",
+      "execution_status": "design_only",
+      "primary_cluster_case_ids": [],
+      "supporting_case_ids": [
+        "004",
+        "005",
+        "007",
+        "020",
+        "025",
+        "026",
+        "030",
+        "031",
+        "036",
+        "037"
+      ],
+      "trigger": "A visit needs scheduling, verified access, rescheduling, parts delivery, or a missed-visit response.",
+      "exclusions": [
+        "Permission to enter is inferred merely because a management key exists.",
+        "A synthetic date or repeated reminder becomes a universal timer policy."
+      ],
+      "steps": [
+        {
+          "id": "book",
+          "when": "An approved provider needs access and an appointment.",
+          "next_action": "Ask for the required contact, access, key and time arrangements using verified current details.",
+          "compatible_tools": [
+            "send_message"
+          ],
+          "if_required_information_is_missing": "Resolve the specific access gap; do not ask for already-known facts.",
+          "evidence_refs": [
+            "E19",
+            "E29"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "conflict",
+          "when": "Recorded dates or time slots disagree.",
+          "next_action": "Confirm the authoritative appointment with the relevant parties before sending a definitive confirmation.",
+          "compatible_tools": [
+            "send_message",
+            "escalate"
+          ],
+          "if_required_information_is_missing": "Do not silently choose one historic date representation.",
+          "evidence_refs": [
+            "E12",
+            "E16"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "missed",
+          "when": "The provider missed a confirmed appointment or awaits parts.",
+          "next_action": "Obtain the revised plan and inform the tenant; wait for actual attendance or result.",
+          "compatible_tools": [
+            "send_message",
+            "hold"
+          ],
+          "if_required_information_is_missing": "Do not mark parts ordered or tomorrow's visit as completed.",
+          "evidence_refs": [
+            "E24",
+            "E30"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "pending",
+          "when": "An answer or visit remains pending.",
+          "next_action": "Use the configured operational reminder and escalation policy.",
+          "compatible_tools": [
+            "hold",
+            "send_message",
+            "escalate"
+          ],
+          "if_required_information_is_missing": "Use a real current clock and verified last-contact facts if timers are enabled.",
+          "evidence_refs": [
+            "E30"
+          ],
+          "guard_status": "proposed; requires operational review"
+        }
+      ],
+      "representative_examples": [
+        {
+          "source": "E12",
+          "summary": "The tenant challenged the oven appointment date and the agency clarified the agreed booking."
+        },
+        {
+          "source": "E30",
+          "summary": "A plumbing provider missed the confirmed date and the case awaited attendance the following day."
+        }
+      ],
+      "evidence_limits": [
+        "Ten selected supporting cases illustrate booking conditions, not the prevalence of all scheduling events.",
+        "The current MCP records messages and holds but has no physical entry or independent calendar execution tool."
+      ],
+      "update_policy": "Update this playbook version after source and operational review. Do not create a searchable record for each ticket.",
+      "source_references": {
+        "E12": {
+          "case_id": "Property Management/026",
+          "event_ids": [
+            "event-016",
+            "event-018",
+            "event-021",
+            "event-023"
+          ],
+          "finding": "A booking description and the tenant's understanding differed, prompting clarification.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/026/history.md",
+          "history_sha256": "d3ab597e03eb0d2e3cfded66e0d4594b19cd34c4bd5732b22bfe176ca3188238",
+          "index_path": "Property Management/026/index.md",
+          "index_sha256": "e7fc7d710880a4a3d1286f671905f02d2037cc2441d939bd27109d70a279f2fb",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E16": {
+          "case_id": "Property Management/004",
+          "event_ids": [
+            "event-013",
+            "event-016",
+            "event-023",
+            "event-026"
+          ],
+          "finding": "Cleaning depended on checkout works; later Sunday and Friday wording did not establish a consistent sequence.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/004/history.md",
+          "history_sha256": "8bae53e287391fb32f1a6a736131dd86a1b4bae8af780f3458ec6717079446a6",
+          "index_path": "Property Management/004/index.md",
+          "index_sha256": "02ba84acd27c0830b12183ef2427e3712df8c981b97267722379765c913fcfb7",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E19": {
+          "case_id": "Property Management/007",
+          "event_ids": [
+            "event-023",
+            "event-025"
+          ],
+          "finding": "The provider asked where the keys were and the agency specified caretaker access.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/007/history.md",
+          "history_sha256": "69d9776cdbf3915af2842af539a5d76d27f2164e42f61ab29862c34281e1db0e",
+          "index_path": "Property Management/007/index.md",
+          "index_sha256": "7588385e26ac82b09bc69ce3160303e22103959e924cfd815eb72f9aba335e88",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E24": {
+          "case_id": "Property Management/025",
+          "event_ids": [
+            "event-020",
+            "event-025",
+            "event-042",
+            "event-050",
+            "event-062"
+          ],
+          "finding": "Initial warranty statements were superseded by reported manufacturer coverage; parts and completion were separate events.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/025/history.md",
+          "history_sha256": "8101970309d2eb0c5db0d0bad3d03f13402ac5b9d560a7b9d2367f5e45cc7a04",
+          "index_path": "Property Management/025/index.md",
+          "index_sha256": "b9bd191d2e2387051296183e626eba980c81fd5bcdc3144fa98b85b9820c68bd",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E29": {
+          "case_id": "Property Management/020",
+          "event_ids": [
+            "event-002",
+            "event-006",
+            "event-007",
+            "event-008",
+            "event-017",
+            "event-020"
+          ],
+          "finding": "Inspection arrangements changed; a report was sent; later dog-flap and key matters were separate.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/020/history.md",
+          "history_sha256": "f124e50e11036aed13bbd4cf0463ae9cd7bcdb4d5399ae63a085a4c513ea80d4",
+          "index_path": "Property Management/020/index.md",
+          "index_sha256": "b3d93b0c03de19de1cd612f7741dd41a975e2cd4966134b85e0c5007bda38349",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E30": {
+          "case_id": "Property Management/030",
+          "event_ids": [
+            "event-037",
+            "event-039"
+          ],
+          "finding": "A missed appointment was followed by a reported next-day repair.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/030/history.md",
+          "history_sha256": "ccf864d8797f39fabb64f9db2118acec7aaa64f5e593826f21fc6979f0d3c2d8",
+          "index_path": "Property Management/030/index.md",
+          "index_sha256": "4781019938b3a58004c27d8e8cf80bd49dd437ac6a8ce32b80ef24e28846e9c0",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      },
+      "provenance": [
+        {
+          "case_id": "Property Management/004",
+          "index_path": "Property Management/004/index.md",
+          "history_path": "Property Management/004/history.md",
+          "index_sha256": "02ba84acd27c0830b12183ef2427e3712df8c981b97267722379765c913fcfb7",
+          "history_sha256": "8bae53e287391fb32f1a6a736131dd86a1b4bae8af780f3458ec6717079446a6",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/005",
+          "index_path": "Property Management/005/index.md",
+          "history_path": "Property Management/005/history.md",
+          "index_sha256": "e796ccdf59faf4fef54cf3dc52f4169c1019686d161fa38bc40bdb647a637619",
+          "history_sha256": "f56a378925d16686c260bbc743b2c2849c7b6d1f8d967bbfbb1c6e63f395f29a",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/007",
+          "index_path": "Property Management/007/index.md",
+          "history_path": "Property Management/007/history.md",
+          "index_sha256": "7588385e26ac82b09bc69ce3160303e22103959e924cfd815eb72f9aba335e88",
+          "history_sha256": "69d9776cdbf3915af2842af539a5d76d27f2164e42f61ab29862c34281e1db0e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/020",
+          "index_path": "Property Management/020/index.md",
+          "history_path": "Property Management/020/history.md",
+          "index_sha256": "b3d93b0c03de19de1cd612f7741dd41a975e2cd4966134b85e0c5007bda38349",
+          "history_sha256": "f124e50e11036aed13bbd4cf0463ae9cd7bcdb4d5399ae63a085a4c513ea80d4",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/025",
+          "index_path": "Property Management/025/index.md",
+          "history_path": "Property Management/025/history.md",
+          "index_sha256": "b9bd191d2e2387051296183e626eba980c81fd5bcdc3144fa98b85b9820c68bd",
+          "history_sha256": "8101970309d2eb0c5db0d0bad3d03f13402ac5b9d560a7b9d2367f5e45cc7a04",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/026",
+          "index_path": "Property Management/026/index.md",
+          "history_path": "Property Management/026/history.md",
+          "index_sha256": "e7fc7d710880a4a3d1286f671905f02d2037cc2441d939bd27109d70a279f2fb",
+          "history_sha256": "d3ab597e03eb0d2e3cfded66e0d4594b19cd34c4bd5732b22bfe176ca3188238",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/030",
+          "index_path": "Property Management/030/index.md",
+          "history_path": "Property Management/030/history.md",
+          "index_sha256": "4781019938b3a58004c27d8e8cf80bd49dd437ac6a8ce32b80ef24e28846e9c0",
+          "history_sha256": "ccf864d8797f39fabb64f9db2118acec7aaa64f5e593826f21fc6979f0d3c2d8",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/031",
+          "index_path": "Property Management/031/index.md",
+          "history_path": "Property Management/031/history.md",
+          "index_sha256": "92ac61deabf51015387b112f6650259822354e5a88862e746fafb924ec2c2b90",
+          "history_sha256": "f87371b639057d12f5702c25cd4b6aee06b681ac3cef369740373585dfb1ccca",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/036",
+          "index_path": "Property Management/036/index.md",
+          "history_path": "Property Management/036/history.md",
+          "index_sha256": "c43c3ad53e93d3dc43295425e98bb99fab20b8cf0dc1aa22d425b2c57a8c2111",
+          "history_sha256": "dab973ea0f326c23f045e655c87f3dba226ab497483f9be851809d02b0aa79a7",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/037",
+          "index_path": "Property Management/037/index.md",
+          "history_path": "Property Management/037/history.md",
+          "index_sha256": "a8871499a901c6ee2852006b4107ab19418cb06ef7598c7757a3f4532c647a0e",
+          "history_sha256": "2529f1b9848674ac5a9f6efbaa0e74d5f6cb3406584494f7dd0622b36f6e067f",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      ]
+    },
+    {
+      "id": "PB11",
+      "version": 1,
+      "title": "Material identity and evidence conflicts",
+      "kind": "decision_module",
+      "status": "candidate",
+      "execution_status": "design_only",
+      "primary_cluster_case_ids": [],
+      "supporting_case_ids": [
+        "005",
+        "008",
+        "009",
+        "015",
+        "032",
+        "038",
+        "045",
+        "047",
+        "048",
+        "050"
+      ],
+      "trigger": "A property, person, contact, provider or evidence item disagrees across records in a way that affects the next action.",
+      "exclusions": [
+        "A stylistic difference that does not change identity or the decision is treated as a material conflict.",
+        "One field is chosen as authoritative solely because it is newer or repeated more often."
+      ],
+      "steps": [
+        {
+          "id": "detect",
+          "when": "Current evidence contains a material mismatch.",
+          "next_action": "Identify the conflicting fields and affected decision without choosing an unsupported canonical value.",
+          "compatible_tools": [
+            "add_note",
+            "send_message"
+          ],
+          "if_required_information_is_missing": "Request authoritative confirmation.",
+          "evidence_refs": [
+            "E31",
+            "E32",
+            "E33",
+            "E36",
+            "E38",
+            "E39"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "block",
+          "when": "The mismatch affects recipient, dispatch, approval or completion.",
+          "next_action": "Block that action and clarify or escalate according to the current policy.",
+          "compatible_tools": [
+            "send_message",
+            "escalate"
+          ],
+          "if_required_information_is_missing": "Do not send sensitive details or close a possibly different job.",
+          "evidence_refs": [
+            "E31",
+            "E32"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "resolve",
+          "when": "An authoritative current source resolves the mismatch.",
+          "next_action": "Record the resolution and return to the relevant playbook step.",
+          "compatible_tools": [
+            "add_note"
+          ],
+          "if_required_information_is_missing": "If no resolution arrives, preserve uncertainty and continue only unaffected work.",
+          "evidence_refs": [
+            "E31",
+            "E32"
+          ],
+          "guard_status": "proposed; requires operational review"
+        }
+      ],
+      "representative_examples": [
+        {
+          "source": "E31",
+          "summary": "A bathroom-window instruction names one property while completion replies name another."
+        },
+        {
+          "source": "E32",
+          "summary": "A window job has different tenant names and telephone details across messages."
+        }
+      ],
+      "evidence_limits": [
+        "Ten selected cases contain explicit identity mismatches in the reviewed evidence. This is not a complete anomaly scan.",
+        "This module is a proposed corrective guard; the historical handling often did not demonstrate successful conflict resolution."
+      ],
+      "update_policy": "Update this playbook version after source and operational review. Do not create a searchable record for each ticket.",
+      "source_references": {
+        "E31": {
+          "case_id": "Property Management/048",
+          "event_ids": [
+            "event-015",
+            "event-016",
+            "event-017",
+            "event-019"
+          ],
+          "finding": "Instruction and completion messages name different property addresses.",
+          "evidence_kind": "conflict_or_caution",
+          "history_path": "Property Management/048/history.md",
+          "history_sha256": "be829723d4b22630f9f2874d2b884f7a6a98e70150f4a2a8915fdccfec3f5e54",
+          "index_path": "Property Management/048/index.md",
+          "index_sha256": "e9dcf55f4a741cc2472260dd600662498474c755e1f2297c6586622fd1035605",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E32": {
+          "case_id": "Property Management/050",
+          "event_ids": [
+            "event-014",
+            "event-016",
+            "event-024",
+            "event-029",
+            "event-032"
+          ],
+          "finding": "The same job has different tenant contacts and inconsistent provider references.",
+          "evidence_kind": "conflict_or_caution",
+          "history_path": "Property Management/050/history.md",
+          "history_sha256": "35780255fbee892c15bd24f06155c0256a6f034c16f148c0b2c924b653fdb1de",
+          "index_path": "Property Management/050/index.md",
+          "index_sha256": "518c35fbcdd419e661bb01685b8308bf5d3ab7b8b49792d413385d33345fb124",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E33": {
+          "case_id": "Property Management/009",
+          "event_ids": [
+            "event-001",
+            "event-011",
+            "event-016",
+            "event-017"
+          ],
+          "finding": "The message header and body refer to different garden properties.",
+          "evidence_kind": "conflict_or_caution",
+          "history_path": "Property Management/009/history.md",
+          "history_sha256": "ad61321988ea769e40260b74e92bd443669ff9037ff7d62576df878af3559294",
+          "index_path": "Property Management/009/index.md",
+          "index_sha256": "7d22e08ffff2004693bc2a57e534cead3b1fad8128232a56815a2d9ddfbdb67f",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E36": {
+          "case_id": "Property Management/015",
+          "event_ids": [
+            "event-016"
+          ],
+          "finding": "A completion message warns of rot, swelling and recurrence; its body names a different property from the header.",
+          "evidence_kind": "conflict_or_caution",
+          "history_path": "Property Management/015/history.md",
+          "history_sha256": "c14d55880fd761ca070b647a16a0d4478578244325c64d83c57f499288bfbc53",
+          "index_path": "Property Management/015/index.md",
+          "index_sha256": "04ac498100c6a6cd798cd854da6ffed0e78337d3a57a814d70021a7b5d4f4fdd",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E38": {
+          "case_id": "Property Management/032",
+          "event_ids": [
+            "event-003",
+            "event-032"
+          ],
+          "finding": "The repair request and a later scheduling call name different property addresses.",
+          "evidence_kind": "conflict_or_caution",
+          "history_path": "Property Management/032/history.md",
+          "history_sha256": "2f0628bdc98c1d32e11895879c14bad67cda8fd801556bbf679ac024ca9b0f2a",
+          "index_path": "Property Management/032/index.md",
+          "index_sha256": "ba2cc4e10ef7bace61d38b953647e5697f7715220c7c5bcf65f100d80c6ed658",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E39": {
+          "case_id": "Property Management/045",
+          "event_ids": [
+            "event-020",
+            "event-023"
+          ],
+          "finding": "Window-assessment and follow-up messages name properties differing from the ticket header.",
+          "evidence_kind": "conflict_or_caution",
+          "history_path": "Property Management/045/history.md",
+          "history_sha256": "3e0752837d192a18668f9a085cbbb9eb03f0568c58a15727bf493260df82bdcc",
+          "index_path": "Property Management/045/index.md",
+          "index_sha256": "c37074a252117e3fc1e9fc6196fdc5b88e5b02690322616b82d39261dffde78d",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      },
+      "provenance": [
+        {
+          "case_id": "Property Management/005",
+          "index_path": "Property Management/005/index.md",
+          "history_path": "Property Management/005/history.md",
+          "index_sha256": "e796ccdf59faf4fef54cf3dc52f4169c1019686d161fa38bc40bdb647a637619",
+          "history_sha256": "f56a378925d16686c260bbc743b2c2849c7b6d1f8d967bbfbb1c6e63f395f29a",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/008",
+          "index_path": "Property Management/008/index.md",
+          "history_path": "Property Management/008/history.md",
+          "index_sha256": "6854ec02177dce4e98ac13051022fec9410035e8d9817bc0a548ea3b953cd106",
+          "history_sha256": "1335074bf892e522d28c64baf19382c8d1ead851bca21ffd37e9509be85c3919",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/009",
+          "index_path": "Property Management/009/index.md",
+          "history_path": "Property Management/009/history.md",
+          "index_sha256": "7d22e08ffff2004693bc2a57e534cead3b1fad8128232a56815a2d9ddfbdb67f",
+          "history_sha256": "ad61321988ea769e40260b74e92bd443669ff9037ff7d62576df878af3559294",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/015",
+          "index_path": "Property Management/015/index.md",
+          "history_path": "Property Management/015/history.md",
+          "index_sha256": "04ac498100c6a6cd798cd854da6ffed0e78337d3a57a814d70021a7b5d4f4fdd",
+          "history_sha256": "c14d55880fd761ca070b647a16a0d4478578244325c64d83c57f499288bfbc53",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/032",
+          "index_path": "Property Management/032/index.md",
+          "history_path": "Property Management/032/history.md",
+          "index_sha256": "ba2cc4e10ef7bace61d38b953647e5697f7715220c7c5bcf65f100d80c6ed658",
+          "history_sha256": "2f0628bdc98c1d32e11895879c14bad67cda8fd801556bbf679ac024ca9b0f2a",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/038",
+          "index_path": "Property Management/038/index.md",
+          "history_path": "Property Management/038/history.md",
+          "index_sha256": "c9293563b50118b75167c87ca1dd46e61f7c0bb46f511f26c11c5b19eab788bc",
+          "history_sha256": "24c97eb2511d80141c8b3d95b2d147c791e4ba4f7d83a0d16c1176f7525842ff",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/045",
+          "index_path": "Property Management/045/index.md",
+          "history_path": "Property Management/045/history.md",
+          "index_sha256": "c37074a252117e3fc1e9fc6196fdc5b88e5b02690322616b82d39261dffde78d",
+          "history_sha256": "3e0752837d192a18668f9a085cbbb9eb03f0568c58a15727bf493260df82bdcc",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/047",
+          "index_path": "Property Management/047/index.md",
+          "history_path": "Property Management/047/history.md",
+          "index_sha256": "77f01c5d8e4c906f4392029380b42a5df80fdb068eb78d3b01dc79ebdb7ef645",
+          "history_sha256": "aff7f65cc7a966f30e7efd892060a8cb7c58aa0f6aa7999b26af9c6a148153f6",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/048",
+          "index_path": "Property Management/048/index.md",
+          "history_path": "Property Management/048/history.md",
+          "index_sha256": "e9dcf55f4a741cc2472260dd600662498474c755e1f2297c6586622fd1035605",
+          "history_sha256": "be829723d4b22630f9f2874d2b884f7a6a98e70150f4a2a8915fdccfec3f5e54",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/050",
+          "index_path": "Property Management/050/index.md",
+          "history_path": "Property Management/050/history.md",
+          "index_sha256": "518c35fbcdd419e661bb01685b8308bf5d3ab7b8b49792d413385d33345fb124",
+          "history_sha256": "35780255fbee892c15bd24f06155c0256a6f034c16f148c0b2c924b653fdb1de",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      ]
+    },
+    {
+      "id": "PB12",
+      "version": 1,
+      "title": "Completion evidence keys invoices and remaining work",
+      "kind": "decision_module",
+      "status": "candidate",
+      "execution_status": "design_only",
+      "primary_cluster_case_ids": [],
+      "supporting_case_ids": [
+        "004",
+        "005",
+        "009",
+        "010",
+        "013",
+        "015",
+        "016",
+        "020",
+        "021",
+        "022",
+        "023",
+        "029",
+        "031",
+        "040",
+        "044"
+      ],
+      "trigger": "A task is reported complete or is being considered for closure.",
+      "exclusions": [
+        "A Completed label alone is treated as complete evidence.",
+        "An invoice implies payment, a promised key drop-off implies return, or an unavailable photo implies inspected content."
+      ],
+      "steps": [
+        {
+          "id": "verify",
+          "when": "A result is reported.",
+          "next_action": "Check identity, in-scope result and who actually confirmed it. Distinguish repaired, no work required and outstanding work.",
+          "compatible_tools": [
+            "send_message",
+            "add_note"
+          ],
+          "if_required_information_is_missing": "Obtain the required current confirmation.",
+          "evidence_refs": [
+            "E14",
+            "E15",
+            "E34"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "keys",
+          "when": "Keys were issued or new keys are owed.",
+          "next_action": "Verify actual return or delivery; a future promise does not satisfy it.",
+          "compatible_tools": [
+            "send_message",
+            "hold"
+          ],
+          "if_required_information_is_missing": "Keep keys outstanding until confirmed.",
+          "evidence_refs": [
+            "E34",
+            "E35"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "invoice",
+          "when": "A charge or invoice is relevant.",
+          "next_action": "Confirm the required invoice status or an evidenced no-charge exception; keep payment separate.",
+          "compatible_tools": [
+            "send_message",
+            "add_note"
+          ],
+          "if_required_information_is_missing": "Ask for the missing document or cost confirmation.",
+          "evidence_refs": [
+            "E14",
+            "E20"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "remaining",
+          "when": "A linked issue, promised inspection or material follow-up remains.",
+          "next_action": "Separate the scope and resolve outstanding obligations before declaring the whole case finished.",
+          "compatible_tools": [
+            "send_message",
+            "add_note"
+          ],
+          "if_required_information_is_missing": "Do not close the unresolved issue by inheriting another task's success.",
+          "evidence_refs": [
+            "E27",
+            "E29",
+            "E36"
+          ],
+          "guard_status": "proposed; requires operational review"
+        },
+        {
+          "id": "close",
+          "when": "All checks required by current policy are evidenced for this task.",
+          "next_action": "Close using the truthful disposition and current confirmation, landlord-awareness, key and invoice fields.",
+          "compatible_tools": [
+            "close_case"
+          ],
+          "if_required_information_is_missing": "Keep the case pending or escalate if a required check cannot be established.",
+          "evidence_refs": [
+            "E34",
+            "E35"
+          ],
+          "guard_status": "proposed; requires operational review"
+        }
+      ],
+      "representative_examples": [
+        {
+          "source": "E34",
+          "summary": "The lock provider promised remaining keys tomorrow; a later event recorded key-return confirmation."
+        },
+        {
+          "source": "E20",
+          "summary": "Checkout cleaning was reported complete with keys returned, while later invoice requests remained unanswered in the available record."
+        }
+      ],
+      "evidence_limits": [
+        "Fifteen selected supporting cases illustrate closure dimensions; not all report every check reliably.",
+        "Policy defines required checks. Historical omissions are cautionary evidence, not permission to omit them."
+      ],
+      "update_policy": "Update this playbook version after source and operational review. Do not create a searchable record for each ticket.",
+      "source_references": {
+        "E14": {
+          "case_id": "Property Management/016",
+          "event_ids": [
+            "event-022"
+          ],
+          "finding": "The provider reported the door had settled and no repair or invoice was required. Event 024 has contradictory invoice wording.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/016/history.md",
+          "history_sha256": "528103049d6f7fa283cee80def4e65006b1daec5cca7a5534aa2d6f9a3943824",
+          "index_path": "Property Management/016/index.md",
+          "index_sha256": "2fa9d89af643a2c34a10c4feedb7bfa55d9c95d1c6bd6c4a3d205a3ec5a6cc1e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E15": {
+          "case_id": "Property Management/026",
+          "event_ids": [
+            "event-029"
+          ],
+          "finding": "The tenant confirmed the oven worked after the repair and the agency discussed closure.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/026/history.md",
+          "history_sha256": "d3ab597e03eb0d2e3cfded66e0d4594b19cd34c4bd5732b22bfe176ca3188238",
+          "index_path": "Property Management/026/index.md",
+          "index_sha256": "e7fc7d710880a4a3d1286f671905f02d2037cc2441d939bd27109d70a279f2fb",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E20": {
+          "case_id": "Property Management/005",
+          "event_ids": [
+            "event-026",
+            "event-029",
+            "event-030",
+            "event-032"
+          ],
+          "finding": "Later messages requested the cleaning invoice; receipt is not established by these requests.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/005/history.md",
+          "history_sha256": "f56a378925d16686c260bbc743b2c2849c7b6d1f8d967bbfbb1c6e63f395f29a",
+          "index_path": "Property Management/005/index.md",
+          "index_sha256": "e796ccdf59faf4fef54cf3dc52f4169c1019686d161fa38bc40bdb647a637619",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E27": {
+          "case_id": "Property Management/040",
+          "event_ids": [
+            "event-008",
+            "event-009",
+            "event-010",
+            "event-011",
+            "event-013"
+          ],
+          "finding": "Replacement, a promised later inspection, closure and a later landlord request for an update coexist.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/040/history.md",
+          "history_sha256": "958821c0d76daee0d855da158de7dcf1db9b7dad0bb74e4eef151abdbc1b1066",
+          "index_path": "Property Management/040/index.md",
+          "index_sha256": "50f4b520c74ba1a058ad99242a1a6b1da19047a7bb41ec600e02c6f2f0d6b919",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E29": {
+          "case_id": "Property Management/020",
+          "event_ids": [
+            "event-002",
+            "event-006",
+            "event-007",
+            "event-008",
+            "event-017",
+            "event-020"
+          ],
+          "finding": "Inspection arrangements changed; a report was sent; later dog-flap and key matters were separate.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/020/history.md",
+          "history_sha256": "f124e50e11036aed13bbd4cf0463ae9cd7bcdb4d5399ae63a085a4c513ea80d4",
+          "index_path": "Property Management/020/index.md",
+          "index_sha256": "b3d93b0c03de19de1cd612f7741dd41a975e2cd4966134b85e0c5007bda38349",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E34": {
+          "case_id": "Property Management/021",
+          "event_ids": [
+            "event-020",
+            "event-028"
+          ],
+          "finding": "The provider promised future key delivery; a later update records keys return confirmed.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/021/history.md",
+          "history_sha256": "50c6900b3b4c1be040cba1aab6f293d726502ae8fd4d1ca76aa57a9c2b3d100e",
+          "index_path": "Property Management/021/index.md",
+          "index_sha256": "75f2be29d3947109aa123c072760b9c9ea294d4330ea9eeb35b1730ed825f27e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E35": {
+          "case_id": "Property Management/022",
+          "event_ids": [
+            "event-020"
+          ],
+          "finding": "A new key was recorded as added to the office key set and copied.",
+          "evidence_kind": "observed_pattern",
+          "history_path": "Property Management/022/history.md",
+          "history_sha256": "a80c500801fafcc52bc716b85ef9451462d3d2c4e72d9ef6aac264838c239caf",
+          "index_path": "Property Management/022/index.md",
+          "index_sha256": "9f02ab7d34907db44e9649286c6a633dc69564b2b79373db481ae13137954b41",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        "E36": {
+          "case_id": "Property Management/015",
+          "event_ids": [
+            "event-016"
+          ],
+          "finding": "A completion message warns of rot, swelling and recurrence; its body names a different property from the header.",
+          "evidence_kind": "conflict_or_caution",
+          "history_path": "Property Management/015/history.md",
+          "history_sha256": "c14d55880fd761ca070b647a16a0d4478578244325c64d83c57f499288bfbc53",
+          "index_path": "Property Management/015/index.md",
+          "index_sha256": "04ac498100c6a6cd798cd854da6ffed0e78337d3a57a814d70021a7b5d4f4fdd",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      },
+      "provenance": [
+        {
+          "case_id": "Property Management/004",
+          "index_path": "Property Management/004/index.md",
+          "history_path": "Property Management/004/history.md",
+          "index_sha256": "02ba84acd27c0830b12183ef2427e3712df8c981b97267722379765c913fcfb7",
+          "history_sha256": "8bae53e287391fb32f1a6a736131dd86a1b4bae8af780f3458ec6717079446a6",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/005",
+          "index_path": "Property Management/005/index.md",
+          "history_path": "Property Management/005/history.md",
+          "index_sha256": "e796ccdf59faf4fef54cf3dc52f4169c1019686d161fa38bc40bdb647a637619",
+          "history_sha256": "f56a378925d16686c260bbc743b2c2849c7b6d1f8d967bbfbb1c6e63f395f29a",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/009",
+          "index_path": "Property Management/009/index.md",
+          "history_path": "Property Management/009/history.md",
+          "index_sha256": "7d22e08ffff2004693bc2a57e534cead3b1fad8128232a56815a2d9ddfbdb67f",
+          "history_sha256": "ad61321988ea769e40260b74e92bd443669ff9037ff7d62576df878af3559294",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/010",
+          "index_path": "Property Management/010/index.md",
+          "history_path": "Property Management/010/history.md",
+          "index_sha256": "72ca1fea17684966fb7cd6564092bc9eb746116b67fc72fbe16d6a8403030854",
+          "history_sha256": "8029c2495c324f1f106139da8682f7fa362b3a26a6584f7dc7a3b05f0a73b51f",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/013",
+          "index_path": "Property Management/013/index.md",
+          "history_path": "Property Management/013/history.md",
+          "index_sha256": "fb62e9ba4a1e26c3e44ae07e1bcd6cac53aaa148f89bb9d07e07b39d0e51dcce",
+          "history_sha256": "146e50e521e06c85a74c1b39980a3b4dd0042e2d397c93892e0e2f8b32e1785e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/015",
+          "index_path": "Property Management/015/index.md",
+          "history_path": "Property Management/015/history.md",
+          "index_sha256": "04ac498100c6a6cd798cd854da6ffed0e78337d3a57a814d70021a7b5d4f4fdd",
+          "history_sha256": "c14d55880fd761ca070b647a16a0d4478578244325c64d83c57f499288bfbc53",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/016",
+          "index_path": "Property Management/016/index.md",
+          "history_path": "Property Management/016/history.md",
+          "index_sha256": "2fa9d89af643a2c34a10c4feedb7bfa55d9c95d1c6bd6c4a3d205a3ec5a6cc1e",
+          "history_sha256": "528103049d6f7fa283cee80def4e65006b1daec5cca7a5534aa2d6f9a3943824",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/020",
+          "index_path": "Property Management/020/index.md",
+          "history_path": "Property Management/020/history.md",
+          "index_sha256": "b3d93b0c03de19de1cd612f7741dd41a975e2cd4966134b85e0c5007bda38349",
+          "history_sha256": "f124e50e11036aed13bbd4cf0463ae9cd7bcdb4d5399ae63a085a4c513ea80d4",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/021",
+          "index_path": "Property Management/021/index.md",
+          "history_path": "Property Management/021/history.md",
+          "index_sha256": "75f2be29d3947109aa123c072760b9c9ea294d4330ea9eeb35b1730ed825f27e",
+          "history_sha256": "50c6900b3b4c1be040cba1aab6f293d726502ae8fd4d1ca76aa57a9c2b3d100e",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/022",
+          "index_path": "Property Management/022/index.md",
+          "history_path": "Property Management/022/history.md",
+          "index_sha256": "9f02ab7d34907db44e9649286c6a633dc69564b2b79373db481ae13137954b41",
+          "history_sha256": "a80c500801fafcc52bc716b85ef9451462d3d2c4e72d9ef6aac264838c239caf",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/023",
+          "index_path": "Property Management/023/index.md",
+          "history_path": "Property Management/023/history.md",
+          "index_sha256": "e382c97998c2df9b9fed4b17cd37b79c242b38165fe22e9faef93bf3f7df0ad7",
+          "history_sha256": "b705d2d76ffed69348c8403c220638878237996556895ec241fa299fb24e066f",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/029",
+          "index_path": "Property Management/029/index.md",
+          "history_path": "Property Management/029/history.md",
+          "index_sha256": "1017fc184f91447907cf9e3ae5642ca017f986e4fcd92b05ab981b629b1ea1ad",
+          "history_sha256": "a1f2d01c026b63d0c360f0a0ad032eda506cf3f01b0fd42d1c5a751fdb341b49",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/031",
+          "index_path": "Property Management/031/index.md",
+          "history_path": "Property Management/031/history.md",
+          "index_sha256": "92ac61deabf51015387b112f6650259822354e5a88862e746fafb924ec2c2b90",
+          "history_sha256": "f87371b639057d12f5702c25cd4b6aee06b681ac3cef369740373585dfb1ccca",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/040",
+          "index_path": "Property Management/040/index.md",
+          "history_path": "Property Management/040/history.md",
+          "index_sha256": "50f4b520c74ba1a058ad99242a1a6b1da19047a7bb41ec600e02c6f2f0d6b919",
+          "history_sha256": "958821c0d76daee0d855da158de7dcf1db9b7dad0bb74e4eef151abdbc1b1066",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        },
+        {
+          "case_id": "Property Management/044",
+          "index_path": "Property Management/044/index.md",
+          "history_path": "Property Management/044/history.md",
+          "index_sha256": "95408312f8ce9f0b348b334d3749479b9f5f6caa5cabffa433afb12351fbf8a8",
+          "history_sha256": "8ca2d7d2815b1cf0689838f237496f99f6f448d0f7d19c3dabcd0acdfa2fa0fd",
+          "source_revision": "9bcdca585955dfb930005ed742572606e68f5688"
+        }
+      ]
+    }
+  ]
+}
