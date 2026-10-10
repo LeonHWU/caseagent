@@ -45,6 +45,7 @@ function getLastContactDays(visible: CaseEvent[]): string {
     for (let i = visible.length - 1; i >= 0; i--) {
       if (visible[i].from.toLowerCase().trim() === party.toLowerCase().trim()) {
         const days = daysSince(now, visible[i].at);
+        if (Number.isNaN(days)) break;
         lines.push(`${party}: ${days} day${days === 1 ? "" : "s"}`);
         break;
       }
