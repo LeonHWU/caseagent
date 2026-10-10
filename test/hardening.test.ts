@@ -157,7 +157,7 @@ test("approval the agency recorded counts, including the approved-by phrasing", 
 });
 
 test("processToEnd escalates instead of silently stopping at the stage cap", async () => {
-  const events = [ev(1, "Northbridge Lettings", "outbound", "Email"), ...Array.from({ length: 12 }, (_, i) => ev(i + 2, "Tenant", `msg ${i + 2}`))];
+  const events = [ev(1, "Northbridge Lettings", "outbound", "Email"), ...Array.from({ length: 55 }, (_, i) => ev(i + 2, "Tenant", `msg ${i + 2}`))];
   const c = mkCase(events);
   const dir = mkdtempSync(join(tmpdir(), "hd-"));
   writeFileSync(join(dir, "index.md"), "# Case 001: T\n\n## Case details\n\ndetails\n\n## Initial request\n\nrequest\n");
@@ -167,7 +167,7 @@ test("processToEnd escalates instead of silently stopping at the stage cap", asy
     events.map((e) => `${anchor(e.n)}## 2026-01-01 00:00:00 UTC — event ${String(e.n).padStart(3, "0")}\n- **Channel:** ${e.channel}\n- **From:** ${e.from}\n- **To:** ${e.to}\n\n${e.body}`).join("\n")
   );
   const loaded = loadCase(dir);
-  assert.equal(loaded.events.length, 13);
+  assert.equal(loaded.events.length, 56);
   const d = deps(fake([[hold()]]));
   const state = await processToEnd(d, dir);
   assert.equal(state.status.kind, "escalated");
