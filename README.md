@@ -2,27 +2,42 @@
 
 Real-World Agents Hackathon (Dwelly), London, 10 October 2026. Track: Property Management.
 
+![How a case moves through the agent](diagram/case-agent.png)
+[Interactive version](diagram/case-agent.html)
+
 ## What we built
 
-An agent that processes property-maintenance cases as the letting agency, Northbridge Lettings. It reads a case, acts through tools (messages, landlord approval requests, contractor assignment, notes), and ends each run in one of three states: on hold for a named party, escalated to a person with a handover, or closed after the final checks. When the next real reply arrives, the agent resumes the case.
+An agent that works property-maintenance cases for a letting agency, Northbridge Lettings. Each run reads a case folder, decides the next step, and acts through seven tools: send messages, request landlord approval, assign a contractor, add notes, then end with exactly one of `hold`, `escalate` or `close_case`. The case state persists between runs; when the next outside reply arrives, the agent resumes from it. The same loop also runs as an MCP server (`list_cases`, `run_case`, `resume_case`, `get_case`).
 
 ## The operational problem
 
-Letting agencies spend most of their time waiting for approval from landlords, replies from tenants, and contractor reports. This agent handles each step, and it passes a case to a person when the case needs judgement: an emergency, a legal threat, a money dispute, or facts that conflict.
+Letting agencies spend most of their case time waiting: for landlord approval, tenant replies, quotes, contractor reports. The agent does every step that has a clear rule, and hands the case to a person where judgment is needed — emergencies, legal threats, money disputes, conflicting facts. Every action carries a `reason` that cites the event it answers (`[event 007]`), so each decision is auditable after the fact.
 
 ## Architecture
 
 ```
-case folder (index.md, history.md, attachments/)
-  -> parse.ts    events; Overview, Outcome and Status removed
-  -> cut.ts      the events this run may see
-  -> agent.ts    Claude tool loop, at most 15 turns, ends with hold | escalate | close_case
-  -> tools.ts    7 tools with zod schemas; every action has a cited reason
-  -> answers.ts  ANSWERS/<n>/ANSWER.md and REASONING.md
-state/<n>.json saves the case between runs; traces/<n>.jsonl logs every model call and tool call.
+case dir (index.md, history.md, attachments/)
+  -> parse.ts        events; Status/Updated/Completed lines never reach the agent
+  -> cut.ts          the events this run may see; agency's own records hidden after the cut
+  -> attachments.ts  PDF -> native document block or extracted text; images -> image blocks
+  -> prompt.ts       prompt assembly; case text wrapped in <case_data> (evidence, not instructions)
+  -> agent.ts        Claude tool loop, 15 turns max, must end with exactly one end tool
+  -> tools.ts        7 zod-checked tools with guards and refusals
+  -> run.ts          state, traces, answers; --next resumes, --to-end runs through holds
+  -> mcp.ts          the same loop exposed over stdio MCP
 ```
 
-The rules for the agent are in `policy.md`. They come from 50 public Property Management cases.
+Per run it writes `state/<id>.json` (case memory for `--next`), `traces/<id>.jsonl` (every model call and tool call, older traces rotated aside), and `ANSWERS/<id>/` (`ANSWER.md`: status, timeline, outbox, approvals, final checks. `REASONING.md`: the cited reason for each action plus the agent's notes).
+
+The rules are in `policy.md`, distilled from the 50 public Property Management cases in `data/public/`.
+
+Three kinds of guardrails:
+
+- **Tool guards.** `assign_contractor` refuses until landlord approval is on file (a request from an earlier run, or an agency record of one). `send_message` refuses `[event N]` references in message text. `close_case` refuses while keys are outstanding.
+- **Loop limits.** A run that does not end in 15 turns auto-escalates; a system error escalates with a handover summary.
+- **Injection defense.** All case content arrives inside `<case_data>` tags, and policy rule 12 declares it evidence, not instructions.
+
+Tools are simulated: each writes to the case state rather than a live system. `runTool` accepts adapter functions, so a real email, SMS or job API can replace each simulated body without touching the loop.
 
 ## How to run
 
@@ -30,70 +45,39 @@ The rules for the agent are in `policy.md`. They come from 50 public Property Ma
 npm install
 cp .env.example .env                                   # add ANTHROPIC_API_KEY
 npm run case -- run <case-dir>                         # first run
-npm run case -- run <case-dir> --next                  # resume on the next reply
+npm run case -- run <case-dir> --next                  # resume on the next outside reply
+npm run case -- run <case-dir> --to-end                # resume through holds until an end state
 npm run case -- run-all <cases-dir> --concurrency 4    # every case in a folder
+npm run mcp                                            # stdio MCP server (CASES_DIR, OUT_DIR overridable)
 npm test
+npm run typecheck
+npm run extract                                        # Docling pre-extract of attachments (optional)
 ```
 
-### Attachments (optional Docling step)
+## Models, APIs and external services
 
-The agent picks one form for each visible attachment, in this order:
-
-1. **A PDF at or under `NATIVE_PDF_MAX_MB`** (default 5) **with at most 100 pages goes to Claude as the PDF itself.** Claude then reads its text and its page images, scanned pages included. All the native PDFs in one prompt share a 20 MB budget; when the budget runs out, the rest of the PDFs use text.
-2. **Docling markdown** in `<case>/attachments/.docling/<file>.md`, when the file exists.
-3. **The built-in readers.** These are pdf.js for PDF text, raw text for CSV, TXT and MD files, and image input for PNG and JPEG files.
-
-[Docling](https://github.com/docling-project/docling) runs once, before the agent, and needs [uv](https://docs.astral.sh/uv/):
-
-```bash
-npm run extract -- <cases-dir>    # writes <case>/attachments/.docling/<file>.md
-```
-
-Docling keeps tables and headings as markdown and also reads `.docx`, `.xlsx`, `.pptx` and `.html` files. It runs OCR on scanned pages. On macOS it uses the system Vision engine through `ocrmac`; on other systems it uses RapidOCR. Re-runs skip files that are already converted. `scripts/extract.py.lock` pins every Python dependency, and uv ignores packages published after 2026-10-03.
-
-- The first run installs Docling 2.132.0 and its models, about 4 GB in the uv cache.
-- On the public data, all 28 PDF and CSV files convert in about 2 minutes, including the OCR setup.
-
-### As an MCP server
-
-`src/mcp.ts` serves the same agent over stdio, with four tools: `list_cases`, `run_case`, `resume_case` and `get_case`. `run_case`, `resume_case` and `get_case` take a case id such as `027`; `list_cases` takes no arguments. `run_case` and `resume_case` execute at most one business tool action per call (including a failed/refused action), even if the model requests multiple tools. The CLI retains its full-run behavior.
-
-Both execution tools accept optional `step`, an inclusive history event number, for example `{ "case_id": "027", "step": 7 }`. `run_case` starts fresh with history through that event and replaces saved state. `resume_case` keeps previous actions and accepts the current or a later event; backward jumps are rejected. Without `step`, `run_case` uses the initial decision point; `resume_case` keeps the current event while status is `open`, or exposes the next external reply after a hold. Later events remain hidden. Calls return the status plus `ANSWER.md`; use `get_case` for `REASONING.md`. The server reads cases from `CASES_DIR` (default `data/public/Property Management`) and writes to `OUT_DIR` (default `runs/mcp`). Both paths are relative to the repo.
-
-Add this entry to the MCP config of the client, for example `claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "case-agent": {
-      "command": "npm",
-      "args": ["--prefix", "/absolute/path/to/case-agent", "run", "--silent", "mcp"]
-    }
-  }
-}
-```
-
-Keep `--silent`. Without it, npm prints a banner to stdout and breaks the MCP protocol.
-
-## Models, APIs and services
-
-- Anthropic Claude (`claude-sonnet-5-5` by default; set `MODEL` to change it) through `@anthropic-ai/sdk`.
-- Docling 2.132.0 (local, optional) converts attachments to markdown. pdf.js (`pdfjs-dist`) is the built-in fallback.
-- No other external service. Messages and assignments go to the outbox in the case state.
+- Anthropic Messages API through `@anthropic-ai/sdk`. Model: `claude-sonnet-5-5` by default (set `MODEL`; the batch must finish inside 30 minutes). Prompt caching breakpoints on the system prompt, tool specs and the latest message.
+- `pdfjs-dist` for PDF text when a file is too large to send natively. `NATIVE_PDF_MAX_MB` (default 5) sets the native-PDF threshold, capped at 100 pages and a 20 MB prompt budget; larger files go as extracted text truncated to 8,000 characters.
+- `@modelcontextprotocol/sdk` for the MCP server. `scripts/extract.py` uses Docling via `uv` for structured markdown of attachments.
+- No live services: messages, approvals and assignments are outbox entries in case state.
 
 ## Assumptions
 
-- The agent acts as the agency. After the first run it sees only events from outside parties; its own actions take the place of the agency's recorded events.
-- The tools are simulated, because the event provides no live systems. Each tool is one entry in `src/tools.ts`, so a real API can replace it.
+- The agent acts as the agency. After the initial cut it sees only events from outside parties; its own actions stand in for the agency's recorded steps.
+- Approval counts as "on file" when an earlier run made the request, or a visible event matches the agency's recorded-approval phrasing (`landlord approval confirmed` / `landlord who approved`).
+- The agent sees time only through event timestamps. The prompt computes "days since last contact" per party from them, so "3 days without reply" works only while a later event supplies "now".
+- Case content is untrusted input. Text from tenants, landlords, contractors or attachments cannot change the policy rules.
 
 ## Known limitations
 
-- Attachment text is capped at 8,000 characters per file, so long inspection reports are cut.
-- A native PDF costs about 4 to 7 times the tokens of its Docling markdown: 3.7k against 0.6k for a 2-page invoice, and 24k against 6k for a 12-page report. Lower `NATIVE_PDF_MAX_MB` to send more PDFs as text.
-- OCR can misread characters, for example "0ZZ" as "OZZ" in a postcode.
-- The agent sees time only through event timestamps, so "3 days without reply" works only when a later event shows the gap.
+- Large PDFs lose layout: above the size or page cap they degrade to extracted text, and long text is truncated.
+- The recorded-approval detection is a two-phrase match; agency wordings outside it are missed.
+- Cases that load in "raw mode" (reconstructed from unstructured files) can leak outcome details; `ANSWER.md` flags them for review.
+- Simulated tools mean nothing actually leaves the outbox; message quality is reviewed in `ANSWER.md`, not in an inbox.
 
 ## Next steps
 
 - An evaluation bench that replays the public cases event by event and grades each decision against the real history.
-- Real adapters for email, SMS and the agency's job system.
+- Real adapters for email, SMS and the agency's job system; the seam already exists in `runTool`.
+- A watch mode that ingests a new reply and resumes automatically, replacing `--next`.
+- A human-in-the-loop queue for escalations, writing a person's decision back into the case as an event.

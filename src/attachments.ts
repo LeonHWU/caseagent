@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync, writeFileSync, mkdirSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import * as pdfjs from "pdfjs-dist";
 
@@ -31,10 +31,6 @@ async function nativePdf(path: string, maxBytes: number): Promise<AttachmentCont
   }
 }
 
-function getCachePath(cacheDir: string, filename: string): string {
-  return join(cacheDir, `${filename}.txt`);
-}
-
 async function extractPdfText(pdfPath: string): Promise<string> {
   const buffer = readFileSync(pdfPath);
   const data = new Uint8Array(buffer);
@@ -61,7 +57,6 @@ function truncateText(text: string): string {
 export async function readAttachment(
   caseDir: string,
   filename: string,
-  cacheDir: string,
   opts: { nativeMaxBytes?: number } = {},
 ): Promise<AttachmentContent> {
   const filepath = join(caseDir, "attachments", filename);
@@ -78,22 +73,10 @@ export async function readAttachment(
 
     const ext = filename.split(".").pop()?.toLowerCase();
 
-    // Check if it's already cached (for PDFs)
-    if (ext === "pdf") {
-      const cachePath = getCachePath(cacheDir, filename);
-      if (existsSync(cachePath)) {
-        const cached = readFileSync(cachePath, "utf8");
-        return { type: "text", text: cached };
-      }
-    }
-
     // Handle different file types
     if (ext === "pdf") {
       const text = await extractPdfText(filepath);
       const truncated = truncateText(text);
-      // Cache the extracted text
-      mkdirSync(cacheDir, { recursive: true });
-      writeFileSync(getCachePath(cacheDir, filename), truncated, "utf8");
       return { type: "text", text: truncated };
     } else if (ext === "txt" || ext === "csv" || ext === "md") {
       const text = readFileSync(filepath, "utf8");

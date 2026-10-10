@@ -37,11 +37,9 @@ export async function processCase(deps: RunDeps, dir: string, next: boolean, opt
   const { out, client, model, policy } = deps;
 
   let c: ReturnType<typeof loadCase>;
-  let loadError = false;
   try {
     c = loadCase(dir);
   } catch (e) {
-    loadError = true;
     const message = e instanceof Error ? e.message : String(e);
     const id = basename(dir);
     const statePath = join(out, "state", `${id}.json`);
@@ -55,7 +53,7 @@ export async function processCase(deps: RunDeps, dir: string, next: boolean, opt
       appendFileSync(tracePath, JSON.stringify({ t: new Date().toISOString(), kind, ...data }) + "\n");
     const emptyCase = { id, title: id, details: "", request: "", events: [], attachments: [], layer: "raw" as const };
     saveState(statePath, state);
-    writeAnswer(out, emptyCase, state, [], []);
+    writeAnswer(out, emptyCase, state, []);
     trace("error", { message });
     return state;
   }
@@ -83,9 +81,8 @@ export async function processCase(deps: RunDeps, dir: string, next: boolean, opt
 
   const trace: Trace = (kind, data) =>
     appendFileSync(tracePath, JSON.stringify({ t: new Date().toISOString(), kind, ...data }) + "\n");
-  let thoughts: string[] = [];
   try {
-    thoughts = await runCase({ c, state: state!, newFrom, client, model, policy, trace, singleStep: options.singleStep, caseDir: dir, cacheDir: join(out, "state", `${c.id}.attachments`) });
+    await runCase({ c, state: state!, newFrom, client, model, policy, trace, singleStep: options.singleStep, caseDir: dir });
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
     state!.incomplete = true;
@@ -93,7 +90,7 @@ export async function processCase(deps: RunDeps, dir: string, next: boolean, opt
     trace("error", { message });
   }
   saveState(statePath, state!);
-  writeAnswer(out, c, state!, visibleEvents(c, state!.initialSeen, state!.seen), thoughts);
+  writeAnswer(out, c, state!, visibleEvents(c, state!.initialSeen, state!.seen));
   return state!;
 }
 

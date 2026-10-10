@@ -11,6 +11,7 @@ type Tool = {
   description: string;
   schema: z.ZodType;
   end: boolean;
+  guard?: (state: CaseState) => void;
   apply: (input: Record<string, unknown>, state: CaseState) => string;
 };
 
@@ -18,9 +19,16 @@ function tool<S extends z.ZodType>(d: {
   description: string;
   schema: S;
   end?: boolean;
+  guard?: (state: CaseState) => void;
   apply: (input: z.infer<S>, state: CaseState) => string;
 }): Tool {
-  return { description: d.description, schema: d.schema, end: d.end ?? false, apply: (input, state) => d.apply(input as z.infer<S>, state) };
+  return { description: d.description, schema: d.schema, end: d.end ?? false, guard: d.guard, apply: (input, state) => d.apply(input as z.infer<S>, state) };
+}
+
+// The landlord answers in a later run, so a request made in this run does not count yet.
+function requireApproval(state: CaseState): void {
+  const requested = state.actions.some((a) => a.tool === "request_landlord_approval" && a.ok && a.run < state.runs);
+  if (!requested && !state.approvalOnFile) throw new Refusal("landlord approval is not on file. Use request_landlord_approval first, and hold the case for the landlord's answer.");
 }
 
 const reason = z.string().min(1).describe("Why you take this action. Cite events as [event 007].");
@@ -51,6 +59,7 @@ const TOOLS: Record<string, Tool> = {
   assign_contractor: tool({
     description: "Assign a maintenance provider. Use this only after the landlord approved the work and is not using their own contractor.",
     schema: z.object({ trade: z.string().min(1), notes: z.string(), reason }),
+    guard: requireApproval,
     apply: (i) => `${i.trade} contractor assigned`,
   }),
   add_note: tool({
@@ -111,6 +120,7 @@ export function runTool(
   if (!parsed.success) return { ok: false, ends: false, result: `invalid input:\n${z.prettifyError(parsed.error)}` };
   const apply = adapters?.[name] ?? t.apply;
   try {
+    t.guard?.(state);
     return { ok: true, ends: t.end, result: apply(parsed.data as Record<string, unknown>, state) };
   } catch (e) {
     if (e instanceof Refusal) return { ok: false, ends: false, result: `refused: ${e.message}` };

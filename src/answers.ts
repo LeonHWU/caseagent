@@ -172,7 +172,7 @@ ${actions || "None."}
 ${runSections.join("\n")}`;
 }
 
-export function writeAnswer(outDir: string, c: Case, s: CaseState, visible: CaseEvent[], thoughts: string[]): void {
+export function writeAnswer(outDir: string, c: Case, s: CaseState, visible: CaseEvent[]): void {
   const dir = join(outDir, "ANSWERS", c.id);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "ANSWER.md"), answerMd(c, s, visible));

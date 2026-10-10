@@ -68,3 +68,41 @@ test("send_message refuses text that cites events, so outside parties never see 
   assert.equal(out.ok, false);
   assert.match(out.result, /^refused: the message text contains an event reference/);
 });
+
+const assignInput = { trade: "plumber", notes: "", reason: "Landlord approved [event 005]." };
+
+test("assign_contractor refuses when no landlord approval is on file", () => {
+  const s = newState("027", 1);
+  s.runs = 1;
+  const out = runTool("assign_contractor", assignInput, s);
+  assert.equal(out.ok, false);
+  assert.match(out.result, /^refused: landlord approval is not on file/);
+});
+
+test("assign_contractor refuses an approval request made in the same run", () => {
+  const s = newState("027", 1);
+  s.runs = 1;
+  s.actions.push({ run: 1, afterEvent: 1, tool: "request_landlord_approval", input: {}, ok: true, result: "sent" });
+  assert.equal(runTool("assign_contractor", assignInput, s).ok, false);
+});
+
+test("assign_contractor accepts an approval request from an earlier run", () => {
+  const s = newState("027", 1);
+  s.runs = 2;
+  s.actions.push({ run: 1, afterEvent: 1, tool: "request_landlord_approval", input: {}, ok: true, result: "sent" });
+  assert.equal(runTool("assign_contractor", assignInput, s).ok, true);
+});
+
+test("assign_contractor accepts an approval the agency recorded before the first run", () => {
+  const s = newState("004", 4);
+  s.runs = 1;
+  s.approvalOnFile = true;
+  assert.equal(runTool("assign_contractor", assignInput, s).ok, true);
+});
+
+test("an adapter cannot skip the approval check", () => {
+  const s = newState("027", 1);
+  s.runs = 1;
+  const out = runTool("assign_contractor", assignInput, s, { assign_contractor: () => "assigned by API" });
+  assert.equal(out.ok, false);
+});

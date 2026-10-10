@@ -1,12 +1,13 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { visibleEvents } from "./cut.ts";
 import type { Case } from "./parse.ts";
-import type { CasePrompt } from "./prompt.ts";
 import { renderCase } from "./prompt.ts";
 import type { CaseState } from "./state.ts";
 import { runTool, TOOL_SPECS, type ToolAdapter } from "./tools.ts";
 
 export const MAX_TURNS = 15;
+// The agency's own records of a landlord approval that came before the agent's first run.
+const APPROVAL_ON_FILE = /landlord approval confirmed|landlord who approved/i;
 const NUDGE = "End the run now with exactly one of hold, escalate or close_case.";
 
 export type ModelClient = {
@@ -24,15 +25,15 @@ export async function runCase(opts: {
   policy: string;
   trace: Trace;
   caseDir?: string;
-  cacheDir?: string;
   adapters?: Record<string, ToolAdapter>;
   singleStep?: boolean;
-}): Promise<string[]> {
-  const { c, state, client, model, policy, trace, caseDir, cacheDir, adapters } = opts;
+}): Promise<void> {
+  const { c, state, client, model, policy, trace, caseDir, adapters } = opts;
   state.runs += 1;
   state.status = { kind: "open" };
   const visible = visibleEvents(c, state.initialSeen, state.seen);
-  const prompt = await renderCase(c, state, visible, opts.newFrom, caseDir, cacheDir);
+  state.approvalOnFile = visible.some((e) => APPROVAL_ON_FILE.test(e.body));
+  const prompt = await renderCase(c, state, visible, opts.newFrom, caseDir);
 
   // Build message content with text and images
   const content: Anthropic.ContentBlockParam[] = [
@@ -53,7 +54,6 @@ export async function runCase(opts: {
   ];
 
   const messages: Anthropic.MessageParam[] = [{ role: "user", content }];
-  const thoughts: string[] = [];
   trace("run_start", { case: c.id, run: state.runs, seen: state.seen, model });
 
   const systemText = opts.singleStep ? `${policy}\nExecute exactly one tool action for this invocation. Do not chain actions.` : policy;
@@ -96,7 +96,6 @@ export async function runCase(opts: {
     // Extract and store text blocks as notes
     for (const b of resp.content) {
       if (b.type === "text" && b.text.trim()) {
-        thoughts.push(b.text.trim());
         state.notes.push({ run: state.runs, afterEvent: state.seen, text: b.text.trim() });
       }
     }
@@ -111,7 +110,7 @@ export async function runCase(opts: {
       const out = runTool(u.name, u.input, state, adapters);
       state.actions.push({ run: state.runs, afterEvent: state.seen, tool: u.name, input: u.input as Record<string, unknown>, ok: out.ok, result: out.result });
       trace("tool", { name: u.name, input: u.input, ...out });
-      if (out.ends || opts.singleStep) return thoughts;
+      if (out.ends || opts.singleStep) return;
       results.push({ type: "tool_result", tool_use_id: u.id, content: out.result, is_error: !out.ok });
     }
     messages.push({ role: "user", content: results });
@@ -120,5 +119,4 @@ export async function runCase(opts: {
   state.incomplete = true;
   state.status = { kind: "escalated", summary: `The agent did not end the run within ${MAX_TURNS} turns. A person must review case ${c.id}.` };
   trace("auto_escalate", { turns: MAX_TURNS });
-  return thoughts;
 }

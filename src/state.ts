@@ -42,6 +42,7 @@ export type CaseState = {
   actions: Action[];
   notes: Note[];
   incomplete: boolean;
+  approvalOnFile?: boolean;
 };
 
 export function newState(caseId: string, initialSeen: number): CaseState {
@@ -51,8 +52,6 @@ export function newState(caseId: string, initialSeen: number): CaseState {
 export function loadState(path: string): CaseState | null {
   if (!existsSync(path)) return null;
   const state = JSON.parse(readFileSync(path, "utf8")) as CaseState;
-  // Default notes to [] for old state files that don't have it
-  if (!state.notes) state.notes = [];
   return state;
 }
 
