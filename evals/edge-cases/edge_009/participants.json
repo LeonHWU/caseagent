@@ -1,0 +1,9 @@
+[
+  {
+    "name": "Tenant",
+    "seen_as": [
+      "from"
+    ],
+    "first_event": 1
+  }
+]

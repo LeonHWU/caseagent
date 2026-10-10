@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Landlord",
+    "seen_as": [
+      "from",
+      "to"
+    ],
+    "first_event": 2
+  },
+  {
+    "name": "Contractor",
+    "seen_as": [
+      "to"
+    ],
+    "first_event": 4
+  }
+]
