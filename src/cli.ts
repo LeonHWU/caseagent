@@ -1,16 +1,17 @@
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
-import { liveDeps, processCase, summary } from "./run.ts";
+import { liveDeps, processCase, processToEnd, summary } from "./run.ts";
 
 const USAGE = `usage:
-  npm run case -- run <case-dir> [--next] [--out <dir>]
-  npm run case -- run-all <cases-dir> [--limit N] [--concurrency N] [--out <dir>]`;
+  npm run case -- run <case-dir> [--next|--to-end] [--out <dir>]
+  npm run case -- run-all <cases-dir> [--to-end] [--limit N] [--concurrency N] [--out <dir>]`;
 
 const { values, positionals } = parseArgs({
   allowPositionals: true,
   options: {
     next: { type: "boolean", default: false },
+    "to-end": { type: "boolean", default: false },
     out: { type: "string", default: "." },
     limit: { type: "string" },
     concurrency: { type: "string", default: "4" },
@@ -29,7 +30,10 @@ if (!process.env.ANTHROPIC_API_KEY) {
 const deps = liveDeps(values.out);
 
 if (cmd === "run") {
-  console.log(summary(await processCase(deps, target, values.next)));
+  const state = values["to-end"]
+    ? await processToEnd(deps, target)
+    : await processCase(deps, target, values.next);
+  console.log(summary(state));
 } else {
   const dirs = readdirSync(target)
     .filter((d) => existsSync(join(target, d, "index.md")))
@@ -39,7 +43,10 @@ if (cmd === "run") {
   const workers = Array.from({ length: Number(values.concurrency) }, async () => {
     for (let d = queue.shift(); d; d = queue.shift()) {
       try {
-        console.log(summary(await processCase(deps, join(target, d), false)));
+        const state = values["to-end"]
+          ? await processToEnd(deps, join(target, d))
+          : await processCase(deps, join(target, d), false);
+        console.log(summary(state));
       } catch (e) {
         console.error(`${d}: failed: ${e instanceof Error ? e.message : String(e)}`);
       }

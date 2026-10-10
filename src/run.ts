@@ -7,6 +7,8 @@ import { initialSeen, nextSeen, visibleEvents } from "./cut.ts";
 import { loadCase } from "./parse.ts";
 import { loadState, newState, saveState, statusLabel, type CaseState } from "./state.ts";
 
+const MAX_STAGES = 10;
+
 export type RunDeps = { out: string; client: ModelClient; model: string; policy: string };
 
 export function liveDeps(out: string): RunDeps {
@@ -80,4 +82,14 @@ export async function processCase(deps: RunDeps, dir: string, next: boolean): Pr
   saveState(statePath, state!);
   writeAnswer(out, c, state!, visibleEvents(c, state!.initialSeen, state!.seen), thoughts);
   return state!;
+}
+
+// Runs the first stage, then resumes while the case is on hold and an outside event remains.
+export async function processToEnd(deps: RunDeps, dir: string): Promise<CaseState> {
+  let state = await processCase(deps, dir, false);
+  for (let stage = 1; stage < MAX_STAGES && state.status.kind === "hold" && !state.incomplete; stage++) {
+    if (nextSeen(loadCase(dir), state.seen) === null) break;
+    state = await processCase(deps, dir, true);
+  }
+  return state;
 }

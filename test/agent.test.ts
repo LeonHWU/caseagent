@@ -5,6 +5,10 @@ import { MAX_TURNS, runCase, type ModelClient } from "../src/agent.ts";
 import { loadCase } from "../src/parse.ts";
 import { renderCase } from "../src/prompt.ts";
 import { visibleEvents } from "../src/cut.ts";
+import { processToEnd } from "../src/run.ts";
+import { mkdtempSync, readFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { newState } from "../src/state.ts";
 
 const c = loadCase("data/public/Property Management/027");
@@ -81,4 +85,21 @@ test("a model that never ends the run is escalated to a person", async () => {
   assert.equal(s.incomplete, true);
   assert.equal(s.status.kind, "escalated");
   assert.match(String(calls[1].messages.at(-1)!.content), /End the run now/);
+});
+
+test("processToEnd: hold, then close, then stop before the later events", async () => {
+  const f = fake([
+    [use("a", "hold", { waiting_for: "Waiting for Tenant", reason: "Asked the tenant to try a plunger." })],
+    [use("b", "close_case", { outcome: "resolved_without_work", work_confirmed_by: "tenant", landlord_informed: false, keys: "not_issued", invoice: "not_required", reason: "Tenant resolved it." })],
+    [use("c", "hold", { waiting_for: "Waiting for Tenant", reason: "Should never run." })],
+  ]);
+  const out = mkdtempSync(join(tmpdir(), "to-end-"));
+  const state = await processToEnd({ out, client: f.client, model: "fake", policy: "policy" }, "data/public/Property Management/027");
+  assert.equal(state.status.kind, "closed");
+  assert.equal(state.runs, 2);
+  assert.equal(f.calls.length, 2);
+  assert.ok(state.seen < c.events.length, "events after the close must not run");
+  const trace = readFileSync(join(out, "traces", "027.jsonl"), "utf8");
+  assert.equal(trace.match(/"kind":"run_start"/g)?.length, 2);
+  assert.match(readFileSync(join(out, "ANSWERS", "027", "ANSWER.md"), "utf8"), /Run 2/);
 });

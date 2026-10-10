@@ -4,9 +4,11 @@ import { fileURLToPath } from "node:url";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { liveDeps, processCase, summary, type RunDeps } from "./run.ts";
+import { liveDeps, processCase, processToEnd, summary, type RunDeps } from "./run.ts";
 
 const caseId = { case_id: z.string().regex(/^[\w-]+$/).describe('Case folder name, for example "027".') };
+
+const runCaseInput = { ...caseId, to_end: z.boolean().optional().describe("Keep resuming after each hold until the case closes, escalates or has no further outside events.") };
 
 export function createServer(opts: { casesDir: string; deps: RunDeps }): McpServer {
   const { casesDir, deps } = opts;
@@ -24,6 +26,11 @@ export function createServer(opts: { casesDir: string; deps: RunDeps }): McpServ
     return reply(`${summary(state)}\n\n${answer(id)}`);
   };
 
+  const runToEnd = async (id: string) => {
+    const state = await processToEnd(deps, caseDir(id));
+    return reply(`${summary(state)}\n\n${answer(id)}`);
+  };
+
   server.registerTool(
     "list_cases",
     { description: "List the case ids this server can run.", inputSchema: {} },
@@ -32,10 +39,10 @@ export function createServer(opts: { casesDir: string; deps: RunDeps }): McpServ
   server.registerTool(
     "run_case",
     {
-      description: "Run a case from the start as Northbridge Lettings, up to its first hold, escalation or close. Replaces any saved run of this case. Returns the status and ANSWER.md.",
-      inputSchema: caseId,
+      description: "Run a case from the start as Northbridge Lettings, up to its first hold, escalation or close. With to_end, keep resuming after each hold until the case closes, escalates or has no further outside events. Replaces any saved run of this case. Returns the status and ANSWER.md.",
+      inputSchema: runCaseInput,
     },
-    async ({ case_id }) => run(case_id, false),
+    async ({ case_id, to_end }) => (to_end ? runToEnd(case_id) : run(case_id, false)),
   );
   server.registerTool(
     "resume_case",
